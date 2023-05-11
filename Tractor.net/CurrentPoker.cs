@@ -40,7 +40,7 @@ namespace Kuaff.Tractor {
         }
         internal int GetMaxCards(int asuit) {
             int rt = -1;
-            if (asuit ==1) {
+            if (asuit == 1) {
                 for(int i=12;i> -1;i--) {
                     if (HeartsNoRank[i]>0) {
                         return i;

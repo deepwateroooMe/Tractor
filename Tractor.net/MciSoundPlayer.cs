@@ -5,11 +5,13 @@ using System.Runtime.InteropServices;
 
 namespace Kuaff.Tractor {
     class MciSoundPlayer {
+        // 感觉，这里直接接入的第三方播放器的动态库，在使用
+
         [DllImport("winmm.dll", EntryPoint = "mciSendString", SetLastError = true, CharSet = CharSet.Auto)] 
         private static extern int mciSendString(string lpstrCommand, [MarshalAs(UnmanagedType.LPTStr)]string lpstrReturnString, int uReturnLength, int hwndCallback);
+
         [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
         public static extern int GetShortPathName([MarshalAs(UnmanagedType.LPTStr)]string path,[MarshalAs(UnmanagedType.LPTStr)]StringBuilder shortPath,int shortPathLength);
-        
         
         public static void Play(string FileName,String alias) {
             StringBuilder shortPathTemp = new StringBuilder(255);
@@ -34,9 +36,7 @@ namespace Kuaff.Tractor {
             string durLength = "";
             durLength = durLength.PadLeft(128, Convert.ToChar(" "));
             mciSendString("status song mode", durLength, 128, 0);
-               
             return durLength.Substring(0, 7).ToLower() == "playing".ToLower();
         }
-       
     }
 }

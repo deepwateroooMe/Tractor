@@ -6,15 +6,15 @@ using System.Text;
 namespace Kuaff.Tractor
 {
     /// <summary>
-    /// ¸ºÔð·Ö·¢ÆË¿ËÅÆ.
-    /// ÓÉ³ÌÐòËæ»úÉú³É108ÕÅÅÆµÄÐòÁÐ£¬·Ö·¢¸øËÄ¸öÓÃ»§.
+    /// ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½Ë¿ï¿½ï¿½ï¿½.
+    /// ï¿½É³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½108ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½Ã»ï¿½.
     /// 
     /// </summary>
     class DistributePokerHelper
     {
-        //Î´´òÂÒµÄ¼¯ºÏ
+        //Î´ï¿½ï¿½ï¿½ÒµÄ¼ï¿½ï¿½ï¿½
         StringBuilder sb = new StringBuilder("000001002003004005006007008009");
-        //´òÂÒºóµÄ¶ÓÁÐ
+        //ï¿½ï¿½ï¿½Òºï¿½Ä¶ï¿½ï¿½ï¿½
         Queue[] queues = new Queue[4] { new Queue(), new Queue(), new Queue(), new Queue()};
         ArrayList[] list = new ArrayList[4] { new ArrayList(), new ArrayList(), new ArrayList(), new ArrayList() };
 
