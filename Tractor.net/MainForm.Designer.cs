@@ -1,33 +1,15 @@
-namespace Kuaff.Tractor
-{
-    partial class MainForm
-    {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+namespace Kuaff.Tractor {
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
+    partial class MainForm {
+        private System.ComponentModel.IContainer components = null;
+        protected override void Dispose(bool disposing) {
+            if (disposing && (components != null)) {
                 components.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
+    }
+#region Windows Form Designer generated code
+        private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.menuStrip = new System.Windows.Forms.MenuStrip();
@@ -83,10 +65,10 @@ namespace Kuaff.Tractor
             // menuStrip
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.GameToolStripMenuItem,
-            this.ConfigToolStripMenuItem,
-            this.ToolsToolStripMenuItem,
-            this.HelpToolStripMenuItem});
+                    this.GameToolStripMenuItem,
+                    this.ConfigToolStripMenuItem,
+                    this.ToolsToolStripMenuItem,
+                    this.HelpToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(629, 24);
@@ -96,16 +78,16 @@ namespace Kuaff.Tractor
             // GameToolStripMenuItem
             // 
             this.GameToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.StartToolStripMenuItem,
-            this.PauseGametoolStripMenuItem,
-            this.toolStripSeparator2,
-            this.SaveToolStripMenuItem,
-            this.RestoreToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.ExitToolStripMenuItem});
+                    this.StartToolStripMenuItem,
+                    this.PauseGametoolStripMenuItem,
+                    this.toolStripSeparator2,
+                    this.SaveToolStripMenuItem,
+                    this.RestoreToolStripMenuItem,
+                    this.toolStripSeparator1,
+                    this.ExitToolStripMenuItem});
             this.GameToolStripMenuItem.Name = "GameToolStripMenuItem";
             this.GameToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
-            this.GameToolStripMenuItem.Text = "”Œœ∑";
+            this.GameToolStripMenuItem.Text = "Ê∏∏Êàè";
             // 
             // StartToolStripMenuItem
             // 
@@ -113,7 +95,7 @@ namespace Kuaff.Tractor
             this.StartToolStripMenuItem.Name = "StartToolStripMenuItem";
             this.StartToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
             this.StartToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.StartToolStripMenuItem.Text = "ø™ º–¬”Œœ∑";
+            this.StartToolStripMenuItem.Text = "ÂºÄÂßãÊñ∞Ê∏∏Êàè";
             this.StartToolStripMenuItem.Click += new System.EventHandler(this.MenuItem_Click);
             // 
             // PauseGametoolStripMenuItem
@@ -122,7 +104,7 @@ namespace Kuaff.Tractor
             this.PauseGametoolStripMenuItem.Name = "PauseGametoolStripMenuItem";
             this.PauseGametoolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
             this.PauseGametoolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.PauseGametoolStripMenuItem.Text = "‘›Õ£”Œœ∑";
+            this.PauseGametoolStripMenuItem.Text = "ÊöÇÂÅúÊ∏∏Êàè";
             this.PauseGametoolStripMenuItem.Click += new System.EventHandler(this.PauseGametoolStripMenuItem_Click);
             // 
             // toolStripSeparator2
@@ -136,7 +118,7 @@ namespace Kuaff.Tractor
             this.SaveToolStripMenuItem.Name = "SaveToolStripMenuItem";
             this.SaveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.SaveToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.SaveToolStripMenuItem.Text = "±£¥Ê≈∆æ÷";
+            this.SaveToolStripMenuItem.Text = "‰øùÂ≠òÁâåÂ±Ä";
             this.SaveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
             // RestoreToolStripMenuItem
@@ -145,7 +127,7 @@ namespace Kuaff.Tractor
             this.RestoreToolStripMenuItem.Name = "RestoreToolStripMenuItem";
             this.RestoreToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
             this.RestoreToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.RestoreToolStripMenuItem.Text = "∂¡»°≈∆æ÷";
+            this.RestoreToolStripMenuItem.Text = "ËØªÂèñÁâåÂ±Ä";
             this.RestoreToolStripMenuItem.Click += new System.EventHandler(this.RestoreToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
@@ -157,29 +139,29 @@ namespace Kuaff.Tractor
             // 
             this.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem";
             this.ExitToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.ExitToolStripMenuItem.Text = "ÕÀ≥ˆ";
+            this.ExitToolStripMenuItem.Text = "ÈÄÄÂá∫";
             this.ExitToolStripMenuItem.Click += new System.EventHandler(this.MenuItem_Click);
             // 
             // ConfigToolStripMenuItem
             // 
             this.ConfigToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.GameSpeedToolStripMenuItem,
-            this.toolStripSeparator3,
-            this.CardImageToolStripMenuItem,
-            this.CardBackToolStripMenuItem,
-            this.CardDesktopToolStripMenuItem,
-            this.toolStripSeparator4,
-            this.BackMusicToolStripMenuItem,
-            this.toolStripSeparator7,
-            this.SetRulesToolStripMenuItem,
-            this.SetGameFinishedtoolStripMenuItem,
-            this.toolStripSeparator6,
-            this.RobotToolStripMenuItem,
-            this.toolStripSeparator8,
-            this.SelectAlgorithmToolStripMenuItem});
+                    this.GameSpeedToolStripMenuItem,
+                    this.toolStripSeparator3,
+                    this.CardImageToolStripMenuItem,
+                    this.CardBackToolStripMenuItem,
+                    this.CardDesktopToolStripMenuItem,
+                    this.toolStripSeparator4,
+                    this.BackMusicToolStripMenuItem,
+                    this.toolStripSeparator7,
+                    this.SetRulesToolStripMenuItem,
+                    this.SetGameFinishedtoolStripMenuItem,
+                    this.toolStripSeparator6,
+                    this.RobotToolStripMenuItem,
+                    this.toolStripSeparator8,
+                    this.SelectAlgorithmToolStripMenuItem});
             this.ConfigToolStripMenuItem.Name = "ConfigToolStripMenuItem";
             this.ConfigToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
-            this.ConfigToolStripMenuItem.Text = "…Ë÷√";
+            this.ConfigToolStripMenuItem.Text = "ËÆæÁΩÆ";
             // 
             // GameSpeedToolStripMenuItem
             // 
@@ -187,7 +169,7 @@ namespace Kuaff.Tractor
             this.GameSpeedToolStripMenuItem.Name = "GameSpeedToolStripMenuItem";
             this.GameSpeedToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
             this.GameSpeedToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.GameSpeedToolStripMenuItem.Text = "”Œœ∑ÀŸ∂»";
+            this.GameSpeedToolStripMenuItem.Text = "Ê∏∏ÊàèÈÄüÂ∫¶";
             this.GameSpeedToolStripMenuItem.Click += new System.EventHandler(this.GameSpeedToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
@@ -198,13 +180,13 @@ namespace Kuaff.Tractor
             // CardImageToolStripMenuItem
             // 
             this.CardImageToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.CommonToolStripMenuItem,
-            this.ModelToolStripMenuItem,
-            this.OperaToolStripMenuItem,
-            this.CustomCardImageToolStripMenuItem});
+                    this.CommonToolStripMenuItem,
+                    this.ModelToolStripMenuItem,
+                    this.OperaToolStripMenuItem,
+                    this.CustomCardImageToolStripMenuItem});
             this.CardImageToolStripMenuItem.Name = "CardImageToolStripMenuItem";
             this.CardImageToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.CardImageToolStripMenuItem.Text = "≈∆√ÊÕº∞∏";
+            this.CardImageToolStripMenuItem.Text = "ÁâåÈù¢ÂõæÊ°à";
             // 
             // CommonToolStripMenuItem
             // 
@@ -212,40 +194,40 @@ namespace Kuaff.Tractor
             this.CommonToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.CommonToolStripMenuItem.Name = "CommonToolStripMenuItem";
             this.CommonToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.CommonToolStripMenuItem.Text = "∆’Õ®Õº∞∏";
+            this.CommonToolStripMenuItem.Text = "ÊôÆÈÄöÂõæÊ°à";
             this.CommonToolStripMenuItem.Click += new System.EventHandler(this.SelectCardImage_Click);
             // 
             // ModelToolStripMenuItem
             // 
             this.ModelToolStripMenuItem.Name = "ModelToolStripMenuItem";
             this.ModelToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.ModelToolStripMenuItem.Text = "œ„≥µ√¿≈Æ";
+            this.ModelToolStripMenuItem.Text = "È¶ôËΩ¶ÁæéÂ•≥";
             this.ModelToolStripMenuItem.Click += new System.EventHandler(this.SelectCardImage_Click);
             // 
             // OperaToolStripMenuItem
             // 
             this.OperaToolStripMenuItem.Name = "OperaToolStripMenuItem";
             this.OperaToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.OperaToolStripMenuItem.Text = "æ©æÁ¡≥∆◊";
+            this.OperaToolStripMenuItem.Text = "‰∫¨ÂâßËÑ∏Ë∞±";
             this.OperaToolStripMenuItem.Click += new System.EventHandler(this.SelectCardImage_Click);
             // 
             // CustomCardImageToolStripMenuItem
             // 
             this.CustomCardImageToolStripMenuItem.Name = "CustomCardImageToolStripMenuItem";
             this.CustomCardImageToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.CustomCardImageToolStripMenuItem.Text = "◊‘∂®“Â";
+            this.CustomCardImageToolStripMenuItem.Text = "Ëá™ÂÆö‰πâ";
             this.CustomCardImageToolStripMenuItem.Click += new System.EventHandler(this.SelectCardImage_Click);
             // 
             // CardBackToolStripMenuItem
             // 
             this.CardBackToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.BlueWorldToolStripMenuItem,
-            this.GreenAgeToolStripMenuItem,
-            this.AntelopeToolStripMenuItem,
-            this.CustomBackImageToolStripMenuItem});
+                    this.BlueWorldToolStripMenuItem,
+                    this.GreenAgeToolStripMenuItem,
+                    this.AntelopeToolStripMenuItem,
+                    this.CustomBackImageToolStripMenuItem});
             this.CardBackToolStripMenuItem.Name = "CardBackToolStripMenuItem";
             this.CardBackToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.CardBackToolStripMenuItem.Text = "≈∆±≥Õº∞∏";
+            this.CardBackToolStripMenuItem.Text = "ÁâåËÉåÂõæÊ°à";
             // 
             // BlueWorldToolStripMenuItem
             // 
@@ -253,38 +235,38 @@ namespace Kuaff.Tractor
             this.BlueWorldToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.BlueWorldToolStripMenuItem.Name = "BlueWorldToolStripMenuItem";
             this.BlueWorldToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.BlueWorldToolStripMenuItem.Text = "Œµ¿∂ ¿ΩÁ";
+            this.BlueWorldToolStripMenuItem.Text = "ËîöËìù‰∏ñÁïå";
             this.BlueWorldToolStripMenuItem.Click += new System.EventHandler(this.SelectBackImage_Click);
             // 
             // GreenAgeToolStripMenuItem
             // 
             this.GreenAgeToolStripMenuItem.Name = "GreenAgeToolStripMenuItem";
             this.GreenAgeToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.GreenAgeToolStripMenuItem.Text = "«‡…¨ƒÍª™";
+            this.GreenAgeToolStripMenuItem.Text = "ÈùíÊ∂©Âπ¥Âçé";
             this.GreenAgeToolStripMenuItem.Click += new System.EventHandler(this.SelectBackImage_Click);
             // 
             // AntelopeToolStripMenuItem
             // 
             this.AntelopeToolStripMenuItem.Name = "AntelopeToolStripMenuItem";
             this.AntelopeToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.AntelopeToolStripMenuItem.Text = "≤›‘≠¡Á—Ú";
+            this.AntelopeToolStripMenuItem.Text = "ËçâÂéüÁæöÁæä";
             this.AntelopeToolStripMenuItem.Click += new System.EventHandler(this.SelectBackImage_Click);
             // 
             // CustomBackImageToolStripMenuItem
             // 
             this.CustomBackImageToolStripMenuItem.Name = "CustomBackImageToolStripMenuItem";
             this.CustomBackImageToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.CustomBackImageToolStripMenuItem.Text = "◊‘∂®“Â";
+            this.CustomBackImageToolStripMenuItem.Text = "Ëá™ÂÆö‰πâ";
             this.CustomBackImageToolStripMenuItem.Click += new System.EventHandler(this.SelectBackImage_Click);
             // 
             // CardDesktopToolStripMenuItem
             // 
             this.CardDesktopToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.KuaffToolStripMenuItem,
-            this.SelectImageToolStripMenuItem});
+                    this.KuaffToolStripMenuItem,
+                    this.SelectImageToolStripMenuItem});
             this.CardDesktopToolStripMenuItem.Name = "CardDesktopToolStripMenuItem";
             this.CardDesktopToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.CardDesktopToolStripMenuItem.Text = "≈∆◊¿Õº∞∏";
+            this.CardDesktopToolStripMenuItem.Text = "ÁâåÊ°åÂõæÊ°à";
             // 
             // KuaffToolStripMenuItem
             // 
@@ -292,14 +274,14 @@ namespace Kuaff.Tractor
             this.KuaffToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.KuaffToolStripMenuItem.Name = "KuaffToolStripMenuItem";
             this.KuaffToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
-            this.KuaffToolStripMenuItem.Text = "ø‰∏∏ø∆ºº";
+            this.KuaffToolStripMenuItem.Text = "Â§∏Áà∂ÁßëÊäÄ";
             this.KuaffToolStripMenuItem.Click += new System.EventHandler(this.SelectImage_Click);
             // 
             // SelectImageToolStripMenuItem
             // 
             this.SelectImageToolStripMenuItem.Name = "SelectImageToolStripMenuItem";
             this.SelectImageToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
-            this.SelectImageToolStripMenuItem.Text = "◊‘∂®“ÂÕº∆¨";
+            this.SelectImageToolStripMenuItem.Text = "Ëá™ÂÆö‰πâÂõæÁâá";
             this.SelectImageToolStripMenuItem.Click += new System.EventHandler(this.SelectImage_Click);
             // 
             // toolStripSeparator4
@@ -310,13 +292,13 @@ namespace Kuaff.Tractor
             // BackMusicToolStripMenuItem
             // 
             this.BackMusicToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.NoBackMusicToolStripMenuItem,
-            this.PlayMusicToolStripMenuItem,
-            this.RandomPlayToolStripMenuItem});
+                    this.NoBackMusicToolStripMenuItem,
+                    this.PlayMusicToolStripMenuItem,
+                    this.RandomPlayToolStripMenuItem});
             this.BackMusicToolStripMenuItem.Image = global::Kuaff.Tractor.Properties.Resources.music;
             this.BackMusicToolStripMenuItem.Name = "BackMusicToolStripMenuItem";
             this.BackMusicToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.BackMusicToolStripMenuItem.Text = "±≥æ∞“Ù¿÷";
+            this.BackMusicToolStripMenuItem.Text = "ËÉåÊôØÈü≥‰πê";
             // 
             // NoBackMusicToolStripMenuItem
             // 
@@ -324,21 +306,21 @@ namespace Kuaff.Tractor
             this.NoBackMusicToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.NoBackMusicToolStripMenuItem.Name = "NoBackMusicToolStripMenuItem";
             this.NoBackMusicToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.NoBackMusicToolStripMenuItem.Text = "Œﬁ±≥æ∞“Ù¿÷";
+            this.NoBackMusicToolStripMenuItem.Text = "Êó†ËÉåÊôØÈü≥‰πê";
             this.NoBackMusicToolStripMenuItem.Click += new System.EventHandler(this.NoBackMusicToolStripMenuItem_Click_1);
             // 
             // PlayMusicToolStripMenuItem
             // 
             this.PlayMusicToolStripMenuItem.Name = "PlayMusicToolStripMenuItem";
             this.PlayMusicToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.PlayMusicToolStripMenuItem.Text = "≤•∑≈±≥æ∞“Ù¿÷";
+            this.PlayMusicToolStripMenuItem.Text = "Êí≠ÊîæËÉåÊôØÈü≥‰πê";
             this.PlayMusicToolStripMenuItem.Click += new System.EventHandler(this.PlayMusicToolStripMenuItem_Click);
             // 
             // RandomPlayToolStripMenuItem
             // 
             this.RandomPlayToolStripMenuItem.Name = "RandomPlayToolStripMenuItem";
             this.RandomPlayToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.RandomPlayToolStripMenuItem.Text = "ÀÊª˙≤•∑≈";
+            this.RandomPlayToolStripMenuItem.Text = "ÈöèÊú∫Êí≠Êîæ";
             this.RandomPlayToolStripMenuItem.Click += new System.EventHandler(this.RandomPlayToolStripMenuItem_Click);
             // 
             // toolStripSeparator7
@@ -350,14 +332,14 @@ namespace Kuaff.Tractor
             // 
             this.SetRulesToolStripMenuItem.Name = "SetRulesToolStripMenuItem";
             this.SetRulesToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.SetRulesToolStripMenuItem.Text = "”Œœ∑πÊ‘Ú";
+            this.SetRulesToolStripMenuItem.Text = "Ê∏∏ÊàèËßÑÂàô";
             this.SetRulesToolStripMenuItem.Click += new System.EventHandler(this.SetRulesToolStripMenuItem_Click);
             // 
             // SetGameFinishedtoolStripMenuItem
             // 
             this.SetGameFinishedtoolStripMenuItem.Name = "SetGameFinishedtoolStripMenuItem";
             this.SetGameFinishedtoolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.SetGameFinishedtoolStripMenuItem.Text = "”Œœ∑Ω· ¯¬÷ ˝";
+            this.SetGameFinishedtoolStripMenuItem.Text = "Ê∏∏ÊàèÁªìÊùüËΩÆÊï∞";
             this.SetGameFinishedtoolStripMenuItem.Click += new System.EventHandler(this.SetGameFinishedtoolStripMenuItem_Click);
             // 
             // toolStripSeparator6
@@ -371,7 +353,7 @@ namespace Kuaff.Tractor
             this.RobotToolStripMenuItem.Image = global::Kuaff.Tractor.Properties.Resources.robot;
             this.RobotToolStripMenuItem.Name = "RobotToolStripMenuItem";
             this.RobotToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.RobotToolStripMenuItem.Text = "ª˙∆˜»À¬ﬁ≤ÆÃÿ";
+            this.RobotToolStripMenuItem.Text = "Êú∫Âô®‰∫∫ÁΩó‰ºØÁâπ";
             this.RobotToolStripMenuItem.Click += new System.EventHandler(this.RobotToolStripMenuItem_Click);
             // 
             // toolStripSeparator8
@@ -383,42 +365,42 @@ namespace Kuaff.Tractor
             // 
             this.SelectAlgorithmToolStripMenuItem.Name = "SelectAlgorithmToolStripMenuItem";
             this.SelectAlgorithmToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.SelectAlgorithmToolStripMenuItem.Text = "À„∑®≤Âº˛";
+            this.SelectAlgorithmToolStripMenuItem.Text = "ÁÆóÊ≥ïÊèí‰ª∂";
             this.SelectAlgorithmToolStripMenuItem.Click += new System.EventHandler(this.SelectAlgorithmToolStripMenuItem_Click);
             // 
             // ToolsToolStripMenuItem
             // 
             this.ToolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.FereToolStripMenuItem,
-            this.SeeTotalScoresToolStripMenuItem});
+                    this.FereToolStripMenuItem,
+                    this.SeeTotalScoresToolStripMenuItem});
             this.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem";
             this.ToolsToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
-            this.ToolsToolStripMenuItem.Text = "π§æﬂ";
+            this.ToolsToolStripMenuItem.Text = "Â∑•ÂÖ∑";
             // 
             // FereToolStripMenuItem
             // 
             this.FereToolStripMenuItem.Image = global::Kuaff.Tractor.Properties.Resources.fere;
             this.FereToolStripMenuItem.Name = "FereToolStripMenuItem";
             this.FereToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.FereToolStripMenuItem.Text = "Õœ¿≠ª˙∞È¬¬";
+            this.FereToolStripMenuItem.Text = "ÊãñÊãâÊú∫‰º¥‰æ£";
             this.FereToolStripMenuItem.Click += new System.EventHandler(this.FereToolStripMenuItem_Click);
             // 
             // SeeTotalScoresToolStripMenuItem
             // 
             this.SeeTotalScoresToolStripMenuItem.Name = "SeeTotalScoresToolStripMenuItem";
             this.SeeTotalScoresToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
-            this.SeeTotalScoresToolStripMenuItem.Text = "º∆∑÷≈∆";
+            this.SeeTotalScoresToolStripMenuItem.Text = "ËÆ°ÂàÜÁâå";
             this.SeeTotalScoresToolStripMenuItem.Click += new System.EventHandler(this.SeeTotalScoresToolStripMenuItem_Click);
             // 
             // HelpToolStripMenuItem
             // 
             this.HelpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.GameHelpToolStripMenuItem,
-            this.toolStripSeparator5,
-            this.AboutMeToolStripMenuItem});
+                    this.GameHelpToolStripMenuItem,
+                    this.toolStripSeparator5,
+                    this.AboutMeToolStripMenuItem});
             this.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem";
             this.HelpToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
-            this.HelpToolStripMenuItem.Text = "∞Ô÷˙";
+            this.HelpToolStripMenuItem.Text = "Â∏ÆÂä©";
             // 
             // GameHelpToolStripMenuItem
             // 
@@ -426,7 +408,7 @@ namespace Kuaff.Tractor
             this.GameHelpToolStripMenuItem.Name = "GameHelpToolStripMenuItem";
             this.GameHelpToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
             this.GameHelpToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
-            this.GameHelpToolStripMenuItem.Text = "”Œœ∑∞Ô÷˙";
+            this.GameHelpToolStripMenuItem.Text = "Ê∏∏ÊàèÂ∏ÆÂä©";
             this.GameHelpToolStripMenuItem.Click += new System.EventHandler(this.GameHelpToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
@@ -439,7 +421,7 @@ namespace Kuaff.Tractor
             this.AboutMeToolStripMenuItem.Name = "AboutMeToolStripMenuItem";
             this.AboutMeToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.A)));
             this.AboutMeToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
-            this.AboutMeToolStripMenuItem.Text = "πÿ”⁄";
+            this.AboutMeToolStripMenuItem.Text = "ÂÖ≥‰∫é";
             this.AboutMeToolStripMenuItem.Click += new System.EventHandler(this.AboutMeToolStripMenuItem_Click);
             // 
             // timer
@@ -448,13 +430,13 @@ namespace Kuaff.Tractor
             // 
             // openFileDialog
             // 
-            this.openFileDialog.Filter = "pngÕº∆¨|*.PNG|jpgÕº∆¨|*.JPG|bmpÕº∆¨|*.BMP|gifÕº∆¨|*.GIF|À˘”–Œƒº˛|*.*";
-            this.openFileDialog.Title = "—°‘Ò±≥æ∞Õº∆¨";
+            this.openFileDialog.Filter = "pngÂõæÁâá|*.PNG|jpgÂõæÁâá|*.JPG|bmpÂõæÁâá|*.BMP|gifÂõæÁâá|*.GIF|ÊâÄÊúâÊñá‰ª∂|*.*";
+            this.openFileDialog.Title = "ÈÄâÊã©ËÉåÊôØÂõæÁâá";
             // 
             // notifyIcon
             // 
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
-            this.notifyIcon.Text = "Õœ¿≠ª˙¥Û’Ω";
+            this.notifyIcon.Text = "ÊãñÊãâÊú∫Â§ßÊàò";
             this.notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseClick);
             // 
             // MainForm
@@ -471,7 +453,7 @@ namespace Kuaff.Tractor
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Õœ¿≠ª˙¥Û’Ω";
+            this.Text = "ÊãñÊãâÊú∫Â§ßÊàò";
             this.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseDoubleClick);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.MainForm_Paint);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseClick);
@@ -480,11 +462,8 @@ namespace Kuaff.Tractor
             this.menuStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
-
-        #endregion
-
+#endregion
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem GameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ConfigToolStripMenuItem;
@@ -534,4 +513,3 @@ namespace Kuaff.Tractor
         private System.Windows.Forms.ToolStripMenuItem SetGameFinishedtoolStripMenuItem;
     }
 }
-

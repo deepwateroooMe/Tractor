@@ -14,295 +14,212 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Configuration;
 
-
-
 using Kuaff.CardResouces;
 using Kuaff.ModelResources;
 using Kuaff.OperaResources;
-
 using Kuaff.TractorFere;
 
-
-namespace Kuaff.Tractor
-{
-    internal partial class MainForm : Form
-    {
-        #region ±äÁ¿ÉùÃ÷
-        //»º³åÇøÍ¼Ïñ
+namespace Kuaff.Tractor {
+    internal partial class MainForm : Form {
+#region å˜é‡å£°æ˜
+        // ç¼“å†²åŒºå›¾åƒ
         internal Bitmap bmp = null;
-        //Ô­Ê¼±³¾°Í¼Æ¬
+        // åŸå§‹èƒŒæ™¯å›¾ç‰‡
         internal Bitmap image = null;
-      
-
-        //*×´Ì¬
-        //µ±Ç°µÄ×´Ì¬
+        // çŠ¶æ€
+        // å½“å‰çš„çŠ¶æ€
         internal CurrentState currentState ;
-        //µ±Ç°µÄRank,´ú±íµ±Ç°ÅÆ¾ÖµÄRank,0´ú±íÊµ¼ÊµÄÅÆ¾Ö2.....11´ú±íK,12´ú±íA,53´ú±í´òÍõ
+        // å½“å‰çš„Rank,ä»£è¡¨å½“å‰ç‰Œå±€çš„Rank,0ä»£è¡¨å®é™…çš„ç‰Œå±€2.....11ä»£è¡¨K,12ä»£è¡¨A,53ä»£è¡¨æ‰“ç‹
         internal int currentRank = 0;
-        //ÊÇ·ñÊÇĞÂ¿ªÊ¼µÄÓÎÏ·
+        // æ˜¯å¦æ˜¯æ–°å¼€å§‹çš„æ¸¸æˆ
         internal bool isNew = true;
-
-        //ÁÁÅÆµÄ´ÎÊı
+        // äº®ç‰Œçš„æ¬¡æ•°
         internal int showSuits = 0;
-        //Ë­ÁÁµÄÅÆ
+        // è°äº®çš„ç‰Œ
         internal int whoShowRank = 0;
-
-
-        //*·¢ÅÆĞòÁĞ
-        //µÃµ½Ò»´Î·¢ÅÆµÄĞòÁĞ,dpokerÊ±·¢ÅÆµÄ°ïÖúÀà£¬pokerListÊÇÃ¿¸öÈËÊÖÖĞµÄÅÆµÄÁĞ±í
+        // *å‘ç‰Œåºåˆ—
+        // å¾—åˆ°ä¸€æ¬¡å‘ç‰Œçš„åºåˆ—,dpokeræ—¶å‘ç‰Œçš„å¸®åŠ©ç±»ï¼ŒpokerListæ˜¯æ¯ä¸ªäººæ‰‹ä¸­çš„ç‰Œçš„åˆ—è¡¨
         internal DistributePokerHelper dpoker = null;
         internal ArrayList[] pokerList = null;
-
-        //Ã¿¸öÈËÊÖÖĞ½âÎöºÃµÄÅÆ
+        // æ¯ä¸ªäººæ‰‹ä¸­è§£æå¥½çš„ç‰Œ
         internal CurrentPoker[] currentPokers = { new CurrentPoker(), new CurrentPoker(), new CurrentPoker(), new CurrentPoker() };
-        //»­Í¼µÄ´ÎÊı£¨½öÔÚ·¢ÅÆÊ±Ê¹ÓÃ£©
+        // ç”»å›¾çš„æ¬¡æ•°ï¼ˆä»…åœ¨å‘ç‰Œæ—¶ä½¿ç”¨ï¼‰
         internal int currentCount = 0;
-        //µ±Ç°Ò»ÂÖ¸÷¼ÒµÄ³öÅÆÇé¿ö
+        // å½“å‰ä¸€è½®å„å®¶çš„å‡ºç‰Œæƒ…å†µ
         internal ArrayList[] currentSendCards = new ArrayList[4];
-        //Ó¦¸ÃË­³öÅÆ
-        internal int whoseOrder = 0;//0Î´¶¨,1ÎÒ£¬2¶Ô¼Ò£¬3Î÷¼Ò,4¶«¼Ò
-        //Ò»´Î³öÀ´ÖĞË­×îÏÈ¿ªÊ¼³öµÄÅÆ
+        // åº”è¯¥è°å‡ºç‰Œ
+        internal int whoseOrder = 0;// 0æœªå®š,1æˆ‘ï¼Œ2å¯¹å®¶ï¼Œ3è¥¿å®¶,4ä¸œå®¶
+        // ä¸€æ¬¡å‡ºæ¥ä¸­è°æœ€å…ˆå¼€å§‹å‡ºçš„ç‰Œ
         internal int firstSend = 0;
-
-        //*¸¨Öú±äÁ¿
-        //µ±Ç°ÊÖÖĞÅÆµÄ×ø±ê
+        // *è¾…åŠ©å˜é‡
+        // å½“å‰æ‰‹ä¸­ç‰Œçš„åæ ‡
         internal ArrayList myCardsLocation = new ArrayList();
-        //µ±Ç°ÊÖÖĞÅÆµÄÊıÖµ
+        // å½“å‰æ‰‹ä¸­ç‰Œçš„æ•°å€¼
         internal ArrayList myCardsNumber = new ArrayList();
-        //µ±Ç°ÊÖÖĞÅÆµÄÊÇ·ñ±»µã³ö
+        // å½“å‰æ‰‹ä¸­ç‰Œçš„æ˜¯å¦è¢«ç‚¹å‡º
         internal ArrayList myCardIsReady = new ArrayList();
-        //µ±Ç°¿Ûµ×µÄÅÆ
+        // å½“å‰æ‰£åº•çš„ç‰Œ
         internal ArrayList send8Cards = new ArrayList();
-
-        //*»­ÎÒµÄÅÆµÄ¸¨Öú±äÁ¿
-        //»­ÅÆË³Ğò
+        // *ç”»æˆ‘çš„ç‰Œçš„è¾…åŠ©å˜é‡
+        // ç”»ç‰Œé¡ºåº
         internal int cardsOrderNumber = 0;
-
-        //È·¶¨³ÌĞòĞİÃßµÄ×î³¤Ê±¼ä
+        // ç¡®å®šç¨‹åºä¼‘çœ çš„æœ€é•¿æ—¶é—´
         internal long sleepTime;
         internal long sleepMaxTime = 2000;
         internal CardCommands wakeupCardCommands;
-
-        //*»æ»­¸¨ÖúÀà
-        //DrawingForm±äÁ¿
+        // *ç»˜ç”»è¾…åŠ©ç±»
+        // DrawingFormå˜é‡
         internal DrawingFormHelper drawingFormHelper = null;
-        internal¡¡CalculateRegionHelper calculateRegionHelper = null;
-
-        //¼ÇÂ¼±¾´ÎµÃ·Ö
+        internalã€€CalculateRegionHelper calculateRegionHelper = null;
+        // è®°å½•æœ¬æ¬¡å¾—åˆ†
         internal int Scores = 0;
-
        
-        //ÓÎÏ·ÉèÖÃ
+        // æ¸¸æˆè®¾ç½®
         internal GameConfig gameConfig = new GameConfig();
-
-        //³öÅÆÊ±Ä¿Ç°ÅÆ×î´óµÄÄÇÒ»¼Ò
+        // å‡ºç‰Œæ—¶ç›®å‰ç‰Œæœ€å¤§çš„é‚£ä¸€å®¶
         internal int whoIsBigger = 0;
-
-
-        //ÒôÀÖÎÄ¼ş
+        // éŸ³ä¹æ–‡ä»¶
         private string musicFile = "";
-        //ÅÆÃæÍ¼°¸
+        // ç‰Œé¢å›¾æ¡ˆ
         internal Bitmap[] cardsImages = new Bitmap[54];
-
-        //³öÅÆËã·¨
+        // å‡ºç‰Œç®—æ³•
         internal object[] UserAlgorithms = { null, null, null, null };
-
-        //µ±Ç°Ò»¾ÖÒÑ¾­³öµÄÅÆ
+        // å½“å‰ä¸€å±€å·²ç»å‡ºçš„ç‰Œ
         internal CurrentPoker[] currentAllSendPokers = { new CurrentPoker(), new CurrentPoker(), new CurrentPoker(), new CurrentPoker() };
-
-        #endregion // ±äÁ¿ÉùÃ÷
-
+#endregion // å˜é‡å£°æ˜
     
-        internal MainForm()
-        {
+        internal MainForm() {
             InitializeComponent();
             SetStyle(ControlStyles.ResizeRedraw, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             SetStyle(ControlStyles.UserPaint, true);
             SetStyle(ControlStyles.StandardDoubleClick, true);
-
            
-            //¶ÁÈ¡³ÌĞòÅäÖÃ
+            // è¯»å–ç¨‹åºé…ç½®
             InitAppSetting();
             
             notifyIcon.Text = Text;
             BackgroundImage = image;
         
-            //±äÁ¿³õÊ¼»¯
+            // å˜é‡åˆå§‹åŒ–
             bmp = new Bitmap(ClientRectangle.Width, ClientRectangle.Height);
             
             
             drawingFormHelper = new DrawingFormHelper(this);
             calculateRegionHelper = new CalculateRegionHelper(this);
-
-
-            for (int i = 0; i < 54; i++)
-            {
-                cardsImages[i] = null; //³õÊ¼»¯
+            for (int i = 0; i < 54; i++) {
+                cardsImages[i] = null; // åˆå§‹åŒ–
             }
         }
-
-        private void InitAppSetting()
-        {
-            //Ã»ÓĞÅäÖÃÎÄ¼ş£¬Ôò´ÓconfigÎÄ¼şÖĞ¶ÁÈ¡
-            if (!File.Exists("gameConfig"))
-            {
+        private void InitAppSetting() {
+            // æ²¡æœ‰é…ç½®æ–‡ä»¶ï¼Œåˆ™ä»configæ–‡ä»¶ä¸­è¯»å–
+            if (!File.Exists("gameConfig")) {
                 AppSettingsReader reader = new AppSettingsReader();
-                try
-                {
+                try {
                     Text = (String)reader.GetValue("title", typeof(String));
                 }
-                catch (Exception ex)
-                {
-                    Text = "ÍÏÀ­»ú´óÕ½";
+                catch (Exception ex) {
+                    Text = "æ‹–æ‹‰æœºå¤§æˆ˜";
                 }
-
-                try
-                {
+                try {
                     gameConfig.MustRank = (String)reader.GetValue("mustRank", typeof(String));
                 }
-                catch (Exception ex)
-                {
+                catch (Exception ex) {
                     gameConfig.MustRank = ",3,8,11,12,13,";
                 }
-
-                try
-                {
+                try {
                     gameConfig.IsDebug = (bool)reader.GetValue("debug", typeof(bool));
                 }
-                catch (Exception ex)
-                {
+                catch (Exception ex) {
                     gameConfig.IsDebug = false;
                 }
-
-                try
-                {
+                try {
                     gameConfig.BottomAlgorithm = (int)reader.GetValue("bottomAlgorithm", typeof(int));
                 }
-                catch (Exception ex)
-                {
+                catch (Exception ex) {
                     gameConfig.BottomAlgorithm = 1;
                 }
             }
-            else
-            {
-                //Êµ¼Ê´ÓgameConfigÎÄ¼şÖĞ¶ÁÈ¡
+            else {
+                // å®é™…ä»gameConfigæ–‡ä»¶ä¸­è¯»å–
                 Stream stream = null;
-                try
-                {
+                try {
                     IFormatter formatter = new BinaryFormatter();
                     stream = new FileStream("gameConfig", FileMode.Open, FileAccess.Read, FileShare.Read);
                     gameConfig = (GameConfig)formatter.Deserialize(stream);
                     
                 }
-                catch (Exception ex)
-                {
+                catch (Exception ex) {
                     
                 }
-                finally
-                {
+                finally {
                     if (stream != null)
                     {
                         stream.Close();
                     }
                 }
             }
-
-            //Î´ĞòÁĞ»¯µÄÖµ
+            // æœªåºåˆ—åŒ–çš„å€¼
             AppSettingsReader myreader = new AppSettingsReader();
             gameConfig.CardsResourceManager = Kuaff_Cards.ResourceManager;
-            try
-            {
+            try {
                 String bkImage = (String)myreader.GetValue("backImage", typeof(String));
                 image = new Bitmap(bkImage);
                 KuaffToolStripMenuItem.CheckState = CheckState.Unchecked;
-
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 image = global::Kuaff.Tractor.Properties.Resources.Backgroud;
             }
-
-            try
-            {
+            try {
                 Text = (String)myreader.GetValue("title", typeof(String));
             }
-            catch (Exception ex)
-            {
-
+            catch (Exception ex) {
             }
-
             gameConfig.CardImageName = "";
-
-            if (gameConfig.IsDebug)
-            {
+            if (gameConfig.IsDebug) {
                 RobotToolStripMenuItem.CheckState = CheckState.Checked;
             }
-
         }
 
-
-
-        #region ´°¿ÚÊÂ¼ş´¦Àí³ÌĞò
-
-        internal void MenuItem_Click(object sender, EventArgs e)
-        {
-
+#region çª—å£äº‹ä»¶å¤„ç†ç¨‹åº
+        internal void MenuItem_Click(object sender, EventArgs e) {
             ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
-            if (menuItem.Text.Equals("ÍË³ö"))
-            {
+            if (menuItem.Text.Equals("é€€å‡º")) {
                 this.Close();
             }
-
-            if (menuItem.Text.Equals("¿ªÊ¼ĞÂÓÎÏ·"))
-            {
-                PauseGametoolStripMenuItem.Text = "ÔİÍ£ÓÎÏ·";
-
-
-                //ĞÂÓÎÏ·³õÊ¼×´Ì¬£¬ÎÒ¼ÒºÍµĞ·½¶¼´Ó2¿ªÊ¼£¬ÁîÅÆÎª¿ªÊ¼·¢ÅÆ
+            if (menuItem.Text.Equals("å¼€å§‹æ–°æ¸¸æˆ")) {
+                PauseGametoolStripMenuItem.Text = "æš‚åœæ¸¸æˆ";
+                // æ–°æ¸¸æˆåˆå§‹çŠ¶æ€ï¼Œæˆ‘å®¶å’Œæ•Œæ–¹éƒ½ä»2å¼€å§‹ï¼Œä»¤ç‰Œä¸ºå¼€å§‹å‘ç‰Œ
                 currentState = new CurrentState(0, 0, 0, 0,0,0,CardCommands.ReadyCards);
                 currentRank = 0;
-
                 isNew = true;
                 whoIsBigger = 0;
-
-                //³õÊ¼»¯
+                // åˆå§‹åŒ–
                 init();
-
-                //¿ªÊ¼¶¨Ê±Æ÷£¬½øĞĞ·¢ÅÆ
+                // å¼€å§‹å®šæ—¶å™¨ï¼Œè¿›è¡Œå‘ç‰Œ
                 timer.Start();
             }
-
         }
-
-
-        //³õÊ¼»¯
-        internal void init()
-        {
-            //Ã¿´Î³õÊ¼»¯¶¼ÖØ»æ±³¾°
+        // åˆå§‹åŒ–
+        internal void init() {
+            // æ¯æ¬¡åˆå§‹åŒ–éƒ½é‡ç»˜èƒŒæ™¯
             Graphics g = Graphics.FromImage(bmp);
             drawingFormHelper.DrawBackground(g);
-
-
-            //·¢Ò»´ÎÅÆ
+            // å‘ä¸€æ¬¡ç‰Œ
             dpoker = new DistributePokerHelper();
             pokerList = dpoker.Distribute();
-
-            //Ã¿¸öÈËÊÖÖĞµÄÅÆÇå¿Õ,×¼±¸ÃşÅÆ
+            // æ¯ä¸ªäººæ‰‹ä¸­çš„ç‰Œæ¸…ç©º,å‡†å¤‡æ‘¸ç‰Œ
             currentPokers[0].Clear();
             currentPokers[1].Clear(); 
             currentPokers[2].Clear();
             currentPokers[3].Clear();
-
-            //Çå¿ÕÒÑ·¢ËÍµÄÅÆ
+            // æ¸…ç©ºå·²å‘é€çš„ç‰Œ
             currentAllSendPokers[0].Clear();
             currentAllSendPokers[1].Clear();
             currentAllSendPokers[2].Clear();
             currentAllSendPokers[3].Clear();
-
-
-            //ÎªÃ¿¸öÈËµÄcurrentPokersÉèÖÃRank
+            // ä¸ºæ¯ä¸ªäººçš„currentPokersè®¾ç½®Rank
             currentPokers[0].Rank = currentRank;
             currentPokers[1].Rank = currentRank;
             currentPokers[2].Rank = currentRank;
@@ -311,112 +228,79 @@ namespace Kuaff.Tractor
             currentPokers[1].Suit = 0;
             currentPokers[2].Suit = 0;
             currentPokers[3].Suit = 0;
-
-
             currentSendCards[0] = new ArrayList();
             currentSendCards[1] = new ArrayList();
             currentSendCards[2] = new ArrayList();
             currentSendCards[3] = new ArrayList();
-
-            //
+            // 
             myCardsLocation= new ArrayList();
             myCardsNumber= new ArrayList();
             myCardIsReady= new ArrayList();
             send8Cards= new ArrayList();
-
-
-            //ÉèÖÃÃüÁî
+            // è®¾ç½®å‘½ä»¤
             currentState.CurrentCardCommands = CardCommands.ReadyCards;
             currentState.Suit = 0;
         
-
-            //ÉèÖÃ»¹Î´·¢ÅÆ,Ñ­»·25´Î½«ÅÆ·¢Íê
+            // è®¾ç½®è¿˜æœªå‘ç‰Œ,å¾ªç¯25æ¬¡å°†ç‰Œå‘å®Œ
             currentCount = 0;
-
-            //Ä¿Ç°²»¿ÉÒÔ·´ÅÆ
+            // ç›®å‰ä¸å¯ä»¥åç‰Œ
             showSuits = 0;
             whoShowRank = 0;
-
-            //µÃ·ÖÇåÁã
+            // å¾—åˆ†æ¸…é›¶
             Scores = 0;
             
-
-            //»æÖÆSidebar
+            // ç»˜åˆ¶Sidebar
             drawingFormHelper.DrawSidebar(g);
-            //»æÖÆ¶«ÄÏÎ÷±±
+            // ç»˜åˆ¶ä¸œå—è¥¿åŒ—
             drawingFormHelper.DrawOtherMaster(g, 0, 0);
             
-            if (currentState.Master != 0)
-            {
+            if (currentState.Master != 0) {
                 drawingFormHelper.DrawMaster(g, currentState.Master, 1);
                 drawingFormHelper.DrawOtherMaster(g, currentState.Master, 1);
             }
-
-            //»æÖÆRank
+            // ç»˜åˆ¶Rank
             drawingFormHelper.DrawRank(g,currentState.OurCurrentRank,true,false);
             drawingFormHelper.DrawRank(g, currentState.OpposedCurrentRank, false, false);
-
-            //»æÖÆ»¨É«
+            // ç»˜åˆ¶èŠ±è‰²
             drawingFormHelper.DrawSuit(g, 0, true, false);
             drawingFormHelper.DrawSuit(g, 0, false, false);
-
             send8Cards = new ArrayList();
-            //µ÷Õû»¨É«
-            if (currentRank == 53)
-            {
+            // è°ƒæ•´èŠ±è‰²
+            if (currentRank == 53) {
                 currentState.Suit = 5;
             }
-
             whoIsBigger = 0;
-
-            //Èç¹ûÉèÖÃÁËÓÎÏ·½ØÖ¹£¬ÔòÍ£Ö¹ÓÎÏ·
-            if (gameConfig.WhenFinished > 0)
-            {
+            // å¦‚æœè®¾ç½®äº†æ¸¸æˆæˆªæ­¢ï¼Œåˆ™åœæ­¢æ¸¸æˆ
+            if (gameConfig.WhenFinished > 0) {
                 
                 bool b = false;
-
-                if ((currentState.OurTotalRound + 1) > gameConfig.WhenFinished) 
-                {
+                if ((currentState.OurTotalRound + 1) > gameConfig.WhenFinished)  {
                     b = true;
                 }
-                if ((currentState.OpposedTotalRound + 1) > gameConfig.WhenFinished)
-                {
+                if ((currentState.OpposedTotalRound + 1) > gameConfig.WhenFinished) {
                     b = true;
                 }
-                if (b)
-                {
+                if (b) {
                     timer.Stop();
-                    PauseGametoolStripMenuItem.Text = "¼ÌĞøÓÎÏ·";
+                    PauseGametoolStripMenuItem.Text = "ç»§ç»­æ¸¸æˆ";
                     PauseGametoolStripMenuItem.Image = Properties.Resources.MenuResume;
                 }
             }
         }
-
        
-
-
-        //´°¿Ú»æ»­´¦Àí,½«»º³åÇøÍ¼Ïñ»­µ½´°¿ÚÉÏ
-        private void MainForm_Paint(object sender, PaintEventArgs e)
-        {
+        // çª—å£ç»˜ç”»å¤„ç†,å°†ç¼“å†²åŒºå›¾åƒç”»åˆ°çª—å£ä¸Š
+        private void MainForm_Paint(object sender, PaintEventArgs e) {
             Graphics g = e.Graphics;
-            //½«bmp»­µ½´°¿ÚÉÏ
+            // å°†bmpç”»åˆ°çª—å£ä¸Š
             g.DrawImage(bmp, 0, 0);
         }
-
-
        
-
-        private void MainForm_MouseClick(object sender, MouseEventArgs e)
-        {
-            //this.Text = "X=" + e.X + ",Y=" + e.Y + ";" + e.Clicks;
-
-            //×ó¼ü
-            //Ö»ÓĞ·¢ÅÆÊ±ºÍ¸ÃÎÒ³öÅÆÊ±²ÅÄÜÏàÓ¦Êó±êÊÂ¼ş
-            if (((currentState.CurrentCardCommands == CardCommands.WaitingForMySending) || (currentState.CurrentCardCommands == CardCommands.WaitingForSending8Cards)) && (whoseOrder == 1))
-            {
-
-                if (e.Button == MouseButtons.Left)
-                {
+        private void MainForm_MouseClick(object sender, MouseEventArgs e) {
+            // this.Text = "X=" + e.X + ",Y=" + e.Y + ";" + e.Clicks;
+            // å·¦é”®
+            // åªæœ‰å‘ç‰Œæ—¶å’Œè¯¥æˆ‘å‡ºç‰Œæ—¶æ‰èƒ½ç›¸åº”é¼ æ ‡äº‹ä»¶
+            if (((currentState.CurrentCardCommands == CardCommands.WaitingForMySending) || (currentState.CurrentCardCommands == CardCommands.WaitingForSending8Cards)) && (whoseOrder == 1)) {
+                if (e.Button == MouseButtons.Left) {
                     if ((e.X >= (int)myCardsLocation[0] && e.X <= ((int)myCardsLocation[myCardsLocation.Count - 1] + 71)) && (e.Y >= 355 && e.Y < 472))
                     {
                         if (calculateRegionHelper.CalculateClickedRegion(e, 1))
@@ -426,8 +310,7 @@ namespace Kuaff.Tractor
                         }
                     }
                 }
-                else if (e.Button == MouseButtons.Right)  //ÓÒ¼ü
-                {
+                else if (e.Button == MouseButtons.Right) {  // å³é”®
                     int i = calculateRegionHelper.CalculateRightClickedRegion(e);
                     if (i > -1 && i < myCardIsReady.Count)
                     {
@@ -445,30 +328,21 @@ namespace Kuaff.Tractor
                                 break;
                             }
                         }
-
                         drawingFormHelper.DrawMyPlayingCards(currentPokers[0]);
                         Refresh();
-
                     }
-
-
                 }
-
-
-                //ÅĞ¶ÏÊÇ·ñµã»÷ÁËĞ¡Öí*********ºÍÒÔÉÏµÄµã»÷²»Í¬
+                // åˆ¤æ–­æ˜¯å¦ç‚¹å‡»äº†å°çŒª*********å’Œä»¥ä¸Šçš„ç‚¹å‡»ä¸åŒ
                 Rectangle pigRect = new Rectangle(296, 300, 53, 46);
                 Region region = new Region(pigRect);
-                if (region.IsVisible(e.X, e.Y))
-                {
-                    //ÅĞ¶ÏÊÇ·ñ´¦ÔÚ¿ÛÅÆ½×¶Î
-                    if ((currentState.CurrentCardCommands == CardCommands.WaitingForSending8Cards)) //Èç¹ûµÈÎÒ¿ÛÅÆ
+                if (region.IsVisible(e.X, e.Y)) {
+                    // åˆ¤æ–­æ˜¯å¦å¤„åœ¨æ‰£ç‰Œé˜¶æ®µ
+                    if ((currentState.CurrentCardCommands == CardCommands.WaitingForSending8Cards)) // å¦‚æœç­‰æˆ‘æ‰£ç‰Œ
                     {
-
-                        //¿ÛÅÆ,ËùÒÔ²ÁÈ¥Ğ¡Öí
+                        // æ‰£ç‰Œ,æ‰€ä»¥æ“¦å»å°çŒª
                         Graphics g = Graphics.FromImage(bmp);
                         g.DrawImage(image, pigRect, pigRect, GraphicsUnit.Pixel);
                         g.Dispose();
-
                         ArrayList readyCards = new ArrayList();
                         for (int i = 0; i < myCardIsReady.Count; i++)
                         {
@@ -488,28 +362,24 @@ namespace Kuaff.Tractor
                             initSendedCards();
                             currentState.CurrentCardCommands = CardCommands.DrawMySortedCards;
                         }
-
                         
-
                     }
-                    else if (currentState.CurrentCardCommands == CardCommands.WaitingForMySending) //Èç¹ûµÈÎÒ·¢ÅÆ
+                    else if (currentState.CurrentCardCommands == CardCommands.WaitingForMySending) // å¦‚æœç­‰æˆ‘å‘ç‰Œ
                     {
-                        //Èç¹ûÎÒ×¼±¸³öµÄÅÆºÏ·¨
+                        // å¦‚æœæˆ‘å‡†å¤‡å‡ºçš„ç‰Œåˆæ³•
                         if (TractorRules.IsInvalid(this, currentSendCards, 1))
                         {
-                            //³öÅÆ£¬ËùÒÔ²ÁÈ¥Ğ¡Öí
+                            // å‡ºç‰Œï¼Œæ‰€ä»¥æ“¦å»å°çŒª
                             Graphics g = Graphics.FromImage(bmp);
                             g.DrawImage(image, pigRect, pigRect, GraphicsUnit.Pixel);
                             g.Dispose();
-
-                            //ÔÚÕâÀï¼ì²éË¦ÅÆµÄ¼ì²é
+                            // åœ¨è¿™é‡Œæ£€æŸ¥ç”©ç‰Œçš„æ£€æŸ¥
                             if (firstSend == 1)
                             {
                                 whoIsBigger = 1;
                                 ArrayList minCards = new ArrayList();
                                 if (TractorRules.CheckSendCards(this, minCards,0))
                                 {
-
                                     currentSendCards[0] = new ArrayList();
                                     for (int i = 0; i < myCardIsReady.Count; i++)
                                     {
@@ -518,8 +388,6 @@ namespace Kuaff.Tractor
                                             CommonMethods.SendCards(currentSendCards[0], currentPokers[0], pokerList[0], (int)myCardsNumber[i]);
                                         }
                                     }
-
-
                                 }
                                 else
                                 {
@@ -528,12 +396,9 @@ namespace Kuaff.Tractor
                                         CommonMethods.SendCards(currentSendCards[0], currentPokers[0], pokerList[0], (int)minCards[i]);
                                     }
                                 }
-
-
                             }
                             else
                             {
-
                                 currentSendCards[0] = new ArrayList();
                                 for (int i = 0; i < myCardIsReady.Count; i++)
                                 {
@@ -542,64 +407,45 @@ namespace Kuaff.Tractor
                                         CommonMethods.SendCards(currentSendCards[0], currentPokers[0], pokerList[0], (int)myCardsNumber[i]);
                                     }
                                 }
-
                             }
-
                             drawingFormHelper.DrawMyFinishSendedCards();
                         }
                     }
-
                 }
-
             }
-            else if (currentState.CurrentCardCommands == CardCommands.ReadyCards)
-            {
+            else if (currentState.CurrentCardCommands == CardCommands.ReadyCards) {
                 drawingFormHelper.IsClickedRanked(e);
             }
         }
-
        
-        private void MainForm_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            //if (e.Button == MouseButtons.Right)
+        private void MainForm_MouseDoubleClick(object sender, MouseEventArgs e) {
+            // if (e.Button == MouseButtons.Right)
             //    return;
-
-            //Èç¹ûµ±Ç°Ã»ÓĞÅÆ¿É³ö 
-            if (currentPokers[0].Count == 0)
-            {
+            // å¦‚æœå½“å‰æ²¡æœ‰ç‰Œå¯å‡º 
+            if (currentPokers[0].Count == 0) {
                 return;
             }
-
             bool  b = calculateRegionHelper.CalculateDoubleClickedRegion(e);
-            if (!b)
-            {
+            if (!b) {
                 return;
             }
-
             currentSendCards[0]= new ArrayList();
-
-
-            //³öÅÆ£¬ËùÒÔ²ÁÈ¥Ğ¡Öí
+            // å‡ºç‰Œï¼Œæ‰€ä»¥æ“¦å»å°çŒª
             Rectangle pigRect = new Rectangle(296, 300, 53, 46);
             Graphics g = Graphics.FromImage(bmp);
             g.DrawImage(image, pigRect, pigRect, GraphicsUnit.Pixel);
            
            
-
-            //¿ÛÅÆ»¹ÊÇ³öÅÆ
-            if ((currentState.CurrentCardCommands == CardCommands.WaitingForSending8Cards) && (whoseOrder == 1)) //Èç¹ûµÈÎÒ¿ÛÅÆ
-            {
+            // æ‰£ç‰Œè¿˜æ˜¯å‡ºç‰Œ
+            if ((currentState.CurrentCardCommands == CardCommands.WaitingForSending8Cards) && (whoseOrder == 1)) { // å¦‚æœç­‰æˆ‘æ‰£ç‰Œ
                 ArrayList readyCards = new ArrayList();
-                for (int i = 0; i < myCardIsReady.Count; i++)
-                {
+                for (int i = 0; i < myCardIsReady.Count; i++) {
                     if ((bool)myCardIsReady[i])
                     {
                         readyCards.Add((int)myCardsNumber[i]);
                     }
                 }
-
-                if (readyCards.Count == 8)
-                {
+                if (readyCards.Count == 8) {
                     send8Cards = new ArrayList();
                     for (int i = 0; i < 8; i++)
                     {
@@ -608,19 +454,13 @@ namespace Kuaff.Tractor
                     initSendedCards();
                     currentState.CurrentCardCommands = CardCommands.DrawMySortedCards;
                 }
-
-
             }
-            else if (currentState.CurrentCardCommands == CardCommands.WaitingForMySending) //Èç¹ûµÈÎÒ·¢ÅÆ
-            {
+            else if (currentState.CurrentCardCommands == CardCommands.WaitingForMySending) { // å¦‚æœç­‰æˆ‘å‘ç‰Œ
                
-
-                if (TractorRules.IsInvalid(this, currentSendCards, 1))
-                {
+                if (TractorRules.IsInvalid(this, currentSendCards, 1)) {
                     if (firstSend == 1)
                     {
                         whoIsBigger = 1;
-
                         ArrayList minCards = new ArrayList();
                         if (TractorRules.CheckSendCards(this, minCards,0))
                         {
@@ -632,7 +472,6 @@ namespace Kuaff.Tractor
                                     CommonMethods.SendCards(currentSendCards[0], currentPokers[0], pokerList[0], (int)myCardsNumber[i]);
                                 }
                             }
-
                         }
                         else
                         {
@@ -642,8 +481,6 @@ namespace Kuaff.Tractor
                             }
                            
                         }
-
-
                     }
                     else
                     {
@@ -656,100 +493,72 @@ namespace Kuaff.Tractor
                             }
                         }
                     }
-
-
                     drawingFormHelper.DrawMyFinishSendedCards();
                 }
             }
-
-
         }
-
-        //³õÊ¼»¯Ã¿¸öÈË³öµÄÅÆ
-        internal void initSendedCards()
-        {
-            //ÖØĞÂ½âÎöÃ¿¸öÈËÊÖÖĞµÄÅÆ
+// åˆå§‹åŒ–æ¯ä¸ªäººå‡ºçš„ç‰Œ
+        internal void initSendedCards() {
+            // é‡æ–°è§£ææ¯ä¸ªäººæ‰‹ä¸­çš„ç‰Œ
             currentPokers[0] = CommonMethods.parse(pokerList[0], currentState.Suit, currentRank);
             currentPokers[1] = CommonMethods.parse(pokerList[1], currentState.Suit, currentRank);
             currentPokers[2] = CommonMethods.parse(pokerList[2], currentState.Suit, currentRank);
             currentPokers[3] = CommonMethods.parse(pokerList[3], currentState.Suit, currentRank);
         }
-
-
-        #endregion // ´°¿ÚÊÂ¼ş´¦Àí³ÌĞò
-
-
-        //¶¨Ê±Æ÷,ÓÃÀ´ÏÔÊ¾·¢ÅÆÊ±µÄ¶¯»­
-        internal void timer_Tick(object sender, EventArgs e)
-        {
-
-            if (musicFile.Length > 0 && (!MciSoundPlayer.IsPlaying()) && PlayMusicToolStripMenuItem.Checked)
-            {
+#endregion // çª—å£äº‹ä»¶å¤„ç†ç¨‹åº
+// å®šæ—¶å™¨,ç”¨æ¥æ˜¾ç¤ºå‘ç‰Œæ—¶çš„åŠ¨ç”»
+        internal void timer_Tick(object sender, EventArgs e) {
+            if (musicFile.Length > 0 && (!MciSoundPlayer.IsPlaying()) && PlayMusicToolStripMenuItem.Checked) {
                 MciSoundPlayer.Stop();
                 MciSoundPlayer.Close();
                 MciSoundPlayer.Play(musicFile,"song");
             }
-            else if (musicFile.Length > 0 && (!MciSoundPlayer.IsPlaying()) && RandomPlayToolStripMenuItem.Checked)
-            {
+            else if (musicFile.Length > 0 && (!MciSoundPlayer.IsPlaying()) && RandomPlayToolStripMenuItem.Checked) {
                 PlayRandomSongs();
             }
-            //1.·ÖÅÆ
-            if (currentState.CurrentCardCommands == CardCommands.ReadyCards) //·ÖÅÆ
-            {
-                if (currentCount ==0)
-                {
-                    //»­¹¤¾ßÀ¸
+            // 1.åˆ†ç‰Œ
+            if (currentState.CurrentCardCommands == CardCommands.ReadyCards) { // åˆ†ç‰Œ
+                if (currentCount ==0) {
+                    // ç”»å·¥å…·æ 
                     if (!gameConfig.IsDebug)
                     {
                         drawingFormHelper.DrawToolbar();
                     }
-
                 }
-
-                if (currentCount < 25)
-                {
+                if (currentCount < 25) {
                     drawingFormHelper.ReadyCards(currentCount);
                     currentCount++;
                     
                 }
-                else
-                {
+                else {
                     currentState.CurrentCardCommands = CardCommands.DrawCenter8Cards;
                 }
             }
-            else if (currentState.CurrentCardCommands == CardCommands.WaitingShowBottom) //·­µ×ÅÆÍê±ÏºóµÄÇåÀí¹¤×÷
-            {
+            else if (currentState.CurrentCardCommands == CardCommands.WaitingShowBottom) { // ç¿»åº•ç‰Œå®Œæ¯•åçš„æ¸…ç†å·¥ä½œ
                 drawingFormHelper.DrawCenterImage();
-                //»­8ÕÅÅÆµÄ±³Ãæ
+// ç”»8å¼ ç‰Œçš„èƒŒé¢
                 Graphics g = Graphics.FromImage(bmp);
-
-                for (int i = 0; i < 8; i++)
-                {
+                for (int i = 0; i < 8; i++) {
                     g.DrawImage(gameConfig.BackImage, 200 + i * 2, 186, 71, 96);
                 }
-
                 SetPauseSet(gameConfig.Get8CardsTime, CardCommands.DrawCenter8Cards);
-
             }
-            else if (currentState.CurrentCardCommands == CardCommands.DrawCenter8Cards) //2.×¥µ×ÅÆ
-            {
-
-                //Èç¹ûÎŞÈËÁÁÖ÷£¬Á÷¾Ö
-                if (drawingFormHelper.DoRankNot())
-                {
-                    if (gameConfig.IsPass) //Èç¹ûÉèÖÃÎªÁ÷¾Ö
+            else if (currentState.CurrentCardCommands == CardCommands.DrawCenter8Cards) { // 2.æŠ“åº•ç‰Œ
+                // å¦‚æœæ— äººäº®ä¸»ï¼Œæµå±€
+                if (drawingFormHelper.DoRankNot()) {
+                    if (gameConfig.IsPass) // å¦‚æœè®¾ç½®ä¸ºæµå±€
                     {
-                        //ÔİÍ£3Ãë
+                        // æš‚åœ3ç§’
                         init();
                         isNew = false;
-                        //»­Í¼Æ¬
+                        // ç”»å›¾ç‰‡
                         drawingFormHelper.DrawPassImage();
                         SetPauseSet(gameConfig.NoRankPauseTime, CardCommands.WaitingShowPass);
                         return;
                     }
-                    else //Èç¹ûÉèÖÃÎª·­µ×ÅÆ
+                    else // å¦‚æœè®¾ç½®ä¸ºç¿»åº•ç‰Œ
                     {
-                        //½«µ×ÅÆµÄµÚÈıÕÅµÄ»¨É«ÉèÖÃÎªÖ÷
+                        // å°†åº•ç‰Œçš„ç¬¬ä¸‰å¼ çš„èŠ±è‰²è®¾ç½®ä¸ºä¸»
                         ArrayList bottom = new ArrayList();
                         bottom.Add(pokerList[0][0]);
                         bottom.Add(pokerList[0][1]);
@@ -761,9 +570,7 @@ namespace Kuaff.Tractor
                         bottom.Add(pokerList[3][1]);
                         int suit = CommonMethods.GetSuit((int)bottom[2]);
                         currentState.Suit = suit;
-
                         Graphics g = Graphics.FromImage(bmp);
-
                         if (currentState.Master == 1 || currentState.Master == 2)
                         {
                             drawingFormHelper.DrawSuit(g, suit, true, true);
@@ -772,107 +579,78 @@ namespace Kuaff.Tractor
                         {
                             drawingFormHelper.DrawSuit(g, suit, false, true);
                         }
-
                         g.Dispose();
-
-                        //ÔÚÖĞÑë»­8ÕÅµ×ÅÆ,µÚÈıÕÅÉÔÎ¢ÏòÉÏ
+                        // åœ¨ä¸­å¤®ç”»8å¼ åº•ç‰Œ,ç¬¬ä¸‰å¼ ç¨å¾®å‘ä¸Š
                         drawingFormHelper.DrawCenterImage();
                         drawingFormHelper.DrawBottomCards(bottom);
-
-                        //ÔİÍ£Ò»¶ÎÊ±¼ä,ÈÃ´ó¼ÒÄÜ¿´µ½·­µÄµ×ÅÆ
+                        // æš‚åœä¸€æ®µæ—¶é—´,è®©å¤§å®¶èƒ½çœ‹åˆ°ç¿»çš„åº•ç‰Œ
                         SetPauseSet(gameConfig.NoRankPauseTime, CardCommands.WaitingShowBottom);
-
                         return;
                     }
                 }
-
-
-                whoseOrder = currentState.Master;//µÚÒ»´ÎÓÉÖ÷¼Ò·¢ÅÆ
+                whoseOrder = currentState.Master;// ç¬¬ä¸€æ¬¡ç”±ä¸»å®¶å‘ç‰Œ
                 firstSend = whoseOrder;
-
                 SetPauseSet(gameConfig.Get8CardsTime, CardCommands.DrawMySortedCards);
-
                 drawingFormHelper.DrawCenter8Cards();
-
                 initSendedCards();
                 drawingFormHelper.DrawMySortedCards(currentPokers[0], currentPokers[0].Count);
-                currentState.CurrentCardCommands = CardCommands.WaitingForSending8Cards; //ÃşÅÆÍê±Ï£¬ÅÅĞòÎÒµÄÅÆ
-
-                //³õÊ¼»¯µÃ·ÖÅÆ
+                currentState.CurrentCardCommands = CardCommands.WaitingForSending8Cards; // æ‘¸ç‰Œå®Œæ¯•ï¼Œæ’åºæˆ‘çš„ç‰Œ
+// åˆå§‹åŒ–å¾—åˆ†ç‰Œ
                 drawingFormHelper.DrawScoreImage(0);
-
-
             }
-            else if (currentState.CurrentCardCommands == CardCommands.WaitingShowPass) //ÏÔÊ¾Á÷¾ÖĞÅÏ¢
-            {
-                //½«Á÷¾ÖÍ¼Æ¬ÇåÀíµô
+            else if (currentState.CurrentCardCommands == CardCommands.WaitingShowPass) { // æ˜¾ç¤ºæµå±€ä¿¡æ¯
+                // å°†æµå±€å›¾ç‰‡æ¸…ç†æ‰
                 drawingFormHelper.DrawCenterImage();
-                //drawingFormHelper.DrawScoreImage(0);
+// drawingFormHelper.DrawScoreImage(0);
                 Refresh();
                 currentState.CurrentCardCommands = CardCommands.ReadyCards;
             }
-            else if (currentState.CurrentCardCommands == CardCommands.WaitingForSending8Cards) //3.¿Ûµ×ÅÆ
-            {
-
-
-                //Èç¹ûĞèÒª
-                switch (currentState.Master)
-                {
-                    case 1:
-                        if (gameConfig.IsDebug)
-                        {
-                            Algorithm.Send8Cards(this, 1);
-                        }
-                        else
-                        {
-                            drawingFormHelper.DrawMyPlayingCards(currentPokers[0]);
-                            Refresh();
-                            return;
-                        }
-                        break;
-                    case 2:
-                        Algorithm.Send8Cards(this, 2);
-                        break;
-                    case 3:
-                        Algorithm.Send8Cards(this, 3);
-                        break;
-                    case 4:
-                        Algorithm.Send8Cards(this, 4);
-                        break;
+            else if (currentState.CurrentCardCommands == CardCommands.WaitingForSending8Cards) { // 3.æ‰£åº•ç‰Œ
+                // å¦‚æœéœ€è¦
+                switch (currentState.Master) {
+                case 1:
+                    if (gameConfig.IsDebug)
+                    {
+                        Algorithm.Send8Cards(this, 1);
+                    }
+                    else
+                    {
+                        drawingFormHelper.DrawMyPlayingCards(currentPokers[0]);
+                        Refresh();
+                        return;
+                    }
+                    break;
+                case 2:
+                    Algorithm.Send8Cards(this, 2);
+                    break;
+                case 3:
+                    Algorithm.Send8Cards(this, 3);
+                    break;
+                case 4:
+                    Algorithm.Send8Cards(this, 4);
+                    break;
                 }
 
-
-
             }
-            else if (currentState.CurrentCardCommands == CardCommands.DrawMySortedCards) //4.»­ÎÒµÄÅÆ
-            {
-
-                //½«×îºó×Ô¼ºµÄÅÆ½øĞĞÅÅĞòÏÔÊ¾
+            else if (currentState.CurrentCardCommands == CardCommands.DrawMySortedCards) { // 4.ç”»æˆ‘çš„ç‰Œ
+                // å°†æœ€åè‡ªå·±çš„ç‰Œè¿›è¡Œæ’åºæ˜¾ç¤º
                 SetPauseSet(gameConfig.SortCardsTime, CardCommands.DrawMySortedCards);
-
                 drawingFormHelper.DrawMySortedCards(currentPokers[0], currentPokers[0].Count);
                 Refresh();
-
                 currentState.CurrentCardCommands = CardCommands.WaitingForSend;
-
             }
-            else if (currentState.CurrentCardCommands == CardCommands.WaitingForSend) //µÈ´ı³öÅÆ
-            {
-                //Èç¹ûÊÇ¶Ô¼Ò
-                if (whoseOrder == 2)
-                {
+            else if (currentState.CurrentCardCommands == CardCommands.WaitingForSend) { // ç­‰å¾…å‡ºç‰Œ
+                // å¦‚æœæ˜¯å¯¹å®¶
+                if (whoseOrder == 2) {
                     drawingFormHelper.DrawFrieldUserSendedCards();
                 }
-                if (whoseOrder == 3)
-                {
+                if (whoseOrder == 3) {
                     drawingFormHelper.DrawPreviousUserSendedCards();
                 }
-                if (whoseOrder == 4)
-                {
+                if (whoseOrder == 4) {
                     drawingFormHelper.DrawNextUserSendedCards();
                 }
-                if (whoseOrder == 1)
-                {
+                if (whoseOrder == 1) {
                     if (gameConfig.IsDebug)
                     {
                         if (firstSend == 1)
@@ -884,7 +662,7 @@ namespace Kuaff.Tractor
                             Algorithm.MustSendedCards(this, 1, currentPokers, currentSendCards, currentState.Suit, currentRank, currentSendCards[firstSend - 1].Count);
                         }
                         drawingFormHelper.DrawMyFinishSendedCards();
-                        if (currentSendCards[3].Count > 0) //ÊÇ·ñÍê³É
+                        if (currentSendCards[3].Count > 0) // æ˜¯å¦å®Œæˆ
                         {
                             currentState.CurrentCardCommands = CardCommands.Pause;
                             SetPauseSet(gameConfig.FinishedOncePauseTime, CardCommands.DrawOnceFinished);
@@ -897,95 +675,71 @@ namespace Kuaff.Tractor
                     }
                     else
                     {
-                        currentState.CurrentCardCommands = CardCommands.WaitingForMySending;//µÈ´ıÊó±êÊÂ¼ş
+                        currentState.CurrentCardCommands = CardCommands.WaitingForMySending;// ç­‰å¾…é¼ æ ‡äº‹ä»¶
                     }
                 }
             }
-            else if (currentState.CurrentCardCommands == CardCommands.Pause) //Èç¹ûĞèÒªÔİÍ£
-            {
-                //Èç¹ûÊÇPause,ÔòÖ»ÊÇÈÃ³ÌĞòĞİÏ¢Ò»»á()
+            else if (currentState.CurrentCardCommands == CardCommands.Pause) { // å¦‚æœéœ€è¦æš‚åœ
+                // å¦‚æœæ˜¯Pause,åˆ™åªæ˜¯è®©ç¨‹åºä¼‘æ¯ä¸€ä¼š()
                 long interval = (DateTime.Now.Ticks - sleepTime) / 10000;
-
-                if (interval > sleepMaxTime)
-                {
+                if (interval > sleepMaxTime) {
                     currentState.CurrentCardCommands = wakeupCardCommands;
                 }
-
-
             }
-            else if (currentState.CurrentCardCommands == CardCommands.DrawOnceFinished) //Èç¹ûÊÇ´ó¼Ò¶¼³öÍêÅÆ
-            {
-                drawingFormHelper.DrawFinishedOnceSendedCards(); //Íê³ÉÇåÀí¹¤×÷
-                if (currentPokers[0].Count > 0)
-                {
+            else if (currentState.CurrentCardCommands == CardCommands.DrawOnceFinished) { // å¦‚æœæ˜¯å¤§å®¶éƒ½å‡ºå®Œç‰Œ
+                drawingFormHelper.DrawFinishedOnceSendedCards(); // å®Œæˆæ¸…ç†å·¥ä½œ
+                if (currentPokers[0].Count > 0) {
                     currentState.CurrentCardCommands = CardCommands.WaitingForSend;
                 }
             }
-            else if (currentState.CurrentCardCommands == CardCommands.DrawOnceRank) //Èç¹û±¾ÂÖ´ó¼Ò¶¼³öÍêÅÆ
-            {
+            else if (currentState.CurrentCardCommands == CardCommands.DrawOnceRank) { // å¦‚æœæœ¬è½®å¤§å®¶éƒ½å‡ºå®Œç‰Œ
                 currentState.CurrentCardCommands = CardCommands.Undefined;
                 init();
             }
         }
-
-        //ÉèÖÃÔİÍ£µÄ×î´óÊ±¼ä£¬ÒÔ¼°ÔİÍ£½áÊøºóµÄÖ´ĞĞÃüÁî
-        internal void SetPauseSet(int max, CardCommands wakeup)
-        {
+// è®¾ç½®æš‚åœçš„æœ€å¤§æ—¶é—´ï¼Œä»¥åŠæš‚åœç»“æŸåçš„æ‰§è¡Œå‘½ä»¤
+        internal void SetPauseSet(int max, CardCommands wakeup) {
             sleepMaxTime = max;
             sleepTime = DateTime.Now.Ticks;
             wakeupCardCommands = wakeup;
             currentState.CurrentCardCommands = CardCommands.Pause;
         }
-
-
-        #region ²Ëµ¥ÊÂ¼ş´¦Àí
-        //ÅÆÃæÍ¼°¸
-        private void SelectCardImage_Click(object sender, EventArgs e)
-        {
+#region èœå•äº‹ä»¶å¤„ç†
+// ç‰Œé¢å›¾æ¡ˆ
+        private void SelectCardImage_Click(object sender, EventArgs e) {
             ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
-
-            if (menuItem.Text.Equals("ÆÕÍ¨Í¼°¸"))
-            {
+            if (menuItem.Text.Equals("æ™®é€šå›¾æ¡ˆ")) {
                 gameConfig.CardsResourceManager = Kuaff_Cards.ResourceManager;
                 CommonToolStripMenuItem.CheckState = CheckState.Checked;
                 ModelToolStripMenuItem.CheckState = CheckState.Unchecked;
                 OperaToolStripMenuItem.CheckState = CheckState.Unchecked;
                 CustomCardImageToolStripMenuItem.CheckState = CheckState.Unchecked;
-
-                CustomCardImageToolStripMenuItem.Text = "×Ô¶¨Òå";
+                CustomCardImageToolStripMenuItem.Text = "è‡ªå®šä¹‰";
                 gameConfig.CardImageName = "";
-
             }
-            else if (menuItem.Text.Equals("Ïã³µÃÀÅ®"))
-            {
+            else if (menuItem.Text.Equals("é¦™è½¦ç¾å¥³")) {
                 gameConfig.CardsResourceManager = Kuaff_Model.ResourceManager;
                 CommonToolStripMenuItem.CheckState = CheckState.Unchecked;
                 ModelToolStripMenuItem.CheckState = CheckState.Checked;
                 OperaToolStripMenuItem.CheckState = CheckState.Unchecked;
                 CustomCardImageToolStripMenuItem.CheckState = CheckState.Unchecked;
-
-                CustomCardImageToolStripMenuItem.Text = "×Ô¶¨Òå";
+                CustomCardImageToolStripMenuItem.Text = "è‡ªå®šä¹‰";
                 gameConfig.CardImageName = "";
             }
-            else if (menuItem.Text.Equals("¾©¾çÁ³Æ×"))
-            {
+            else if (menuItem.Text.Equals("äº¬å‰§è„¸è°±")) {
                 gameConfig.CardsResourceManager = Kuaff_Opera.ResourceManager;
                 CommonToolStripMenuItem.CheckState = CheckState.Unchecked;
                 ModelToolStripMenuItem.CheckState = CheckState.Unchecked;
                 OperaToolStripMenuItem.CheckState = CheckState.Checked;
                 CustomCardImageToolStripMenuItem.CheckState = CheckState.Unchecked;
-
-                CustomCardImageToolStripMenuItem.Text = "×Ô¶¨Òå";
+                CustomCardImageToolStripMenuItem.Text = "è‡ªå®šä¹‰";
                 gameConfig.CardImageName = "";
             }
-            else if (menuItem.Text.StartsWith("×Ô¶¨Òå"))
-            {
+            else if (menuItem.Text.StartsWith("è‡ªå®šä¹‰")) {
                 SelectCardsImage sci = new SelectCardsImage(this);
-                if (sci.ShowDialog(this) == DialogResult.OK)
-                {
+                if (sci.ShowDialog(this) == DialogResult.OK) {
                     gameConfig.CardImageName = sci.CardsName;
-                    menuItem.Text = "×Ô¶¨Òå--" + gameConfig.CardImageName;
-
+                    menuItem.Text = "è‡ªå®šä¹‰--" + gameConfig.CardImageName;
                     CommonToolStripMenuItem.CheckState = CheckState.Unchecked;
                     ModelToolStripMenuItem.CheckState = CheckState.Unchecked;
                     OperaToolStripMenuItem.CheckState = CheckState.Unchecked;
@@ -993,82 +747,61 @@ namespace Kuaff.Tractor
                 }
             }
         }
-        //ÅÆ±³Í¼Æ¬
-        private void SelectBackImage_Click(object sender, EventArgs e)
-        {
+// ç‰ŒèƒŒå›¾ç‰‡
+        private void SelectBackImage_Click(object sender, EventArgs e) {
             ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
-
-            if (menuItem.Text.Equals("ÎµÀ¶ÊÀ½ç"))
-            {
+            if (menuItem.Text.Equals("è”šè“ä¸–ç•Œ")) {
                 gameConfig.BackImage = Kuaff_Cards.back;
                 BlueWorldToolStripMenuItem.CheckState = CheckState.Checked;
                 GreenAgeToolStripMenuItem.CheckState = CheckState.Unchecked;
                 AntelopeToolStripMenuItem.CheckState = CheckState.Unchecked;
-
                 CustomBackImageToolStripMenuItem.CheckState = CheckState.Unchecked;
-                CustomBackImageToolStripMenuItem.Text = "×Ô¶¨Òå";
+                CustomBackImageToolStripMenuItem.Text = "è‡ªå®šä¹‰";
             }
-            else if (menuItem.Text.Equals("ÇàÉ¬Äê»ª"))
-            {
+            else if (menuItem.Text.Equals("é’æ¶©å¹´å")) {
                 gameConfig.BackImage = Kuaff_Cards.back2;
                 BlueWorldToolStripMenuItem.CheckState = CheckState.Unchecked;
                 GreenAgeToolStripMenuItem.CheckState = CheckState.Checked;
                 AntelopeToolStripMenuItem.CheckState = CheckState.Unchecked;
-
                 CustomBackImageToolStripMenuItem.CheckState = CheckState.Unchecked;
-                CustomBackImageToolStripMenuItem.Text = "×Ô¶¨Òå";
+                CustomBackImageToolStripMenuItem.Text = "è‡ªå®šä¹‰";
             }
-            else if (menuItem.Text.Equals("²İÔ­ÁçÑò"))
-            {
+            else if (menuItem.Text.Equals("è‰åŸç¾šç¾Š")) {
                 gameConfig.BackImage = Kuaff_Cards.back3;
                 BlueWorldToolStripMenuItem.CheckState = CheckState.Unchecked;
                 GreenAgeToolStripMenuItem.CheckState = CheckState.Unchecked;
                 AntelopeToolStripMenuItem.CheckState = CheckState.Checked;
-
                 CustomBackImageToolStripMenuItem.CheckState = CheckState.Unchecked;
-                CustomBackImageToolStripMenuItem.Text = "×Ô¶¨Òå";
+                CustomBackImageToolStripMenuItem.Text = "è‡ªå®šä¹‰";
             }
-            else if (menuItem.Text.StartsWith("×Ô¶¨Òå"))
-            {
+            else if (menuItem.Text.StartsWith("è‡ªå®šä¹‰")) {
                 SelectCardbackImage sci = new SelectCardbackImage(this);
-                if (sci.ShowDialog(this) == DialogResult.OK)
-                {
-                    menuItem.Text = "×Ô¶¨Òå--" + sci.CardBackImageName;
-
+                if (sci.ShowDialog(this) == DialogResult.OK) {
+                    menuItem.Text = "è‡ªå®šä¹‰--" + sci.CardBackImageName;
                     BlueWorldToolStripMenuItem.CheckState = CheckState.Unchecked;
                     GreenAgeToolStripMenuItem.CheckState = CheckState.Unchecked;
                     AntelopeToolStripMenuItem.CheckState = CheckState.Unchecked;
                     CustomBackImageToolStripMenuItem.CheckState = CheckState.Checked;
                 }
-
             }
         }
-
-        //Ñ¡Ôñ±³¾°Í¼Æ¬
-        private void SelectImage_Click(object sender, EventArgs e)
-        {
-            PauseGametoolStripMenuItem.Text = "ÔİÍ£ÓÎÏ·";
-
+// é€‰æ‹©èƒŒæ™¯å›¾ç‰‡
+        private void SelectImage_Click(object sender, EventArgs e) {
+            PauseGametoolStripMenuItem.Text = "æš‚åœæ¸¸æˆ";
             ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
-            if (menuItem.Text.Equals("¿ä¸¸¿Æ¼¼"))
-            {
+            if (menuItem.Text.Equals("å¤¸çˆ¶ç§‘æŠ€")) {
                 KuaffToolStripMenuItem.CheckState = CheckState.Checked;
                 image = global::Kuaff.Tractor.Properties.Resources.Backgroud;
                 BackgroundImage = image;
-
                 Graphics g = Graphics.FromImage(bmp);
                 g.DrawImage(image, ClientRectangle, ClientRectangle,GraphicsUnit.Pixel);
-
                 init();
-                //»æÖÆ¶«ÄÏÎ÷±±
-
+                // ç»˜åˆ¶ä¸œå—è¥¿åŒ—
                 drawingFormHelper.DrawOtherMaster(g, 0, 0);
               
-                if (isNew && (currentRank == 0))
-                {
+                if (isNew && (currentRank == 0)) {
                 }
-                else
-                {
+                else {
                     if (currentState.Master != 0)
                     {
                         drawingFormHelper.DrawMaster(g, currentState.Master, 1);
@@ -1078,21 +811,17 @@ namespace Kuaff.Tractor
                 g.Dispose();
                 Refresh();
             }
-            else if (menuItem.Text.Equals("×Ô¶¨ÒåÍ¼Æ¬"))
-            {
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
+            else if (menuItem.Text.Equals("è‡ªå®šä¹‰å›¾ç‰‡")) {
+                if (openFileDialog.ShowDialog() == DialogResult.OK) {
                     KuaffToolStripMenuItem.CheckState = CheckState.Unchecked;
                     image = new Bitmap(openFileDialog.OpenFile());
                     image = new Bitmap(image,new Size(ClientRectangle.Width,ClientRectangle.Height));
-                    //BackgroundImage = image;
-
+                    // BackgroundImage = image;
                     Graphics g = Graphics.FromImage(bmp);
                     g.DrawImage(image, ClientRectangle, ClientRectangle, GraphicsUnit.Pixel);
                    
                     init();
-                    //»æÖÆ¶«ÄÏÎ÷±±
-
+                    // ç»˜åˆ¶ä¸œå—è¥¿åŒ—
                     drawingFormHelper.DrawOtherMaster(g, 0, 0);
                    
                     if (isNew && (currentRank == 0))
@@ -1111,40 +840,29 @@ namespace Kuaff.Tractor
                 }
                 
             }
-
         }
-
-        //ÍĞÅÌÊÂ¼ş´¦Àí
-        private void notifyIcon_MouseClick(object sender, MouseEventArgs e)
-        {
+// æ‰˜ç›˜äº‹ä»¶å¤„ç†
+        private void notifyIcon_MouseClick(object sender, MouseEventArgs e) {
             this.Show();
-            if (this.WindowState == FormWindowState.Minimized)
-            {
+            if (this.WindowState == FormWindowState.Minimized) {
                 this.WindowState = FormWindowState.Normal;
             }
             this.Activate();
         }
-
-        private void MainForm_Resize(object sender, EventArgs e)
-        {
-            if (this.WindowState == FormWindowState.Minimized)
-            {
+        private void MainForm_Resize(object sender, EventArgs e) {
+            if (this.WindowState == FormWindowState.Minimized) {
                 this.Visible = false;
                 notifyIcon.Visible = true;
             }
-            else
-            {
+            else {
                 notifyIcon.Visible = false;
             }
         }
-
-        //ÉèÖÃÓÎÏ·ËÙ¶È
-        private void GameSpeedToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+// è®¾ç½®æ¸¸æˆé€Ÿåº¦
+        private void GameSpeedToolStripMenuItem_Click(object sender, EventArgs e) {
             SetSpeedDialog dialog = new SetSpeedDialog(this);
-            if (dialog.ShowDialog(this) == DialogResult.OK)
-            {
-                //µ÷ÕûËÙ¶È
+            if (dialog.ShowDialog(this) == DialogResult.OK) {
+                // è°ƒæ•´é€Ÿåº¦
                 gameConfig.FinishedOncePauseTime = (int)(150 * Math.Pow(10, dialog.trackBar1.Value / 25.0));
                 gameConfig.NoRankPauseTime = (int)(500 * Math.Pow(10, dialog.trackBar2.Value / 25.0));
                 gameConfig.Get8CardsTime = (int)(100 * Math.Pow(10, dialog.trackBar3.Value / 25.0));
@@ -1154,146 +872,103 @@ namespace Kuaff.Tractor
                 timer.Interval = gameConfig.TimerDiDa;
             }
         }
-
-        //±£´æÅÆ¾Ö
-        private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+// ä¿å­˜ç‰Œå±€
+        private void SaveToolStripMenuItem_Click(object sender, EventArgs e) {
             Stream stream = null;
-            try
-            {
+            try {
                 IFormatter formatter = new BinaryFormatter();
                 stream = new FileStream("backup", FileMode.Create, FileAccess.Write, FileShare.None);
                 formatter.Serialize(stream, currentState);
             }
-            catch (Exception ex)
-            {
-
+            catch (Exception ex) {
             }
-            finally
-            {
-                if (stream != null)
-                {
+            finally {
+                if (stream != null) {
                     stream.Close();
                 }
             }
         }
-
-        //¶ÁÈ¡ÅÆ¾Ö
-        private void RestoreToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PauseGametoolStripMenuItem.Text = "ÔİÍ£ÓÎÏ·";
-
+// è¯»å–ç‰Œå±€
+        private void RestoreToolStripMenuItem_Click(object sender, EventArgs e) {
+            PauseGametoolStripMenuItem.Text = "æš‚åœæ¸¸æˆ";
             Stream stream = null;
-            try
-            {
+            try {
                 IFormatter formatter = new BinaryFormatter();
                 stream = new FileStream("backup", FileMode.Open, FileAccess.Read, FileShare.Read);
                 CurrentState cs = (CurrentState)formatter.Deserialize(stream);
                 
                 currentState = cs;
-
                
-                if (currentState.Master == 1 || currentState.Master == 2)
-                {
+                if (currentState.Master == 1 || currentState.Master == 2) {
                     currentRank = currentState.OurCurrentRank;
                 }
-                else if(currentState.Master == 3 || currentState.Master == 4)
-                {
+                else if(currentState.Master == 3 || currentState.Master == 4) {
                     currentRank = currentState.OpposedCurrentRank;
                 }
-                else
-                {
+                else {
                     isNew = true;
                     currentRank = 0;
                 }
-
                 init();
-
                 timer.Start();
                 
-
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
             }
-            finally
-            {
-                if (stream != null)
-                {
+            finally {
+                if (stream != null) {
                     stream.Close();
                 }
             }
         }
-
-        //ÏÔÊ¾°ïÖú
-        private void GameHelpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+// æ˜¾ç¤ºå¸®åŠ©
+        private void GameHelpToolStripMenuItem_Click(object sender, EventArgs e) {
             Help.ShowHelp(this,"Tractor.CHM");
         }
-
-        //Aboutme
-        private void AboutMeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+// Aboutme
+        private void AboutMeToolStripMenuItem_Click(object sender, EventArgs e) {
             About about = new About();
             about.Show(this);
         }
-
-        private void PauseGametoolStripMenuItem_Click(object sender, EventArgs e)
-        {
+        private void PauseGametoolStripMenuItem_Click(object sender, EventArgs e) {
             ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
-            if (menuItem.Text.Equals("ÔİÍ£ÓÎÏ·"))
-            {
+            if (menuItem.Text.Equals("æš‚åœæ¸¸æˆ")) {
                 timer.Stop();
-                menuItem.Text = "¼ÌĞøÓÎÏ·";
+                menuItem.Text = "ç»§ç»­æ¸¸æˆ";
                 menuItem.Image = Properties.Resources.MenuResume;
             }
-            else
-            {
+            else {
                 timer.Start();
-                menuItem.Text = "ÔİÍ£ÓÎÏ·";
+                menuItem.Text = "æš‚åœæ¸¸æˆ";
                 menuItem.Image = Properties.Resources.MenuPause;
             }
         }
-
-        private void RobotToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+        private void RobotToolStripMenuItem_Click(object sender, EventArgs e) {
             ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
-
-            if (menuItem.CheckState == CheckState.Checked)
-            {
+            if (menuItem.CheckState == CheckState.Checked) {
                 gameConfig.IsDebug = true;
             }
-            else
-            {
+            else {
                 gameConfig.IsDebug = false;
             }
         }
-
-        private void SetRulesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+        private void SetRulesToolStripMenuItem_Click(object sender, EventArgs e) {
             SetRules sr = new SetRules(this);
             sr.ShowDialog(this);
         }
-
-        private void NoBackMusicToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //
+        private void NoBackMusicToolStripMenuItem_Click(object sender, EventArgs e) {
+            // 
             ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
             menuItem.CheckState = CheckState.Checked;
             
         }
-
-        private void PlayMusicToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //µ¯³öÄÚÖÃÒôÀÖÑ¡Ôñ¶Ô»°¿ò
+        private void PlayMusicToolStripMenuItem_Click(object sender, EventArgs e) {
+            // å¼¹å‡ºå†…ç½®éŸ³ä¹é€‰æ‹©å¯¹è¯æ¡†
             SelectMusic sem = new SelectMusic();
-            if (sem.ShowDialog(this) == DialogResult.OK)
-            {
+            if (sem.ShowDialog(this) == DialogResult.OK) {
                 NoBackMusicToolStripMenuItem.CheckState = CheckState.Unchecked;
-
-                //Èç¹ûÑ¡ÔñÁËÒ»Ê×Çú×Ó£¬Ôò²¥·Å
-                try
-                {
+                // å¦‚æœé€‰æ‹©äº†ä¸€é¦–æ›²å­ï¼Œåˆ™æ’­æ”¾
+                try {
                     string music = (string)sem.music.SelectedItem;
                     String newMusicFile = Path.Combine(Application.StartupPath, "music\\" + music);
                     if (musicFile != newMusicFile && musicFile.Length > 0)
@@ -1303,25 +978,18 @@ namespace Kuaff.Tractor
                     }
                     musicFile = newMusicFile;
                     MciSoundPlayer.Play(musicFile,"song");
-
                     NoBackMusicToolStripMenuItem.CheckState = CheckState.Unchecked;
                     PlayMusicToolStripMenuItem.CheckState = CheckState.Checked;
                     RandomPlayToolStripMenuItem.CheckState = CheckState.Unchecked;
                 }
-                catch (Exception ex)
-                {
-
+                catch (Exception ex) {
                 }
             }
-            else
-            {
-                //NoBackMusicToolStripMenuItem.CheckState = CheckState.Checked;
-
+            else {
+                // NoBackMusicToolStripMenuItem.CheckState = CheckState.Checked;
             }
         }
-
-        private void NoBackMusicToolStripMenuItem_Click_1(object sender, EventArgs e)
-        {
+        private void NoBackMusicToolStripMenuItem_Click_1(object sender, EventArgs e) {
             musicFile = "";
             MciSoundPlayer.Stop();
             MciSoundPlayer.Close();
@@ -1329,71 +997,47 @@ namespace Kuaff.Tractor
             RandomPlayToolStripMenuItem.CheckState = CheckState.Unchecked;
             PlayMusicToolStripMenuItem.CheckState = CheckState.Unchecked;
         }
-
-        private void RandomPlayToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
+        private void RandomPlayToolStripMenuItem_Click(object sender, EventArgs e) {
             PlayRandomSongs();
-
             NoBackMusicToolStripMenuItem.CheckState = CheckState.Unchecked;
             RandomPlayToolStripMenuItem.CheckState = CheckState.Checked;
             PlayMusicToolStripMenuItem.CheckState = CheckState.Unchecked;
         }
-
-        //Ëæ»ú²¥·ÅÒôÀÖ
-        private void PlayRandomSongs()
-        {
-            try
-            {
+// éšæœºæ’­æ”¾éŸ³ä¹
+        private void PlayRandomSongs() {
+            try {
                 SelectMusic sem = new SelectMusic();
                 int count = sem.music.Items.Count;
                 Random random = new Random();
                 string music = (string)sem.music.Items[random.Next(count)];
                 sem.Dispose();
                 String newMusicFile = Path.Combine(Application.StartupPath, "music\\" + music);
-                if (musicFile != newMusicFile && musicFile.Length > 0)
-                {
+                if (musicFile != newMusicFile && musicFile.Length > 0) {
                     MciSoundPlayer.Stop();
                     MciSoundPlayer.Close();
                 }
                 musicFile = newMusicFile;
                 MciSoundPlayer.Play(musicFile, "song");
-
             }
-            catch (Exception ex)
-            {
-
+            catch (Exception ex) {
             }
         }
-
-        private void FereToolStripMenuItem_Click(object sender, EventArgs e) //ÍÏÀ­»ú°éÂÂ
-        {
+        private void FereToolStripMenuItem_Click(object sender, EventArgs e) { // æ‹–æ‹‰æœºä¼´ä¾£
             Fere fere = new Fere();
             fere.Show(this);
         }
-
-        private void SeeTotalScoresToolStripMenuItem_Click(object sender, EventArgs e) //µÃ·ÖÍ³¼Æ
-        {
+        private void SeeTotalScoresToolStripMenuItem_Click(object sender, EventArgs e) { // å¾—åˆ†ç»Ÿè®¡
             TotalScores ts = new TotalScores(this);
             ts.Show(this);
         }
-
-        private void SelectAlgorithmToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+        private void SelectAlgorithmToolStripMenuItem_Click(object sender, EventArgs e) {
             SelectUserAlgorithm sua = new SelectUserAlgorithm(this);
             sua.ShowDialog(this);
         }
-
-        #endregion // ²Ëµ¥ÊÂ¼ş´¦Àí
-
-        private void SetGameFinishedtoolStripMenuItem_Click(object sender, EventArgs e)
-        {
+#endregion // èœå•äº‹ä»¶å¤„ç†
+        private void SetGameFinishedtoolStripMenuItem_Click(object sender, EventArgs e) {
             SetGameFinished sgf = new SetGameFinished(this);
             sgf.ShowDialog(this);
-        }
-
-        
-
-               
+        }              
     }
 }

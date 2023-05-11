@@ -1,64 +1,43 @@
 using System;
 using System.Collections;
 using System.Text;
+namespace Kuaff.Tractor.Plugins {
 
-namespace Kuaff.Tractor.Plugins
-{
-    public interface IUserAlgorithm
-    {
-        /// <summary>
-        /// Ëã·¨×÷Õß
-        /// </summary>
-        string Author
-        {
+    public interface IUserAlgorithm {
+        // ç®—æ³•ä½œè€…
+        string Author {
             get;
         }
-        /// <summary>
-        /// Ëã·¨×÷ÕßµÄemailµØÖ·
-        /// </summary>
-        string Email
-        {
+        // ç®—æ³•ä½œè€…çš„emailåœ°å€
+        string Email {
             get;
         }
-        /// <summary>
-        /// Ëã·¨Ãû³Æ
-        /// </summary>
-        string Name
-        {
+        // ç®—æ³•åç§°
+        string Name {
             get;
         }
-        /// <summary>
-        /// Ëã·¨½éÉÜ
-        /// </summary>
-        string Description
-        {
+        // ç®—æ³•ä»‹ç»
+        string Description {
             get;
         }
-
-        /// <summary>
-        /// Ê×ÏÈ³öÅÆµÄËã·¨¡£
-        /// </summary>
-        /// <param name="who">µ±Ç°ÓÃ»§ÊÇË­£¬1ÎªÄÏ¼Ò£¬2Îª±±¼Ò£¬3ÎªÎ÷¼Ò£¬4Îª¶«¼Ò</param>
-        /// <param name="suit">µ±Ç°Ö÷ÅÆµÄ»¨É«£¬1ÎªºìĞÄ£¬2ÎªºÚÌÒ£¬3Îª·½Æ¬£¬4ÎªÃ·»¨,5ÎªÍõ£¨ÎŞÖ÷£©</param>
-        /// <param name="rank">µ±Ç°´ò¼¸,0Îª´ò2£¬1Îª´ò3,2Îª´ò4........11Îª´òK£¬12Îª´òA,53Îª´òÍõ</param>
-        /// <param name="master">µ±Ç°Ë­Îª×¯¼Ò,1ÎªÄÏ¼Ò£¬2Îª±±¼Ò£¬3ÎªÎ÷¼Ò£¬4Îª¶«¼Ò</param>
-        /// <param name="sendCards">µ±Ç°Ò»¾Ö¸÷¼ÒÒÑ¾­³öµôµÄÅÆ£¬sendCards[0]ÎªÄÏ¼Ò£¬sendCards[1]Îª±±¼Ò£¬sendCards[2]ÎªÎ÷¼Ò£¬sendCards[3]Îª¶«¼Ò</param>
-        /// <param name="myCards">´ËÓÃ»§ÊÖÖĞµÄÅÆ</param>
-        /// <returns></returns>
+        // é¦–å…ˆå‡ºç‰Œçš„ç®—æ³•ã€‚
+        // <param name="who">å½“å‰ç”¨æˆ·æ˜¯è°ï¼Œ1ä¸ºå—å®¶ï¼Œ2ä¸ºåŒ—å®¶ï¼Œ3ä¸ºè¥¿å®¶ï¼Œ4ä¸ºä¸œå®¶</param>
+        // <param name="suit">å½“å‰ä¸»ç‰Œçš„èŠ±è‰²ï¼Œ1ä¸ºçº¢å¿ƒï¼Œ2ä¸ºé»‘æ¡ƒï¼Œ3ä¸ºæ–¹ç‰‡ï¼Œ4ä¸ºæ¢…èŠ±,5ä¸ºç‹ï¼ˆæ— ä¸»ï¼‰</param>
+        // <param name="rank">å½“å‰æ‰“å‡ ,0ä¸ºæ‰“2ï¼Œ1ä¸ºæ‰“3,2ä¸ºæ‰“4........11ä¸ºæ‰“Kï¼Œ12ä¸ºæ‰“A,53ä¸ºæ‰“ç‹</param>
+        // <param name="master">å½“å‰è°ä¸ºåº„å®¶,1ä¸ºå—å®¶ï¼Œ2ä¸ºåŒ—å®¶ï¼Œ3ä¸ºè¥¿å®¶ï¼Œ4ä¸ºä¸œå®¶</param>
+        // <param name="sendCards">å½“å‰ä¸€å±€å„å®¶å·²ç»å‡ºæ‰çš„ç‰Œï¼ŒsendCards[0]ä¸ºå—å®¶ï¼ŒsendCards[1]ä¸ºåŒ—å®¶ï¼ŒsendCards[2]ä¸ºè¥¿å®¶ï¼ŒsendCards[3]ä¸ºä¸œå®¶</param>
+        // <param name="myCards">æ­¤ç”¨æˆ·æ‰‹ä¸­çš„ç‰Œ</param>
         ArrayList ShouldSendCards(int who, int suit, int rank, int master, string[] sendCards, string myCards);
         
-        /// <summary>
-        /// ¸Ä×Ô¼º³öµÄÅÆÊ±µÄËã·¨£¨×Ô¼º²»ÊÇÊ×¼Ò£©
-        /// </summary>
-        /// <param name="who">µ±Ç°ÓÃ»§ÊÇË­£¬1ÎªÄÏ¼Ò£¬2Îª±±¼Ò£¬3ÎªÎ÷¼Ò£¬4Îª¶«¼Ò</param>
-        /// <param name="suit">µ±Ç°Ö÷ÅÆµÄ»¨É«£¬1ÎªºìĞÄ£¬2ÎªºÚÌÒ£¬3Îª·½Æ¬£¬4ÎªÃ·»¨,5ÎªÍõ£¨ÎŞÖ÷£©</param>
-        /// <param name="rank">µ±Ç°´ò¼¸,0Îª´ò2£¬1Îª´ò3,2Îª´ò4........11Îª´òK£¬12Îª´òA,53Îª´òÍõ</param>
-        /// <param name="master">µ±Ç°Ë­Îª×¯¼Ò,1ÎªÄÏ¼Ò£¬2Îª±±¼Ò£¬3ÎªÎ÷¼Ò£¬4Îª¶«¼Ò</param>
-        /// <param name="whoIsFirst">Ë­Ê×ÏÈ³öµÄÅÆ£¬1ÎªÄÏ¼Ò£¬2Îª±±¼Ò£¬3ÎªÎ÷¼Ò£¬4Îª¶«¼Ò</param>
-        /// <param name="sendCards">µ±Ç°Ò»¾Ö¸÷¼ÒÒÑ¾­³öµôµÄÅÆ£¬sendCards[0]ÎªÄÏ¼Ò£¬sendCards[1]Îª±±¼Ò£¬sendCards[2]ÎªÎ÷¼Ò£¬sendCards[3]Îª¶«¼Ò</param>
-        /// <param name="currentSendCards">Ê×¼ÒÒÔ¼°×Ô¼ºµÄÉÏ¼Ò³öµÄÅÆ</param>
-        /// <param name="myCards">´ËÓÃ»§ÊÖÖĞµÄÅÆ</param>
-        /// <returns></returns>
+        // æ”¹è‡ªå·±å‡ºçš„ç‰Œæ—¶çš„ç®—æ³•ï¼ˆè‡ªå·±ä¸æ˜¯é¦–å®¶ï¼‰
+        // <param name="who">å½“å‰ç”¨æˆ·æ˜¯è°ï¼Œ1ä¸ºå—å®¶ï¼Œ2ä¸ºåŒ—å®¶ï¼Œ3ä¸ºè¥¿å®¶ï¼Œ4ä¸ºä¸œå®¶</param>
+        // <param name="suit">å½“å‰ä¸»ç‰Œçš„èŠ±è‰²ï¼Œ1ä¸ºçº¢å¿ƒï¼Œ2ä¸ºé»‘æ¡ƒï¼Œ3ä¸ºæ–¹ç‰‡ï¼Œ4ä¸ºæ¢…èŠ±,5ä¸ºç‹ï¼ˆæ— ä¸»ï¼‰</param>
+        // <param name="rank">å½“å‰æ‰“å‡ ,0ä¸ºæ‰“2ï¼Œ1ä¸ºæ‰“3,2ä¸ºæ‰“4........11ä¸ºæ‰“Kï¼Œ12ä¸ºæ‰“A,53ä¸ºæ‰“ç‹</param>
+        // <param name="master">å½“å‰è°ä¸ºåº„å®¶,1ä¸ºå—å®¶ï¼Œ2ä¸ºåŒ—å®¶ï¼Œ3ä¸ºè¥¿å®¶ï¼Œ4ä¸ºä¸œå®¶</param>
+        // <param name="whoIsFirst">è°é¦–å…ˆå‡ºçš„ç‰Œï¼Œ1ä¸ºå—å®¶ï¼Œ2ä¸ºåŒ—å®¶ï¼Œ3ä¸ºè¥¿å®¶ï¼Œ4ä¸ºä¸œå®¶</param>
+        // <param name="sendCards">å½“å‰ä¸€å±€å„å®¶å·²ç»å‡ºæ‰çš„ç‰Œï¼ŒsendCards[0]ä¸ºå—å®¶ï¼ŒsendCards[1]ä¸ºåŒ—å®¶ï¼ŒsendCards[2]ä¸ºè¥¿å®¶ï¼ŒsendCards[3]ä¸ºä¸œå®¶</param>
+        // <param name="currentSendCards">é¦–å®¶ä»¥åŠè‡ªå·±çš„ä¸Šå®¶å‡ºçš„ç‰Œ</param>
+        // <param name="myCards">æ­¤ç”¨æˆ·æ‰‹ä¸­çš„ç‰Œ</param>
         ArrayList MustSendCards(int who, int suit, int rank, int master, int whoIsFirst, string[] sendCards, ArrayList[] currentSendCards, string myCards);
     }
 }

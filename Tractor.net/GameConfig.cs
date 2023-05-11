@@ -4,192 +4,135 @@ using System.Text;
 using System.Resources;
 using System.Drawing;
 using System.Drawing.Imaging;
-
 using Kuaff.CardResouces;
-
-namespace Kuaff.Tractor
-{
+namespace Kuaff.Tractor {
     [Serializable]
-    class GameConfig
-    {
-        #region Ê±¼äÉèÖÃ
-
-        //Ê±¼äÉèÖÃ
-        int finishedOncePauseTime = DefinedConstant.FINISHEDONCEPAUSETIME; //½áËãÊ±¼ä
-
-        internal int FinishedOncePauseTime
-        {
+    class GameConfig {
+#region æ—¶é—´è®¾ç½®
+        // æ—¶é—´è®¾ç½®
+        int finishedOncePauseTime = DefinedConstant.FINISHEDONCEPAUSETIME; // ç»“ç®—æ—¶é—´
+        internal int FinishedOncePauseTime {
             get { return finishedOncePauseTime; }
             set { finishedOncePauseTime = value; }
         }
-
-
-        int noRankPauseTime = DefinedConstant.NORANKPAUSETIME; //Á÷¾ÖÔİÍ£Ê±¼ä
-
-        public int NoRankPauseTime
-        {
+        int noRankPauseTime = DefinedConstant.NORANKPAUSETIME; // æµå±€æš‚åœæ—¶é—´
+        public int NoRankPauseTime {
             get { return noRankPauseTime; }
             set { noRankPauseTime = value; }
         }
-
-        int get8CardsTime = DefinedConstant.GET8CARDSTIME; //¿ÛÅÆÊ±¼ä
-
-        public int Get8CardsTime
-        {
+        int get8CardsTime = DefinedConstant.GET8CARDSTIME; // æ‰£ç‰Œæ—¶é—´
+        public int Get8CardsTime {
             get { return get8CardsTime; }
             set { get8CardsTime = value; }
         }
-        int sortCardsTime = DefinedConstant.SORTCARDSTIME; //ÅÅĞòÊ±¼ä
-
-        public int SortCardsTime
-        {
+        int sortCardsTime = DefinedConstant.SORTCARDSTIME; // æ’åºæ—¶é—´
+        public int SortCardsTime {
             get { return sortCardsTime; }
             set { sortCardsTime = value; }
         }
-        int finishedThisTime = DefinedConstant.FINISHEDTHISTIME; //×Ü½áËãÊ±¼ä
-
-        public int FinishedThisTime
-        {
+        int finishedThisTime = DefinedConstant.FINISHEDTHISTIME; // æ€»ç»“ç®—æ—¶é—´
+        public int FinishedThisTime {
             get { return finishedThisTime; }
             set { finishedThisTime = value; }
         }
-
-        int timerDiDa = DefinedConstant.TIMERDIDA; //ÓÎÏ·µÎ´ğ
-
-        public int TimerDiDa
-        {
+        int timerDiDa = DefinedConstant.TIMERDIDA; // æ¸¸æˆæ»´ç­”
+        public int TimerDiDa {
             get { return timerDiDa; }
             set { timerDiDa = value; }
         }
-        #endregion // Ê±¼äÉèÖÃ
-
-
-        #region ¹æÔòÉèÖÃ
-        //±Ø´òµÄÅÆ
+#endregion // æ—¶é—´è®¾ç½®
+#region è§„åˆ™è®¾ç½®
+        // å¿…æ‰“çš„ç‰Œ
         private string mustRank = "";
-        internal string MustRank
-        {
+        internal string MustRank {
             get { return mustRank; }
             set { mustRank = value; }
         }
-
-        //ÊÇ·ñÔÚµ÷ÊÔ
+        // æ˜¯å¦åœ¨è°ƒè¯•
         private bool isDebug = false;
-        internal bool IsDebug
-        {
+        internal bool IsDebug {
             get { return isDebug; }
             set { isDebug = value; }
         }
-
-
-        //¿Ûµ×Ëã·¨
+        // æ‰£åº•ç®—æ³•
         private int bottomAlgorithm = 1;
-        internal int BottomAlgorithm
-        {
+        internal int BottomAlgorithm {
             get { return bottomAlgorithm; }
             set { bottomAlgorithm = value; }
         }
-
- 
-        //ÊÇ·ñ¿ÉÒÔÁ÷¾Ö
+        // æ˜¯å¦å¯ä»¥æµå±€
         private bool isPass = true;
-        internal bool IsPass
-        {
+        internal bool IsPass {
             get { return isPass; }
             set { isPass = value; }
         }
-
-        //ÊÇ·ñ¿ÉÒÔJµ½µ×
+        // æ˜¯å¦å¯ä»¥Jåˆ°åº•
         private bool jToBottom = false;
-        internal bool JToBottom
-        {
+        internal bool JToBottom {
             get { return jToBottom; }
             set { jToBottom = value; }
         }
-
-        //ÊÇ·ñ¿ÉÒÔqµ½°ë
+        // æ˜¯å¦å¯ä»¥qåˆ°åŠ
         private bool qToHalf = false;
-        internal bool QToHalf
-        {
+        internal bool QToHalf {
             get { return qToHalf; }
             set { qToHalf = value; }
         }
-
-        //ÊÇ·ñ¿ÉÒÔAµ½J
+        // æ˜¯å¦å¯ä»¥Aåˆ°J
         private bool aToJ = false;
-        internal bool AToJ
-        {
+        internal bool AToJ {
             get { return aToJ; }
             set { aToJ = value; }
         }
         
-
-
-        //ÊÇ·ñ¿ÉÒÔ×Ô·´
+        // æ˜¯å¦å¯ä»¥è‡ªå
         private bool canMyRankAgain = true;
-        internal bool CanMyRankAgain
-        {
+        internal bool CanMyRankAgain {
             get { return canMyRankAgain; }
             set { canMyRankAgain = value; }
         }
-
-        //ÊÇ·ñ¿ÉÒÔÁÁÎŞÖ÷
+        // æ˜¯å¦å¯ä»¥äº®æ— ä¸»
         private bool canRankJack = true;
-        internal bool CanRankJack
-        {
+        internal bool CanRankJack {
             get { return canRankJack; }
             set { canRankJack = value; }
         }
-
-        //ÊÇ·ñ¿ÉÒÔ¼Ó¹Ì
+        // æ˜¯å¦å¯ä»¥åŠ å›º
         private bool canMyStrengthen = true;
-        internal bool CanMyStrengthen
-        {
+        internal bool CanMyStrengthen {
             get { return canMyStrengthen; }
             set { canMyStrengthen = value; }
         }
-
         private int whenFinished = 0;
-        internal int WhenFinished
-        {
+        internal int WhenFinished {
             get { return whenFinished; }
             set { whenFinished = value; }
         }
-
-        #endregion // ¹æÔòÉèÖÃ
-
-
-        #region Í¼°¸ÉèÖÃ
-        //Ö»ÓĞÔÚÊ¹ÓÃÄÚÖÃµÄÅÆÃæ×ÊÔ´Ê±²ÅÆğ×÷ÓÃ
+#endregion // è§„åˆ™è®¾ç½®
+#region å›¾æ¡ˆè®¾ç½®
+        // åªæœ‰åœ¨ä½¿ç”¨å†…ç½®çš„ç‰Œé¢èµ„æºæ—¶æ‰èµ·ä½œç”¨
         [NonSerialized()]
-        ResourceManager cardsResourceManager = Kuaff_Cards.ResourceManager; //µ±Ç°ÅÆÃæËùÊ¹ÓÃµÄ×ÊÔ´¹ÜÀíÆ÷
-        public ResourceManager CardsResourceManager
-        {
+        ResourceManager cardsResourceManager = Kuaff_Cards.ResourceManager; // å½“å‰ç‰Œé¢æ‰€ä½¿ç”¨çš„èµ„æºç®¡ç†å™¨
+        public ResourceManager CardsResourceManager {
             get {
-                if (cardsResourceManager != null)
-                {
+                if (cardsResourceManager != null) {
                     return cardsResourceManager;
                 }
-                else
-                {
+                else {
                     cardsResourceManager = Kuaff_Cards.ResourceManager;
                     return cardsResourceManager;
                 }
             }
             set { cardsResourceManager = value; }
         }
-
         [NonSerialized()]
-        Bitmap backImage = Kuaff_Cards.back; //×ÀÃæ±³¾°
-        internal Bitmap BackImage
-        {
+        Bitmap backImage = Kuaff_Cards.back; // æ¡Œé¢èƒŒæ™¯
+        internal Bitmap BackImage {
             get {
-                if (backImage != null)
-                {
+                if (backImage != null) {
                     return backImage;
                 }
-                else
-                {
+                else {
                     backImage = Kuaff_Cards.back;
                     return backImage;
                 }
@@ -197,16 +140,13 @@ namespace Kuaff.Tractor
             set { backImage = value; }
         }
        
-        //ÊÇ·ñ²ÉÓÃ×Ô¶¨ÒåµÄÅÆÃæ
-        private string cardImageName = ""; //ÅÆÃæÍ¼°¸
-        internal string CardImageName
-        {
+        // æ˜¯å¦é‡‡ç”¨è‡ªå®šä¹‰çš„ç‰Œé¢
+        private string cardImageName = ""; // ç‰Œé¢å›¾æ¡ˆ
+        internal string CardImageName {
             get { return cardImageName; }
             set { cardImageName = value; }
         }
-        #endregion // Í¼°¸ÉèÖÃ
-
-
+#endregion // å›¾æ¡ˆè®¾ç½®
 
     }
 }

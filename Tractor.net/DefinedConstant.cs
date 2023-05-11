@@ -1,79 +1,51 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
-namespace Kuaff.Tractor
-{
-    //³ÌĞò³£Á¿
-    class DefinedConstant
-    {
-        //Ê±¼ä³£Á¿
-        internal const int FINISHEDONCEPAUSETIME = 1500; //Ã¿È¦ÔİÍ£Ê±¼ä
-        internal const int NORANKPAUSETIME = 5000; //Á÷¾ÖÊ±¼ä
-        internal const int GET8CARDSTIME = 1000; //Ãş8ÕÅµ×ÅÆµÄÊ±¼ä
-        internal const int SORTCARDSTIME = 1000; //ÎÒµÄÅÆÅÅĞòÊ±¼ä
-        internal const int FINISHEDTHISTIME = 2500; //Ã¿¾ÖÔİÍ£Ê±¼ä
-        internal const int TIMERDIDA = 100; //ÏµÍ³µÎ´ğ
-
+namespace Kuaff.Tractor {
+    // ç¨‹åºå¸¸é‡
+    class DefinedConstant {
+        // æ—¶é—´å¸¸é‡
+        internal const int FINISHEDONCEPAUSETIME = 1500; // æ¯åœˆæš‚åœæ—¶é—´
+        internal const int NORANKPAUSETIME = 5000; // æµå±€æ—¶é—´
+        internal const int GET8CARDSTIME = 1000; // æ‘¸8å¼ åº•ç‰Œçš„æ—¶é—´
+        internal const int SORTCARDSTIME = 1000; // æˆ‘çš„ç‰Œæ’åºæ—¶é—´
+        internal const int FINISHEDTHISTIME = 2500; // æ¯å±€æš‚åœæ—¶é—´
+        internal const int TIMERDIDA = 100; // ç³»ç»Ÿæ»´ç­”
     }
-
-
-    /// <summary>
-    /// ÃüÁî×´Ì¬£¬Ö¸Ê¾ÏÂÒ»²½¶¯×÷
-    /// </summary>
-    enum CardCommands
-    {
-        ReadyCards, //·¢ÅÆÃüÁî
-        DrawCenter8Cards, //»­8ÕÅµ×ÅÆµÄÃüÁî
-        WaitingForSending8Cards, //µÈ´ı¿Ûµ×µÄÃüÁî
-        DrawMySortedCards,//ÅÅĞòÎÒµÄÅÆµÄÃüÁî
-
-        Pause,//Í¨ÓÃÔİÍ£ÃüÁî
-        WaitingShowPass, //ÏÔÊ¾Á÷¾ÖµÄÃüÁî
-        WaitingShowBottom, //·­µ×ÅÆµÄÃüÁî
-        WaitingForSend, //µÈ´ı³öÅÆ
-        WaitingForMySending, //µÈ´ıÎÒ³öÅÆµÄÃüÁî
-        DrawOnceFinished,//³öÍêÒ»È¦ºóµÄÃüÁî
-        DrawOnceRank,//³öÍêÒ»¾ÖºóµÄÃüÁî
-        Undefined //Î´¶¨ÒåµÄÃüÁî
+    // å‘½ä»¤çŠ¶æ€ï¼ŒæŒ‡ç¤ºä¸‹ä¸€æ­¥åŠ¨ä½œ
+    enum CardCommands {
+        ReadyCards, // å‘ç‰Œå‘½ä»¤
+        DrawCenter8Cards, // ç”»8å¼ åº•ç‰Œçš„å‘½ä»¤
+        WaitingForSending8Cards, // ç­‰å¾…æ‰£åº•çš„å‘½ä»¤
+        DrawMySortedCards,// æ’åºæˆ‘çš„ç‰Œçš„å‘½ä»¤
+        Pause,// é€šç”¨æš‚åœå‘½ä»¤
+        WaitingShowPass, // æ˜¾ç¤ºæµå±€çš„å‘½ä»¤
+        WaitingShowBottom, // ç¿»åº•ç‰Œçš„å‘½ä»¤
+        WaitingForSend, // ç­‰å¾…å‡ºç‰Œ
+        WaitingForMySending, // ç­‰å¾…æˆ‘å‡ºç‰Œçš„å‘½ä»¤
+        DrawOnceFinished,// å‡ºå®Œä¸€åœˆåçš„å‘½ä»¤
+        DrawOnceRank,// å‡ºå®Œä¸€å±€åçš„å‘½ä»¤
+        Undefined // æœªå®šä¹‰çš„å‘½ä»¤
     }
-
-    /// <summary>
-    /// ±£´æµ±Ç°ÓÎÏ·×´Ì¬µÄ¶ÔÏó
-    /// </summary>
+    // ä¿å­˜å½“å‰æ¸¸æˆçŠ¶æ€çš„å¯¹è±¡
     [Serializable]
-    struct CurrentState
-    {
-        /// <summary>
-        /// ×Ô¼ºµ±Ç°µÄÅÆ¾Ö
-        /// </summary>
+    struct CurrentState {
+        // è‡ªå·±å½“å‰çš„ç‰Œå±€
         internal int OurCurrentRank;
-        //×ÜÂÖÊı
+        // æ€»è½®æ•°
         internal int OurTotalRound;
-
-        /// <summary>
-        /// ¶Ô·½µÄÅÆ¾Ö
-        /// </summary>
+        // å¯¹æ–¹çš„ç‰Œå±€
         internal int OpposedCurrentRank;
-        //×ÜÂÖÊı
+        // æ€»è½®æ•°
         internal int OpposedTotalRound;
-
-        /// <summary>
-        /// µ±Ç°µÄ»¨É«
-        /// Î´¶¨0¡¢ºìÌÒ1¡¢ºÚÌÒ2¡¢·½¿é3¡¢Ã·»¨4¡¢ÎŞÖ÷5
-        /// </summary>
+        // å½“å‰çš„èŠ±è‰²
+        // æœªå®š0ã€çº¢æ¡ƒ1ã€é»‘æ¡ƒ2ã€æ–¹å—3ã€æ¢…èŠ±4ã€æ— ä¸»5
         internal int Suit;
-
-        /// <summary>
-        /// µ±Ç°µÄ×¯¼Ò
-        /// Î´¶¨0,×Ô¼º1¡¢¶Ô¼Ò2¡¢Î÷3¡¢¶«4
-        /// </summary>
+        // å½“å‰çš„åº„å®¶
+        // æœªå®š0,è‡ªå·±1ã€å¯¹å®¶2ã€è¥¿3ã€ä¸œ4
         internal int Master;
-
-        internal CardCommands CurrentCardCommands; //µ±Ç°ÃüÁî
-
-        internal CurrentState(int ourCurrentRank, int opposedCurrentRank, int suit, int master,int ourTotalRound,int opposedTotalRound, CardCommands currentCardCommands)
-        {
+        internal CardCommands CurrentCardCommands; // å½“å‰å‘½ä»¤
+        internal CurrentState(int ourCurrentRank, int opposedCurrentRank, int suit, int master,int ourTotalRound,int opposedTotalRound, CardCommands currentCardCommands) {
             OurCurrentRank = ourCurrentRank;
             OpposedCurrentRank = opposedCurrentRank;
             Suit = suit;

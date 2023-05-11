@@ -1,188 +1,114 @@
 using System;
 using System.Collections;
 using System.Text;
-
 using Kuaff.Tractor.Plugins;
+namespace Kuaff.Tractor.AlgorithmSample {
 
-namespace Kuaff.Tractor.AlgorithmSample
-{
-    public class SampleUserAlgorithm : IUserAlgorithm
-    {
-        /// <summary>
-        /// Ëã·¨×÷Õß
-        /// </summary>
-        public string Author
-        {
+    public class SampleUserAlgorithm : IUserAlgorithm {
+        // ç®—æ³•ä½œè€…
+        public string Author {
             get {return "smallnest";}
         }
-        /// <summary>
-        /// Ëã·¨×÷ÕßµÄemailµØÖ·
-        /// </summary>
-        public string Email
-        {
+        // ç®—æ³•ä½œè€…çš„emailåœ°å€
+        public string Email {
             get {return "smallnest@gmail.com";}
         }
-        /// <summary>
-        /// Ëã·¨Ãû³Æ
-        /// </summary>
-        public string Name
-        {
-            get {return "¼òµ¥ÑİÊ¾Ëã·¨";}
+        // ç®—æ³•åç§°
+        public string Name {
+            get {return "ç®€å•æ¼”ç¤ºç®—æ³•";}
         }
-        /// <summary>
-        /// Ëã·¨½éÉÜ
-        /// </summary>
-        public string Description
-        {
-            get { return "ÕâÊÇÒ»¸öËã·¨½Ó¿ÚµÄ¼òµ¥ÊµÏÖ£¬ÓÃÀ´ÑİÊ¾ÈçºÎÊµÏÖËã·¨½Ó¿Ú¡£"; }
+        // ç®—æ³•ä»‹ç»
+        public string Description {
+            get { return "è¿™æ˜¯ä¸€ä¸ªç®—æ³•æ¥å£çš„ç®€å•å®ç°ï¼Œç”¨æ¥æ¼”ç¤ºå¦‚ä½•å®ç°ç®—æ³•æ¥å£ã€‚"; }
         }
-
-        /// <summary>
-        /// Ê×ÏÈ³öÅÆµÄËã·¨¡£
-        /// </summary>
-        /// <param name="who">µ±Ç°ÓÃ»§ÊÇË­£¬1ÎªÄÏ¼Ò£¬2Îª±±¼Ò£¬3ÎªÎ÷¼Ò£¬4Îª¶«¼Ò</param>
-        /// <param name="suit">µ±Ç°Ö÷ÅÆµÄ»¨É«£¬1ÎªºìĞÄ£¬2ÎªºÚÌÒ£¬3Îª·½Æ¬£¬4ÎªÃ·»¨,5ÎªÍõ£¨ÎŞÖ÷£©</param>
-        /// <param name="rank">µ±Ç°´ò¼¸,0Îª´ò2£¬1Îª´ò3,2Îª´ò4........11Îª´òK£¬12Îª´òA,53Îª´òÍõ</param>
-        /// <param name="master">µ±Ç°Ë­Îª×¯¼Ò,1ÎªÄÏ¼Ò£¬2Îª±±¼Ò£¬3ÎªÎ÷¼Ò£¬4Îª¶«¼Ò</param>
-        /// <param name="sendCards">µ±Ç°Ò»¾Ö¸÷¼ÒÒÑ¾­³öµôµÄÅÆ£¬sendCards[0]ÎªÄÏ¼Ò£¬sendCards[1]Îª±±¼Ò£¬sendCards[2]ÎªÎ÷¼Ò£¬sendCards[3]Îª¶«¼Ò</param>
-        /// <param name="myCards">´ËÓÃ»§ÊÖÖĞµÄÅÆ</param>
-        /// <returns></returns>
-        public ArrayList ShouldSendCards(int who, int suit, int rank, int master, string[] sendCards, string myCards)
-        {
+        // é¦–å…ˆå‡ºç‰Œçš„ç®—æ³•ã€‚
+        // <param name="who">å½“å‰ç”¨æˆ·æ˜¯è°ï¼Œ1ä¸ºå—å®¶ï¼Œ2ä¸ºåŒ—å®¶ï¼Œ3ä¸ºè¥¿å®¶ï¼Œ4ä¸ºä¸œå®¶</param>
+        // <param name="suit">å½“å‰ä¸»ç‰Œçš„èŠ±è‰²ï¼Œ1ä¸ºçº¢å¿ƒï¼Œ2ä¸ºé»‘æ¡ƒï¼Œ3ä¸ºæ–¹ç‰‡ï¼Œ4ä¸ºæ¢…èŠ±,5ä¸ºç‹ï¼ˆæ— ä¸»ï¼‰</param>
+        // <param name="rank">å½“å‰æ‰“å‡ ,0ä¸ºæ‰“2ï¼Œ1ä¸ºæ‰“3,2ä¸ºæ‰“4........11ä¸ºæ‰“Kï¼Œ12ä¸ºæ‰“A,53ä¸ºæ‰“ç‹</param>
+        // <param name="master">å½“å‰è°ä¸ºåº„å®¶,1ä¸ºå—å®¶ï¼Œ2ä¸ºåŒ—å®¶ï¼Œ3ä¸ºè¥¿å®¶ï¼Œ4ä¸ºä¸œå®¶</param>
+        // <param name="sendCards">å½“å‰ä¸€å±€å„å®¶å·²ç»å‡ºæ‰çš„ç‰Œï¼ŒsendCards[0]ä¸ºå—å®¶ï¼ŒsendCards[1]ä¸ºåŒ—å®¶ï¼ŒsendCards[2]ä¸ºè¥¿å®¶ï¼ŒsendCards[3]ä¸ºä¸œå®¶</param>
+        // <param name="myCards">æ­¤ç”¨æˆ·æ‰‹ä¸­çš„ç‰Œ</param>
+        public ArrayList ShouldSendCards(int who, int suit, int rank, int master, string[] sendCards, string myCards) {
             ArrayList result = new ArrayList();
             string[] cards = myCards.Split(new char[] {','});
-            if (cards.Length > 0)
-            {
+            if (cards.Length > 0) {
                 result.Add(int.Parse(cards[0]));
             }
            
             return result;
         }
-
-        /// <summary>
-        /// ¸Ä×Ô¼º³öµÄÅÆÊ±µÄËã·¨£¨×Ô¼º²»ÊÇÊ×¼Ò£©
-        /// </summary>
-        /// <param name="who">µ±Ç°ÓÃ»§ÊÇË­£¬1ÎªÄÏ¼Ò£¬2Îª±±¼Ò£¬3ÎªÎ÷¼Ò£¬4Îª¶«¼Ò</param>
-        /// <param name="suit">µ±Ç°Ö÷ÅÆµÄ»¨É«£¬1ÎªºìĞÄ£¬2ÎªºÚÌÒ£¬3Îª·½Æ¬£¬4ÎªÃ·»¨,5ÎªÍõ£¨ÎŞÖ÷£©</param>
-        /// <param name="rank">µ±Ç°´ò¼¸,0Îª´ò2£¬1Îª´ò3,2Îª´ò4........11Îª´òK£¬12Îª´òA,53Îª´òÍõ</param>
-        /// <param name="master">µ±Ç°Ë­Îª×¯¼Ò,1ÎªÄÏ¼Ò£¬2Îª±±¼Ò£¬3ÎªÎ÷¼Ò£¬4Îª¶«¼Ò</param>
-        /// <param name="whoIsFirst">Ë­Ê×ÏÈ³öµÄÅÆ£¬1ÎªÄÏ¼Ò£¬2Îª±±¼Ò£¬3ÎªÎ÷¼Ò£¬4Îª¶«¼Ò</param>
-        /// <param name="sendCards">µ±Ç°Ò»¾Ö¸÷¼ÒÒÑ¾­³öµôµÄÅÆ£¬sendCards[0]ÎªÄÏ¼Ò£¬sendCards[1]Îª±±¼Ò£¬sendCards[2]ÎªÎ÷¼Ò£¬sendCards[3]Îª¶«¼Ò</param>
-        /// <param name="currentSendCards">Ê×¼ÒÒÔ¼°×Ô¼ºµÄÉÏ¼Ò³öµÄÅÆ</param>
-        /// <param name="myCards">´ËÓÃ»§ÊÖÖĞµÄÅÆ</param>
-        /// <returns></returns>
-        public ArrayList MustSendCards(int who, int suit, int rank, int master, int whoIsFirst, string[] sendCards, ArrayList[] currentSendCards, string myCards)
-        {
+        // è¯¥è‡ªå·±å‡ºçš„ç‰Œæ—¶çš„ç®—æ³•ï¼ˆè‡ªå·±ä¸æ˜¯é¦–å®¶ï¼‰
+        // <param name="who">å½“å‰ç”¨æˆ·æ˜¯è°ï¼Œ1ä¸ºå—å®¶ï¼Œ2ä¸ºåŒ—å®¶ï¼Œ3ä¸ºè¥¿å®¶ï¼Œ4ä¸ºä¸œå®¶</param>
+        // <param name="suit">å½“å‰ä¸»ç‰Œçš„èŠ±è‰²ï¼Œ1ä¸ºçº¢å¿ƒï¼Œ2ä¸ºé»‘æ¡ƒï¼Œ3ä¸ºæ–¹ç‰‡ï¼Œ4ä¸ºæ¢…èŠ±,5ä¸ºç‹ï¼ˆæ— ä¸»ï¼‰</param>
+        // <param name="rank">å½“å‰æ‰“å‡ ,0ä¸ºæ‰“2ï¼Œ1ä¸ºæ‰“3,2ä¸ºæ‰“4........11ä¸ºæ‰“Kï¼Œ12ä¸ºæ‰“A,53ä¸ºæ‰“ç‹</param>
+        // <param name="master">å½“å‰è°ä¸ºåº„å®¶,1ä¸ºå—å®¶ï¼Œ2ä¸ºåŒ—å®¶ï¼Œ3ä¸ºè¥¿å®¶ï¼Œ4ä¸ºä¸œå®¶</param>
+        // <param name="whoIsFirst">è°é¦–å…ˆå‡ºçš„ç‰Œï¼Œ1ä¸ºå—å®¶ï¼Œ2ä¸ºåŒ—å®¶ï¼Œ3ä¸ºè¥¿å®¶ï¼Œ4ä¸ºä¸œå®¶</param>
+        // <param name="sendCards">å½“å‰ä¸€å±€å„å®¶å·²ç»å‡ºæ‰çš„ç‰Œï¼ŒsendCards[0]ä¸ºå—å®¶ï¼ŒsendCards[1]ä¸ºåŒ—å®¶ï¼ŒsendCards[2]ä¸ºè¥¿å®¶ï¼ŒsendCards[3]ä¸ºä¸œå®¶</param>
+        // <param name="currentSendCards">é¦–å®¶ä»¥åŠè‡ªå·±çš„ä¸Šå®¶å‡ºçš„ç‰Œ</param>
+        // <param name="myCards">æ­¤ç”¨æˆ·æ‰‹ä¸­çš„ç‰Œ</param>
+        public ArrayList MustSendCards(int who, int suit, int rank, int master, int whoIsFirst, string[] sendCards, ArrayList[] currentSendCards, string myCards) {
             ArrayList result = new ArrayList();
-            string[] cards = myCards.Split(new char[] { ',' });
-            //µÃµ½Ê×¼Ò³öµÄ»¨É«£¬ÊÇÄ³ÖÖ¸±ÅÆ»¹ÊÇÔÚµ÷Ö÷
-            
-            if (currentSendCards[whoIsFirst-1].Count > 0)
-            {
-                //µÃµ½Ê×¼Ò³öµÄÒ»ÕÅÅÆ
+            string[] cards = myCards.Split(new char[] { ',' }); // æŠŠç°æ‰‹ä¸Šçš„ä½™ç‰Œï¼šæŠ˜æˆæ˜¯å•å¼ çš„ç‰Œ
+            // å¾—åˆ°é¦–å®¶å‡ºçš„èŠ±è‰²ï¼Œæ˜¯æŸç§å‰¯ç‰Œè¿˜æ˜¯åœ¨è°ƒä¸»
+            if (currentSendCards[whoIsFirst-1].Count > 0) {
+                // å¾—åˆ°é¦–å®¶å‡ºçš„ä¸€å¼ ç‰Œ
                 int oneCard = (int)currentSendCards[whoIsFirst - 1][0];
-                bool isSuit = false;
-                if (oneCard == 52 || oneCard == 53) //Èç¹ûÊÇĞ¡Íõ»òÕß´óÍõ£¬ºÁÎŞÒÉÎÊÓ¦¸ÃÊÇÖ÷
-                {
+                bool isSuit = false; // æ˜¯åœ¨è°ƒä¸»å—ï¼Ÿ
+                if (oneCard == 52 || oneCard == 53) { // å¦‚æœæ˜¯å°ç‹æˆ–è€…å¤§ç‹ï¼Œæ¯«æ— ç–‘é—®åº”è¯¥æ˜¯ä¸»
                     isSuit = true;
-                }
-                else if ((oneCard % 13) == rank) //Èç¹ûÊÇÖ÷,±ÈÈç´ò8£¬Èç¹û³öµÄÅÆÊÇ8£¬ÔòÎªµ÷Ö÷
-                {
+                } else if ((oneCard % 13) == rank) { // å¦‚æœæ˜¯ä¸»,æ¯”å¦‚æ‰“8ï¼Œå¦‚æœå‡ºçš„ç‰Œæ˜¯8ï¼Œåˆ™ä¸ºè°ƒä¸»
                     isSuit = true;
-                }
-                else
-                {
-                    if ((oneCard >= 0 && oneCard < 13) && (suit==1)) //Èç¹û³öµÄÊÇºìĞÄ¶øÇÒÖ÷»¨É«Ò²ÊÇºìĞÄ
-                    {
+                } else { // æ¥ä¸‹æ¥ï¼šåˆ¤æ–­ä¸»èŠ±è‰²ï¼Œä¸æ˜¯åœ¨è°ƒä¸»çš„æƒ…å†µã€çº¢é»‘æ–¹æ¢…ã€‘çš„é¡ºåº
+                    if ((oneCard >= 0 && oneCard < 13) && (suit == 1)) { // å¦‚æœå‡ºçš„æ˜¯çº¢å¿ƒè€Œä¸”ä¸»èŠ±è‰²ä¹Ÿæ˜¯çº¢å¿ƒ
                         isSuit = true;
-                    }
-                    else if ((oneCard >= 13 && oneCard < 26) && (suit == 2)) //Èç¹û³öµÄÊÇºÚÌÒ¶øÇÒÖ÷»¨É«Ò²ÊÇºÚÌÒ
-                    {
+                    } else if ((oneCard >= 13 && oneCard < 26) && (suit == 2)) { // å¦‚æœå‡ºçš„æ˜¯é»‘æ¡ƒè€Œä¸”ä¸»èŠ±è‰²ä¹Ÿæ˜¯é»‘æ¡ƒ
                         isSuit = true;
-                    }
-                    else if ((oneCard >= 26 && oneCard < 39) && (suit == 3)) //Èç¹û³öµÄÊÇ·½Æ¬¶øÇÒÖ÷»¨É«Ò²ÊÇ·½Æ¬
-                    {
+                    } else if ((oneCard >= 26 && oneCard < 39) && (suit == 3)) { // å¦‚æœå‡ºçš„æ˜¯æ–¹ç‰‡è€Œä¸”ä¸»èŠ±è‰²ä¹Ÿæ˜¯æ–¹ç‰‡
                         isSuit = true;
-                    }
-                    else if ((oneCard >= 39 && oneCard < 52) && (suit == 4)) //Èç¹û³öµÄÊÇÃ·»¨¶øÇÒÖ÷»¨É«Ò²ÊÇÃ·»¨
-                    {
+                    } else if ((oneCard >= 39 && oneCard < 52) && (suit == 4)) { // å¦‚æœå‡ºçš„æ˜¯æ¢…èŠ±è€Œä¸”ä¸»èŠ±è‰²ä¹Ÿæ˜¯æ¢…èŠ±
                         isSuit = true;
                     }
                 }
                 int count = currentSendCards[whoIsFirst - 1].Count;
-
-                if (isSuit) //Èç¹ûÊÇµ÷Ö÷£¬°´µ÷Ö÷µÄ·½·¨³öÅÆ
-                {
-                    //TODO:ÅĞ¶ÏÊ×¼ÒÊÇ·ñÊÇË¦ÅÆ
-
-                    //TODO:·ñÔòÅĞ¶ÏÊ×¼ÒÊÇ·ñÓĞÍÏÀ­»ú
-
-                    //TODO:·ñÔòÅĞ¶ÏÊ×¼ÒÊÇ·ñ³ö¶Ô
-
-                    //TODO:·ñÔòÊ×¼ÒÓ¦¸Ã³öµ¥ÕÅµÄÅÆ
-
-                    //TODO:½«À´É¾³ı£¬ÏÂÃæÊÇ×î±¿µÄ°ì·¨,¼Ù¶¨Ê×¼ÒÖ»³öÁËÒ»ÕÅÅÆ,¸ù±¾Î´¿¼ÂÇÉÏÃæµÄÌõ¼ş
-                    for (int i = 0; i < cards.Length; i++)
-                    {
+                if (isSuit) { // ã€è°ƒä¸»ã€‘ï¼šæŒ‰è°ƒä¸»çš„æ–¹æ³•å‡ºç‰Œ
+                    // TODO:åˆ¤æ–­é¦–å®¶æ˜¯å¦æ˜¯ã€ç”©ç‰Œã€‘
+                    // TODO:å¦åˆ™åˆ¤æ–­é¦–å®¶æ˜¯å¦æœ‰ã€æ‹–æ‹‰æœºã€‘
+                    // TODO:å¦åˆ™åˆ¤æ–­é¦–å®¶æ˜¯å¦ã€å‡ºå¯¹ã€‘
+                    // TODO:å¦åˆ™é¦–å®¶åº”è¯¥å‡ºã€å•å¼ çš„ç‰Œã€‘
+                    // TODO:å°†æ¥åˆ é™¤ï¼Œä¸‹é¢æ˜¯æœ€ç¬¨çš„åŠæ³•,å‡å®šé¦–å®¶åªå‡ºäº†ä¸€å¼ ç‰Œ,æ ¹æœ¬æœªè€ƒè™‘ä¸Šé¢çš„æ¡ä»¶
+                    for (int i = 0; i < cards.Length; i++) {
                         int number = int.Parse(cards[i]);
-                        if ((number / 13) == (suit-1) && number < 52) //ÓĞ´Ë»¨É«µÄÖ÷
-                        {
+                        if ((number / 13) == (suit-1) && number < 52) { // æœ‰æ­¤èŠ±è‰²çš„ä¸»
                             result.Add(number);
                             break;
-                        }
-                        else if ((number == 52) || (number == 53)) //ÓĞ´óĞ¡Íõ
-                        {
+                        } else if ((number == 52) || (number == 53)) { // æœ‰å¤§å°ç‹
                             result.Add(number);
                             break;
-                        }
-                        else if ((number % 13) == rank) //ÓĞÖ÷£¬±ÈÈç´ò10,ÓĞ10
-                        {
+                        } else if ((number % 13) == rank) { // æœ‰ä¸»ï¼Œæ¯”å¦‚æ‰“10,æœ‰10
                             result.Add(number);
                             break;
                         }
                     }
-
-                    if (result.Count ==0) //ÎŞÖ÷£¬Ëæ±ã³öÕÅ¸±ÅÆ
-                    {
+                    if (result.Count == 0) { // æ— ä¸»ï¼Œéšä¾¿å‡ºå¼ å‰¯ç‰Œ: è¿™ä¹Ÿå¤ªç¬¨äº†å§ï¼Œä¸€ç‚¹å„¿æƒ³æ³•ä¹Ÿæ²¡æœ‰ã€‚ã€‚
                         result.Add(int.Parse(cards[0]));
                     }
-                }
-                else //·ñÔò³öÏàÓ¦µÄ¸±ÅÆ
-                {
-                    //TODO:ÅĞ¶ÏÊ×¼ÒÊÇ·ñÊÇË¦ÅÆ
-
-                    //TODO:·ñÔòÅĞ¶ÏÊ×¼ÒÊÇ·ñÓĞÍÏÀ­»ú
-
-                    //TODO:·ñÔòÅĞ¶ÏÊ×¼ÒÊÇ·ñ³ö¶Ô
-
-                    //TODO:·ñÔòÊ×¼ÒÓ¦¸Ã³öµ¥ÕÅµÄÅÆ
-
-                    //TODO:½«À´É¾³ı£¬ÏÂÃæÊÇ×î±¿µÄ°ì·¨,¼Ù¶¨Ê×¼ÒÖ»³öÁËÒ»ÕÅÅÆ,¸ù±¾Î´¿¼ÂÇÉÏÃæµÄÌõ¼ş
+                } else { // å¦åˆ™å‡ºç›¸åº”çš„å‰¯ç‰Œ
                     int firstSuit = (oneCard / 13) + 1;
-
-                    for (int i = 0; i < cards.Length; i++)
-                    {
-                        if (cards[i].Length == 0)
-                        {
+                    for (int i = 0; i < cards.Length; i++) {
+                        if (cards[i].Length == 0) { //  ï¼Ÿ
                             continue;
                         }
                         int number = int.Parse(cards[i]);
-                        if ((number / 13) == (firstSuit - 1) && number < 52 && ((number % 13) != rank)) //ÓĞ´Ë»¨É«
-                        {
+                        if ((number / 13) == (firstSuit - 1) && number < 52 && ((number % 13) != rank)) { // æœ‰æ­¤èŠ±è‰²
                             result.Add(number);
                             break;
                         }
-                       
                     }
-                    if (result.Count == 0) //Èç¹ûÃ»ÓĞ´Ë»¨É«µÄÅÆ£¬Ëæ±ã³öÒ»ÕÅ
-                    {
+                    if (result.Count == 0) { // å¦‚æœæ²¡æœ‰æ­¤èŠ±è‰²çš„ç‰Œï¼Œéšä¾¿å‡ºä¸€å¼ ã€‚è¿™é‡Œéšä¾¿å‡ºä¸€å¼ ï¼Œå¤ªç¬¨äº†ã€‚ã€‚
                         result.Add(int.Parse(cards[0]));
                     }
                 }
-                }
-
-               
-
+            }
             return result;
         }
     }

@@ -2,623 +2,375 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-
-namespace Kuaff.Tractor
-{
-    /// <summary>
-    /// Í¨ÓÃ´¦ÀíÀà.
-    /// ÓÃÀ´´¦Àí³ÌĞòÖĞ³£ÓÃµÄ·½·¨£¬±ÈÈç½âÎöµÈ.
-    /// </summary>
-    class CommonMethods
-    {
+namespace Kuaff.Tractor {
+    // é€šç”¨å¤„ç†ç±».
+    // ç”¨æ¥å¤„ç†ç¨‹åºä¸­å¸¸ç”¨çš„æ–¹æ³•ï¼Œæ¯”å¦‚è§£æç­‰.
+    class CommonMethods {
         
-        /// <summary>
-        /// ¶ÔÒ»¸öËæ»ú²úÉúµÄĞòÁĞ½øĞĞ½âÎö
-        /// </summary>
-        /// <param name="list">ÒªÅÅĞòµÄÁĞ±í</param>
-        /// <param name="suit">µ±Ç°»¨É«</param>
-        /// <param name="rank">µ±Ç°ÅÆ¾Ö</param>
-        /// <returns>·µ»ØCurrentPoker¶ÔÏó</returns>
-        internal static CurrentPoker parse(ArrayList list, int suit, int rank)
-        {
-            //ºìÌÒ0-12
-            //ºÚÌÒ13-25
-            //·½¿é26-38
-            //Ã·»¨39-51
-            //Ğ¡Íõ52
-            //´óÍõ53
+// å¯¹ä¸€ä¸ªéšæœºäº§ç”Ÿçš„åºåˆ—è¿›è¡Œè§£æ
+// <param name="list">è¦æ’åºçš„åˆ—è¡¨</param>
+// <param name="suit">å½“å‰èŠ±è‰²</param>
+// <param name="rank">å½“å‰ç‰Œå±€</param>
+// <returns>è¿”å›CurrentPokerå¯¹è±¡</returns>
+        internal static CurrentPoker parse(ArrayList list, int suit, int rank) {
+            // çº¢æ¡ƒ0-12
+            // é»‘æ¡ƒ13-25
+            // æ–¹å—26-38
+            // æ¢…èŠ±39-51
+            // å°ç‹52
+            // å¤§ç‹53
             CurrentPoker poker = new CurrentPoker();
-
             poker.Rank = rank;
             poker.Suit = suit;
-
-            //½âÎöÓÃ»§µÄÅÆ¾Ö
-            foreach (int i in list)
-            {
-                //´óÍõ
-                if (i == 53)
-                {
+            // è§£æç”¨æˆ·çš„ç‰Œå±€
+            foreach (int i in list) {
+                // å¤§ç‹
+                if (i == 53) {
                     poker.BigJack++;
                     continue;
-                }
-                else if (i == 52)
-                {
+                } else if (i == 52) {
                     poker.SmallJack++;
                     continue;
-                }
-                else if (i < 52)
-                {
-                    if (i >= 0 && i < 13)
-                    {
+                } else if (i < 52) {
+                    if (i >= 0 && i < 13) {
                         poker.Hearts[i]++;
-                        if (i != rank)
-                        {
+                        if (i != rank) {
                             poker.HeartsNoRank[i]++;
                             poker.HeartsNoRankTotal++;
                         }
-                        else
-                        {
+                        else {
                             poker.HeartsRankTotal++;
                         }
-                    }
-                    else if (i >= 13 && i < 26)
-                    {
+                    } else if (i >= 13 && i < 26) {
                         poker.Peachs[i - 13]++;
-                        if ((i - 13) != rank)
-                        {
+                        if ((i - 13) != rank) {
                             poker.PeachsNoRank[i - 13]++;
                             poker.PeachsNoRankTotal++;
                         }
-                        else
-                        {
+                        else {
                             poker.PeachsRankTotal++;
                         }
-                    }
-                    else if (i >= 26 && i < 39)
-                    {
+                    } else if (i >= 26 && i < 39) {
                         poker.Diamonds[i - 26]++;
-                        if ((i - 26) != rank)
-                        {
+                        if ((i - 26) != rank) {
                             poker.DiamondsNoRank[i - 26]++;
                             poker.DiamondsNoRankTotal++;
                         }
-                        else
-                        {
+                        else {
                             poker.DiamondsRankTotal++;
                         }
-                    }
-                    else if (i >= 39 && i < 52)
-                    {
+                    } else if (i >= 39 && i < 52) {
                         poker.Clubs[i - 39]++;
-                        if ((i - 39) != rank)
-                        {
+                        if ((i - 39) != rank) {
                             poker.ClubsNoRank[i - 39]++;
                             poker.ClubsNoRankTotal++;
                         }
-                        else
-                        {
+                        else {
                             poker.ClubsRankTotal++;
                         }
                     }
-
-                    if (suit > 0)
-                    {
-                        if (i == ((suit - 1) * 13 + rank))
-                        {
+                    if (suit > 0) {
+                        if (i == ((suit - 1) * 13 + rank)) {
                             poker.MasterRank++;
                         }
                     }
                 }
-
-                
-
             }
-           
             return poker;
         }
-
-        /// <summary>
-        /// ÅĞ¶Ïµ±Ç°·¢³öµÄÅÆÖĞ°üº¬µÄ·ÖÊı
-        /// </summary>
-        /// <param name="currentSendCards">¸÷¼Ò³öµÄÅÆ</param>
-        /// <returns>¼ÆËã³öµÄ·ÖÊı</returns>
-        internal static int GetScores(ArrayList[] currentSendCards)
-        {
+// åˆ¤æ–­å½“å‰å‘å‡ºçš„ç‰Œä¸­åŒ…å«çš„åˆ†æ•°
+// <param name="currentSendCards">å„å®¶å‡ºçš„ç‰Œ</param>
+// <returns>è®¡ç®—å‡ºçš„åˆ†æ•°</returns>
+        internal static int GetScores(ArrayList[] currentSendCards) {
             int scores = 0;
-            for (int i = 0; i < currentSendCards.Length; i++)
-            {
-                for (int j = 0; j < currentSendCards[i].Count; j++)
-                {
-                    if ((int)currentSendCards[i][j] % 13 == 11)
-                    {
+            for (int i = 0; i < currentSendCards.Length; i++) {
+                for (int j = 0; j < currentSendCards[i].Count; j++) {
+                    if ((int)currentSendCards[i][j] % 13 == 11) {
                         scores += 10;
                     }
-                    if ((int)currentSendCards[i][j] % 13 == 8)
-                    {
+                    if ((int)currentSendCards[i][j] % 13 == 8) {
                         scores += 10;
                     }
-                    if ((int)currentSendCards[i][j] % 13 == 3)
-                    {
+                    if ((int)currentSendCards[i][j] % 13 == 3) {
                         scores += 5;
                     }
                 }
             }
-
             return scores;
         }
-
-        /// <summary>
-        /// ¼ÆËãÆäËû¸÷¼ÒÓÃ»§µÄ±àºÅ
-        /// </summary>
-        /// <param name="me">»ù×¼ÓÃ»§µÄ±àºÅ</param>
-        /// <returns></returns>
-        internal static int[] OtherUsers(int me)
-        {
+// è®¡ç®—å…¶ä»–å„å®¶ç”¨æˆ·çš„ç¼–å·
+// <param name="me">åŸºå‡†ç”¨æˆ·çš„ç¼–å·</param>
+        internal static int[] OtherUsers(int me) {
             int[] users = { 0, 0, 0 };
-            if (me == 1)
-            {
+            if (me == 1) {
                 users[0] = 4;
                 users[1] = 2;
                 users[2] = 3;
-            }
-            else if (me == 2)
-            {
+            } else if (me == 2) {
                 users[0] = 3;
                 users[1] = 1;
                 users[2] = 4;
-            }
-            else if (me == 3)
-            {
+            } else if (me == 3) {
                 users[0] = 1;
                 users[1] = 4;
                 users[2] = 2;
-            }
-            else if (me == 4)
-            {
+            } else if (me == 4) {
                 users[0] = 2;
                 users[1] = 3;
                 users[2] = 1;
             }
-
             return users;
         }
-
-        /// <summary>
-        /// ÅĞ¶ÏÒ»ÕÅÅÆÊÇ·ñÊÇÖ÷
-        /// </summary>
-        /// <param name="number"></param>
-        /// <param name="suit"></param>
-        /// <param name="rank"></param>
-        /// <returns></returns>
-        internal static bool IsMaster(int number,int suit,int rank)
-        {
-            if ((number == 53) || (number == 52))
-            {
+// åˆ¤æ–­ä¸€å¼ ç‰Œæ˜¯å¦æ˜¯ä¸»
+// <param name="number"></param>
+// <param name="suit"></param>
+// <param name="rank"></param>
+        internal static bool IsMaster(int number,int suit,int rank) {
+            if ((number == 53) || (number == 52)) {
                 return true;
-            }
-            else if ((number%13) == rank)
-            {
+            } else if ((number%13) == rank) {
                 return true;
-            }
-            else if (suit ==1)
-            {
-                if (number>=0 && number<13)
-                {
+            } else if (suit ==1) {
+                if (number>=0 && number<13) {
                     return true;
+                } else {
+                    return false;
                 }
-                else
-                {
+            } else if (suit == 2) {
+                if (number >= 13 && number < 26) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else if (suit == 3) {
+                if (number >= 26 && number < 39) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else if (suit == 4) {
+                if (number >= 39 && number < 52) {
+                    return true;
+                } else {
                     return false;
                 }
             }
-            else if (suit == 2)
-            {
-                if (number >= 13 && number < 26)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else if (suit == 3)
-            {
-                if (number >= 26 && number < 39)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else if (suit == 4)
-            {
-                if (number >= 39 && number < 52)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
             return false;
         }
-
-        /// <summary>
-        /// ±È½ÏÊÇ·ñÊÇÍ¬Ò»»¨É«
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <param name="suit">Ö÷»¨É«</param>
-        /// <param name="rank">Ö÷Êı×Ö</param>
-        /// <returns></returns>
-        internal static bool IsSameSuit(int a, int b, int suit, int rank)
-        {
+// æ¯”è¾ƒæ˜¯å¦æ˜¯åŒä¸€èŠ±è‰²
+// <param name="a"></param>
+// <param name="b"></param>
+// <param name="suit">ä¸»èŠ±è‰²</param>
+// <param name="rank">ä¸»æ•°å­—</param>
+        internal static bool IsSameSuit(int a, int b, int suit, int rank) {
             bool b1 = IsMaster(a, suit, rank);
             bool b2 = IsMaster(a, suit, rank);
-
-            if ((b1) && (b2)) //¶¼ÊÇÖ÷£¬±È½ÏÖ÷
-            {
+            if ((b1) && (b2)) { // éƒ½æ˜¯ä¸»ï¼Œæ¯”è¾ƒä¸»
                 return true;
-            }
-            else if ((!b1) && (!b2)) //¶¼ÊÇ¸±
-            {
+            } else if ((!b1) && (!b2)) { // éƒ½æ˜¯å‰¯
                 int suit1 = GetSuit(a);
                 int suit2 = GetSuit(b);
-                if (suit1 != suit2)
-                {
+                if (suit1 != suit2) {
                     return false;
-                }
-                else
-                {
+                } else {
                     return true;
                 }
             }
-
             return false;
         }
-
-        /// <summary>
-        /// µÃµ½Ò»¸öÅÆµÄ»¨É«
-        /// </summary>
-        /// <param name="a">ÅÆÖµ</param>
-        /// <returns>»¨É«</returns>
-        internal static int GetSuit(int a)
-        {
-            if (a >= 0 && a < 13)
-            {
+// å¾—åˆ°ä¸€ä¸ªç‰Œçš„èŠ±è‰²
+// <param name="a">ç‰Œå€¼</param>
+// <returns>èŠ±è‰²</returns>
+        internal static int GetSuit(int a) {
+            if (a >= 0 && a < 13) {
                 return 1;
-            }
-            else if (a >= 13 && a < 26)
-            {
+            } else if (a >= 13 && a < 26) {
                 return 2;
-            }
-            else if (a >= 26 && a < 39)
-            {
+            } else if (a >= 26 && a < 39) {
                 return 3;
-            }
-
-            else if (a >= 39 && a < 52)
-            {
+            } else if (a >= 39 && a < 52) {
                 return 4;
-            }
-
-            else 
-            {
+            } else  {
                 return 5;
             }
         }
-
-        /// <summary>
-        /// µÃµ½Ò»ÕÅÅÆµÄ»¨É«£¬Èç¹ûÊÇÖ÷£¬Ôò·µ»ØÖ÷µÄ»¨É«
-        /// </summary>
-        /// <param name="a">ÅÆÖµ</param>
-        /// <param name="suit">Ö÷»¨É«</param>
-        /// <param name="rank">Ö÷Rank</param>
-        /// <returns>»¨É«</returns>
-        internal static int GetSuit(int a,int suit,int rank)
-        {
+// å¾—åˆ°ä¸€å¼ ç‰Œçš„èŠ±è‰²ï¼Œå¦‚æœæ˜¯ä¸»ï¼Œåˆ™è¿”å›ä¸»çš„èŠ±è‰²
+// <param name="a">ç‰Œå€¼</param>
+// <param name="suit">ä¸»èŠ±è‰²</param>
+// <param name="rank">ä¸»Rank</param>
+// <returns>èŠ±è‰²</returns>
+        internal static int GetSuit(int a,int suit,int rank) {
             int firstSuit = 0;
-            
-            if (a == 53 || a == 52)
-            {
+            if (a == 53 || a == 52) {
                 firstSuit = suit;
-            }
-            else if ((a % 13) == rank)
-            {
+            } else if ((a % 13) == rank) {
                 firstSuit = suit;
-            }
-            else
-            {
+            } else {
                 firstSuit = GetSuit(a);
             }
-
             return firstSuit;
         }
-
-        /// <summary>
-        /// ´ÓÒ»¶ÑÅÆÖĞÕÒ³ö×î´óµÄÅÆ£¬¿¼ÂÇÖ÷
-        /// </summary>
-        /// <param name="sendCards">Ò»¶ÑÖ÷</param>
-        /// <param name="suit">»¨É«</param>
-        /// <param name="rank">Ö÷</param>
-        /// <returns>×î´óµÄÅÆ</returns>
-        internal static int GetMaxCard(ArrayList sendCards,int suit,int rank)
-        {
+// ä»ä¸€å †ç‰Œä¸­æ‰¾å‡ºæœ€å¤§çš„ç‰Œï¼Œè€ƒè™‘ä¸»
+// <param name="sendCards">ä¸€å †ä¸»</param>
+// <param name="suit">èŠ±è‰²</param>
+// <param name="rank">ä¸»</param>
+// <returns>æœ€å¤§çš„ç‰Œ</returns>
+        internal static int GetMaxCard(ArrayList sendCards,int suit,int rank) {
             CurrentPoker cp = new CurrentPoker();
             cp.Suit = suit;
             cp.Rank = rank;
             cp = parse(sendCards, suit, rank);
             int thisSuit = CommonMethods.GetSuit((int)sendCards[0]);
-
-
-            if (cp.IsMixed())
-            {
+            if (cp.IsMixed()) {
                 return -1;
             }
-
             bool hasTractor = cp.HasTractors();
             int pairTotal = cp.GetPairs().Count;
             int count = cp.Count;
-
-            //Èç¹ûÍÏÀ­»ú
-            if (hasTractor)
-            {
+// å¦‚æœæ‹–æ‹‰æœº
+            if (hasTractor) {
                 return cp.GetTractor();
-            }
-            else if (count == 1) //µ¥ÕÅÅÆ
-            {
+            } else if (count == 1) { // å•å¼ ç‰Œ
                 return (int)sendCards[0];
-            }
-            else if (count == pairTotal * 2 && (count > 1)) //¶¼ÊÇ¶Ô
-            {
+            } else if (count == pairTotal * 2 && (count > 1)) { // éƒ½æ˜¯å¯¹
                 return (int)cp.GetPairs()[pairTotal - 1];
-            }
-            else //ÓĞ¶ÔºÍÓĞµ¥ÕÅÅÆ£¬µÃµ½¶ÔµÄ×î´óÖµ
-            {
-                if (pairTotal>0)
-                {
+            } else { // æœ‰å¯¹å’Œæœ‰å•å¼ ç‰Œï¼Œå¾—åˆ°å¯¹çš„æœ€å¤§å€¼
+                if (pairTotal>0) {
                     return (int)cp.GetPairs()[pairTotal - 1];
-                }
-                else
-                {
+                } else {
                     return cp.GetMaxCard(thisSuit);
                 }
-                
             }
-
-          
         }
-
-        /// <summary>
-        /// µÃµ½Ä³ÖÖ»¨É«ÅÆµÄÊıÁ¿
-        /// </summary>
-        /// <param name="cp">ÅÆ</param>
-        /// <param name="suit">Ö÷»¨É«</param>
-        /// <param name="rank">Ö÷Rank</param>
-        /// <param name="mysuit">²éÕÒµÄ»¨É«</param>
-        /// <returns>ÅÆµÄÊıÁ¿</returns>
-        internal static int GetSuitCount(CurrentPoker cp,int suit,int rank,int mysuit)
-        {
-            if (suit == mysuit)
-            {
+// å¾—åˆ°æŸç§èŠ±è‰²ç‰Œçš„æ•°é‡
+// <param name="cp">ç‰Œ</param>
+// <param name="suit">ä¸»èŠ±è‰²</param>
+// <param name="rank">ä¸»Rank</param>
+// <param name="mysuit">æŸ¥æ‰¾çš„èŠ±è‰²</param>
+// <returns>ç‰Œçš„æ•°é‡</returns>
+        internal static int GetSuitCount(CurrentPoker cp,int suit,int rank,int mysuit) {
+            if (suit == mysuit) {
                 int count = cp.MasterRank + cp.SubRank + cp.BigJack + cp.SmallJack;
-                if (mysuit == 1)
-                {
+                if (mysuit == 1) {
                     count += cp.HeartsNoRankTotal;
-                }
-                else if (mysuit == 2)
-                {
+                } else if (mysuit == 2) {
                     count += cp.PeachsNoRankTotal;
-                }
-                else if (mysuit == 3)
-                {
+                } else if (mysuit == 3) {
                     count += cp.DiamondsNoRankTotal;
-                }
-                else if (mysuit == 4)
-                {
+                } else if (mysuit == 4) {
                     count += cp.ClubsNoRankTotal;
                 }
-
                 return count;
-            }
-            else
-            {
-                if (mysuit == 1)
-                {
+            } else {
+                if (mysuit == 1) {
                     return cp.HeartsNoRankTotal;
                 }
-
-                if (mysuit == 2)
-                {
+                if (mysuit == 2) {
                     return cp.PeachsNoRankTotal;
-                    
                 }
-
-                if (mysuit == 3)
-                {
+                if (mysuit == 3) {
                     return cp.DiamondsNoRankTotal;
-
                 }
-
-                if (mysuit == 4)
-                {
+                if (mysuit == 4) {
                     return cp.ClubsNoRankTotal;
-                   
                 }
-
-                if (mysuit == 5)
-                {
+                if (mysuit == 5) {
                     return cp.SmallJack + cp.BigJack;
                 }
             }
-
             return 0;
         }
-
-        /// <summary>
-        /// ±È½ÏÁ½ÕÅÅÆÊë´óÊëĞ¡
-        /// </summary>
-        /// <param name="a">µÚÒ»ÕÅÅÆ</param>
-        /// <param name="b">µÚ¶şÕÅÅÆ</param>
-        /// <param name="suit">Ö÷»¨É«</param>
-        /// <param name="rank">Ö÷Rank</param>
-        /// <param name="firstSuit">µÚÒ»ÕÅÅÆµÄ»¨É«</param>
-        /// <returns>Èç¹ûµÚÒ»ÕÅ´óÓÚµÈÓÚµÚ¶şÕÅÅÆ£¬·µ»Øtrue,·ñÔò·µ»Øfalse</returns>
-        internal static bool CompareTo(int a,int b,int suit,int rank, int firstSuit)
-        {
-            if ((a == -1) && (b == -1))
-            {
+// æ¯”è¾ƒä¸¤å¼ ç‰Œå­°å¤§å­°å°
+// <param name="a">ç¬¬ä¸€å¼ ç‰Œ</param>
+// <param name="b">ç¬¬äºŒå¼ ç‰Œ</param>
+// <param name="suit">ä¸»èŠ±è‰²</param>
+// <param name="rank">ä¸»Rank</param>
+// <param name="firstSuit">ç¬¬ä¸€å¼ ç‰Œçš„èŠ±è‰²</param>
+// <returns>å¦‚æœç¬¬ä¸€å¼ å¤§äºç­‰äºç¬¬äºŒå¼ ç‰Œï¼Œè¿”å›true,å¦åˆ™è¿”å›false</returns>
+        internal static bool CompareTo(int a,int b,int suit,int rank, int firstSuit) {
+            if ((a == -1) && (b == -1)) {
                 return true;
-            }
-            else if ((a == -1) && (b != -1))
-            {
+            } else if ((a == -1) && (b != -1)) {
                 return false;
-            }
-            else if ((a != -1) && (b == -1))
-            {
+            } else if ((a != -1) && (b == -1)) {
                 return true;
             }
-
-
             int suit1 = GetSuit(a, suit, rank);
             int suit2 = GetSuit(b, suit, rank);
-
-            if ((suit1 == firstSuit) && (suit2 != firstSuit))
-            {
-                if (suit1 == suit)
-                {
+            if ((suit1 == firstSuit) && (suit2 != firstSuit)) {
+                if (suit1 == suit) {
                     return true;
-                }
-                else if (suit2 == suit)
-                {
+                } else if (suit2 == suit) {
                     return false;
                 }
                 return true;
-            }
-            else if ((suit1 != firstSuit) && (suit2 == firstSuit))
-            {
-                if (suit1 == suit)
-                {
+            } else if ((suit1 != firstSuit) && (suit2 == firstSuit)) {
+                if (suit1 == suit) {
                     return true;
-                }
-                else if (suit2 == suit)
-                {
+                } else if (suit2 == suit) {
                     return false;
                 }
-
                 return false;
             }
-
-            if (a == 53)
-            {
+            if (a == 53) {
                 return true;
             }
-
-
-            if (a == 52)
-            {
-                if (b == 53)
-                {
+            if (a == 52) {
+                if (b == 53) {
                     return false;
-                }
-                else
-                {
+                } else {
                     return true;
                 }
-            }
-            else if (b == 52)
-            {
-                if (a == 53)
-                {
+            } else if (b == 52) {
+                if (a == 53) {
                     return true;
-                }
-                else
-                {
+                } else {
                     return false;
                 }
             }
-
-
-            if (a == (suit-1) * 13 +rank) 
-            {
-                if (b == 53 || b == 52)
-                {
+            if (a == (suit-1) * 13 +rank)  {
+                if (b == 53 || b == 52) {
                     return false;
-                }
-                else 
-                {
+                } else  {
                     return true;
                 }
-            }
-            else if (a% 13 == rank)
-            {
-                if (b == 53 || b == 52 || (b == (suit - 1) * 13 + rank))
-                {
+            } else if (a% 13 == rank) {
+                if (b == 53 || b == 52 || (b == (suit - 1) * 13 + rank)) {
                     return false;
-                }
-                else
-                {
+                } else {
                     return true;
                 }
-            }
-            else if (b == (suit - 1) * 13 + rank)
-            {
-                if (a == 53 || a == 52)
-                {
+            } else if (b == (suit - 1) * 13 + rank) {
+                if (a == 53 || a == 52) {
                     return true;
-                }
-                else
-                {
+                } else {
                     return false;
                 }
-            }
-            else if (b % 13 == rank)
-            {
-                if (a == 53 || a == 52 || (a == (suit - 1) * 13 + rank))
-                {
+            } else if (b % 13 == rank) {
+                if (a == 53 || a == 52 || (a == (suit - 1) * 13 + rank)) {
                     return true;
-                }
-                else
-                {
+                } else {
                     return false;
                 }
-            }
-            else
-            {
-                if ((suit1 == suit) && (suit2 != suit))
-                {
+            } else {
+                if ((suit1 == suit) && (suit2 != suit)) {
                     return true;
-                }
-                else if ((suit1 != suit) && (suit2 == suit))
-                {
+                } else if ((suit1 != suit) && (suit2 == suit)) {
                     return false;
-                }
-                else if (suit1 == suit2)
-                {
+                } else if (suit1 == suit2) {
                     return (a - b >= 0);
-                }
-                else
-                {
+                } else {
                     return true;
                 }
                 
             }
         }
-
-        /// <summary>
-        /// ³öÅÆµÄÍ¨ÓÃ×ö·¨£¬´ÓCurrentPokerÖĞÉ¾³ı´ËÅÆ£¬´ÓpokerListÖĞÉ¾³ı´ËÅÆ£¬½«´ËÅÆ·ÅÈë³öÅÆÁĞ±íÖĞ
-        /// </summary>
-        /// <param name="sends">³öÅÆÊı×éÁĞ±í</param>
-        /// <param name="cp">CurrentPoker¶ÔÏó</param>
-        /// <param name="pokerList">pokerList¶ÔÏó</param>
-        /// <param name="number">³öÅÆÊı×Ö</param>
-        internal static void SendCards(ArrayList sends,CurrentPoker cp,ArrayList pokerList,int number)
-        {
+// å‡ºç‰Œçš„é€šç”¨åšæ³•ï¼Œä»CurrentPokerä¸­åˆ é™¤æ­¤ç‰Œï¼Œä»pokerListä¸­åˆ é™¤æ­¤ç‰Œï¼Œå°†æ­¤ç‰Œæ”¾å…¥å‡ºç‰Œåˆ—è¡¨ä¸­
+// <param name="sends">å‡ºç‰Œæ•°ç»„åˆ—è¡¨</param>
+// <param name="cp">CurrentPokerå¯¹è±¡</param>
+// <param name="pokerList">pokerListå¯¹è±¡</param>
+// <param name="number">å‡ºç‰Œæ•°å­—</param>
+        internal static void SendCards(ArrayList sends,CurrentPoker cp,ArrayList pokerList,int number) {
             sends.Add(number);
             cp.RemoveCard(number);
             pokerList.Remove(number);
