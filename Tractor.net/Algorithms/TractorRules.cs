@@ -83,7 +83,7 @@ namespace Kuaff.Tractor {
                 if (cp[first-1].HasTractors()) {
                     if ((!cp[who - 1].HasTractors()) && (mainForm.currentPokers[who-1].GetTractor(previousSuit) > -1)) {
                         return false;
-                    } else if ((mypairs == 1) && (myCurrentPairs> 1))对 { // 出了单个对，但是实际多于1个
+                    } else if ((mypairs == 1) && (myCurrentPairs> 1)) { // 出了单个对，但是实际多于1个对
                             return false;
                         } else if ((mypairs == 0) && (myCurrentPairs > 0)) { // 没出对，但实际有对
                         return false;

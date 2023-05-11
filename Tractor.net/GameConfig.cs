@@ -63,24 +63,28 @@ namespace Kuaff.Tractor {
             set { bottomAlgorithm = value; }
         }
         // 是否可以流局
-        private bool isPass = true;
+        // private bool isPass = true;
+        private bool isPass = false;
         internal bool IsPass {
             get { return isPass; }
             set { isPass = value; }
         }
         // 是否可以J到底
-        private bool jToBottom = false;
+        // private bool jToBottom = false;
+        private bool jToBottom = true;
         internal bool JToBottom {
             get { return jToBottom; }
             set { jToBottom = value; }
         }
         // 是否可以q到半
-        private bool qToHalf = false;
+        private bool qToHalf = true;
+        // private bool qToHalf = false;
         internal bool QToHalf {
             get { return qToHalf; }
             set { qToHalf = value; }
         }
         // 是否可以A到J
+        // private bool aToJ = true;
         private bool aToJ = false;
         internal bool AToJ {
             get { return aToJ; }

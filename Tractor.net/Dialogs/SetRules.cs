@@ -9,9 +9,11 @@ using System.Configuration;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Diagnostics;
 
 namespace Kuaff.Tractor {
     partial class SetRules : Form {
+        private const string TAG = "SetRules";
 
         private MainForm form = null;
 
@@ -143,7 +145,7 @@ namespace Kuaff.Tractor {
             } else {
                 form.gameConfig.AToJ = false;
             }
-            // ±£´æµ½ÎÄ¼þ
+            // ï¿½ï¿½ï¿½æµ½ï¿½Ä¼ï¿½
             SaveGameConfig();
         }
         private void SaveGameConfig() {
@@ -178,7 +180,8 @@ namespace Kuaff.Tractor {
             }
             SaveGameConfig();
         }
-        private void button5_Click(object sender, EventArgs e) {
+        private void button55_Click(object sender, EventArgs e) {
+            Debug.WriteLine(TAG + ": button55_Click: ");
             if (checkBox10.Checked) {
                 form.gameConfig.CanRankJack = true;
             } else {
