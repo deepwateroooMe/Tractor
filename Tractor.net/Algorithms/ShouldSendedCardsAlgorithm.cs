@@ -1,73 +1,42 @@
 using System;
 using System.Collections;
 using System.Text;
+namespace Kuaff.Tractor {
 
-namespace Kuaff.Tractor
-{
-    /// <summary>
-    /// Ê×ÏÈ³öÅÆµÄËã·¨
-    /// </summary>
-    class ShouldSendedCardsAlgorithm
-    {
-        internal static void ShouldSendCards(MainForm mainForm, CurrentPoker[] currentPokers, int whoseOrder, ArrayList sendedCards)
-        {
+    // é¦–å…ˆå‡ºç‰Œçš„ç®—æ³•
+    class ShouldSendedCardsAlgorithm {
+        internal static void ShouldSendCards(MainForm mainForm, CurrentPoker[] currentPokers, int whoseOrder, ArrayList sendedCards) {
             currentPokers[0].Sort();
             currentPokers[1].Sort();
             currentPokers[2].Sort();
             currentPokers[3].Sort();
-
             mainForm.whoIsBigger = whoseOrder;
-
-            //1.Ìô³ö×î´óµÄ¸±ÅÆ³ö
+            // 1.æŒ‘å‡ºæœ€å¤§çš„å‰¯ç‰Œå‡º
             CurrentPoker cp = currentPokers[whoseOrder - 1];
-
-           
-
-            #region Èç¹û¸±ÅÆÓÐÍÏÀ­»ú
-            int t = cp.GetNoRankNoSuitTractor(); //¸±ÅÆÍÏÀ­»ú
-            if (t > -1)
-            {
+#region å¦‚æžœå‰¯ç‰Œæœ‰æ‹–æ‹‰æœº
+            int t = cp.GetNoRankNoSuitTractor(); // å‰¯ç‰Œæ‹–æ‹‰æœº
+            if (t > -1) {
                 int[] othercards = cp.GetTractorOtherCards(t);
-
                 CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], t);
                 CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], t);
                 CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], othercards[1]);
                 CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], othercards[1]);
-
-
                 return;
             }
-            #endregion // Èç¹û¸±ÅÆÓÐÍÏÀ­»ú
-
-           
-
-
-            #region Èç¹ûÓÐ¸±ÅÆ×î´óµÄ¶Ô
-            if (cp.GetNoRankNoSuitPairs().Count > 0 )
-            {
-                
-
+#endregion // å¦‚æžœå‰¯ç‰Œæœ‰æ‹–æ‹‰æœº
+#region å¦‚æžœæœ‰å‰¯ç‰Œæœ€å¤§çš„å¯¹
+            if (cp.GetNoRankNoSuitPairs().Count > 0 ) {
                 ArrayList al = cp.GetNoRankNoSuitPairs();
                 int[] max = { (int)al[al.Count - 1], (int)al[al.Count - 1] };
-
                 bool b3 = cp.Count < 25;
                 bool b1 = cp.Rank != 12 && (((int)al[al.Count - 1] % 13) == 12) ;
                 bool b2 = cp.Rank == 12 && (((int)al[al.Count - 1] % 13) == 11) ;
-
-                if (b3 || b1 || b2) //²»´òAÊ±
-                {
-
-                    if (whoseOrder == 2)
-                    {
-                        if ((!currentPokers[2].CompareTo(max)) && (!currentPokers[3].CompareTo(max)))
-                        {
-                          
+                if (b3 || b1 || b2) { // ä¸æ‰“Aæ—¶
+                    if (whoseOrder == 2) {
+                        if ((!currentPokers[2].CompareTo(max)) && (!currentPokers[3].CompareTo(max))) {
                             CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], max[0]);
                             CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], max[0]);
-
-
-                            if ((mainForm.currentRank != 12) && (mainForm.currentRank != 11)) //Í¬Ê±Ë¦A
-                            {
+                            if ((mainForm.currentRank != 12) && (mainForm.currentRank != 11))  { // åŒæ—¶ç”©A
                                 if ((max[0] % 13) == 11)
                                 {
                                     if (cp.GetCardCount((CommonMethods.GetSuit(max[0]) - 1) * 13 + 12) == 1)
@@ -83,8 +52,7 @@ namespace Kuaff.Tractor
                                     }
                                 }
                             }
-                            else if ((mainForm.currentRank != 12) && (mainForm.currentRank == 11)) //Í¬Ê±Ë¦A
-                            {
+                            else if ((mainForm.currentRank != 12) && (mainForm.currentRank == 11))  { // åŒæ—¶ç”©A
                                 if ((max[0] % 13) == 10)
                                 {
                                     if (cp.GetCardCount((CommonMethods.GetSuit(max[0]) - 1) * 13 + 12) == 1)
@@ -100,8 +68,7 @@ namespace Kuaff.Tractor
                                     }
                                 }
                             }
-                            else if (mainForm.currentRank == 12) //Í¬Ê±Ë¦A
-                            {
+                            else if (mainForm.currentRank == 12)  { // åŒæ—¶ç”©A
                                 if ((max[0] % 13) == 10)
                                 {
                                     if (cp.GetCardCount((CommonMethods.GetSuit(max[0]) - 1) * 13 + 11) == 1)
@@ -117,24 +84,13 @@ namespace Kuaff.Tractor
                                     }
                                 }
                             }
-
-                           
-
                             return;
                         }
-
-                    }
-                    else if (whoseOrder == 3)
-                    {
-                        if ((!currentPokers[0].CompareTo(max)) && (!currentPokers[1].CompareTo(max)))
-                        {
-                           
-
+                    } else if (whoseOrder == 3) {
+                        if ((!currentPokers[0].CompareTo(max)) && (!currentPokers[1].CompareTo(max))) {
                             CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], max[0]);
                             CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], max[0]);
-
-                            if ((mainForm.currentRank != 12) && (mainForm.currentRank != 11)) //Í¬Ê±Ë¦A
-                            {
+                            if ((mainForm.currentRank != 12) && (mainForm.currentRank != 11))  { // åŒæ—¶ç”©A
                                 if ((max[0] % 13) == 11)
                                 {
                                     if (cp.GetCardCount((CommonMethods.GetSuit(max[0]) - 1) * 13 + 12) == 1)
@@ -150,8 +106,7 @@ namespace Kuaff.Tractor
                                     }
                                 }
                             }
-                            else if ((mainForm.currentRank != 12) && (mainForm.currentRank == 11)) //Í¬Ê±Ë¦A
-                            {
+                            else if ((mainForm.currentRank != 12) && (mainForm.currentRank == 11))  { // åŒæ—¶ç”©A
                                 if ((max[0] % 13) == 10)
                                 {
                                     if (cp.GetCardCount((CommonMethods.GetSuit(max[0]) - 1) * 13 + 12) == 1)
@@ -167,8 +122,7 @@ namespace Kuaff.Tractor
                                     }
                                 }
                             }
-                            else if (mainForm.currentRank == 12) //Í¬Ê±Ë¦A
-                            {
+                            else if (mainForm.currentRank == 12)  { // åŒæ—¶ç”©A
                                 if ((max[0] % 13) == 10)
                                 {
                                     if (cp.GetCardCount((CommonMethods.GetSuit(max[0]) - 1) * 13 + 11) == 1)
@@ -184,22 +138,13 @@ namespace Kuaff.Tractor
                                     }
                                 }
                             }
-
-                           
                             return;
                         }
-                    }
-                    else if (whoseOrder == 4)
-                    {
-                        if ((!currentPokers[0].CompareTo(max)) && (!currentPokers[1].CompareTo(max)))
-                        {
-                           
-
+                    } else if (whoseOrder == 4) {
+                        if ((!currentPokers[0].CompareTo(max)) && (!currentPokers[1].CompareTo(max))) {
                             CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], max[0]);
                             CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], max[0]);
-
-                            if ((mainForm.currentRank != 12) && (mainForm.currentRank != 11)) //Í¬Ê±Ë¦A
-                            {
+                            if ((mainForm.currentRank != 12) && (mainForm.currentRank != 11))  { // åŒæ—¶ç”©A
                                 if ((max[0] % 13) == 11)
                                 {
                                     if (cp.GetCardCount((CommonMethods.GetSuit(max[0]) - 1) * 13 + 12) == 1)
@@ -215,8 +160,7 @@ namespace Kuaff.Tractor
                                     }
                                 }
                             }
-                            else if ((mainForm.currentRank != 12) && (mainForm.currentRank == 11)) //Í¬Ê±Ë¦A
-                            {
+                            else if ((mainForm.currentRank != 12) && (mainForm.currentRank == 11))  {
                                 if ((max[0] % 13) == 10)
                                 {
                                     if (cp.GetCardCount((CommonMethods.GetSuit(max[0]) - 1) * 13 + 12) == 1)
@@ -232,8 +176,7 @@ namespace Kuaff.Tractor
                                     }
                                 }
                             }
-                            else if (mainForm.currentRank == 12) //Í¬Ê±Ë¦A
-                            {
+                            else if (mainForm.currentRank == 12)  {
                                 if ((max[0] % 13) == 10)
                                 {
                                     if (cp.GetCardCount((CommonMethods.GetSuit(max[0]) - 1) * 13 + 11) == 1)
@@ -249,144 +192,89 @@ namespace Kuaff.Tractor
                                     }
                                 }
                             }
-
-                           
-
                             return;
                         }
                     }
                 }
             }
-            #endregion // Èç¹ûÓÐ¸±ÅÆ×î´óµÄ¶Ô
-
-           
-
-            #region Èç¹ûÓÐµ¥ÕÅ×î´óµÄÅÆ
-            //ÅÐ¶Ïµ¥ÕÅÅÆ
+#endregion // å¦‚æžœæœ‰å‰¯ç‰Œæœ€å¤§çš„å¯¹
+#region å¦‚æžœæœ‰å•å¼ æœ€å¤§çš„ç‰Œ
+            // åˆ¤æ–­å•å¼ ç‰Œ
             int maxCards = -1;
-            for (int i = 1; i < 5; i++)
-            {
-                if (i == cp.Suit)
-                {
+            for (int i = 1; i < 5; i++) {
+                if (i == cp.Suit) {
                     continue;
                 }
-
                 maxCards = cp.GetMaxCards(i);
-                if (maxCards == -1)
-                {
+                if (maxCards == -1) {
                     continue;
                 }
-
-                if (whoseOrder == 2)
-                {
-                    if ((!currentPokers[2].CompareTo(maxCards)) && (!currentPokers[3].CompareTo(maxCards)))
-                    {
+                if (whoseOrder == 2) {
+                    if ((!currentPokers[2].CompareTo(maxCards)) && (!currentPokers[3].CompareTo(maxCards))) {
                         CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], maxCards);
-
-                       
                         return;
                     }
-
-                }
-                else if (whoseOrder == 3)
-                {
-                    if ((!currentPokers[0].CompareTo(maxCards)) && (!currentPokers[1].CompareTo(maxCards)))
-                    {
+                } else if (whoseOrder == 3) {
+                    if ((!currentPokers[0].CompareTo(maxCards)) && (!currentPokers[1].CompareTo(maxCards))) {
                         CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], maxCards);
-
-                      
                         return;
                     }
-                }
-                else if (whoseOrder == 4)
-                {
-                    if ((!currentPokers[0].CompareTo(maxCards)) && (!currentPokers[1].CompareTo(maxCards)))
-                    {
+                } else if (whoseOrder == 4) {
+                    if ((!currentPokers[0].CompareTo(maxCards)) && (!currentPokers[1].CompareTo(maxCards))) {
                         CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], maxCards);
-
                         return;
                     }
                 }
             }
-            #endregion // Èç¹ûÓÐµ¥ÕÅ×î´óµÄÅÆ
-
-          
-
-
-            #region ËäÈ»Ã»ÓÐ×î´ó¸±ÅÆ,¼ì²é¶Ô¼ÒÊÇ·ñÓÐ×î´óµÄ¸±ÅÆ
-            for (int i = 1; i < 5; i++)
-            {
-                if (i == cp.Suit)
-                {
+#endregion // å¦‚æžœæœ‰å•å¼ æœ€å¤§çš„ç‰Œ
+#region è™½ç„¶æ²¡æœ‰æœ€å¤§å‰¯ç‰Œ,æ£€æŸ¥å¯¹å®¶æ˜¯å¦æœ‰æœ€å¤§çš„å‰¯ç‰Œ
+            for (int i = 1; i < 5; i++) {
+                if (i == cp.Suit) {
                     continue;
                 }
-
-                if (whoseOrder == 2)
-                {
+                if (whoseOrder == 2) {
                     maxCards = currentPokers[0].GetMaxCards(i);
-                    if (maxCards == -1)
-                    {
+                    if (maxCards == -1) {
                         continue;
                     }
-
-                    if ((!currentPokers[2].CompareTo(maxCards)) && (!currentPokers[3].CompareTo(maxCards)))
-                    {
+                    if ((!currentPokers[2].CompareTo(maxCards)) && (!currentPokers[3].CompareTo(maxCards))) {
                         int max2 = currentPokers[2].GetMaxCard(i);
                         int max3 = currentPokers[2].GetMaxCard(i);
-
-                        if (CommonMethods.CompareTo(max2, max3, cp.Suit, cp.Rank, i))
-                        {
+                        if (CommonMethods.CompareTo(max2, max3, cp.Suit, cp.Rank, i)) {
                             int rt = currentPokers[whoseOrder - 1].GetMinCardsOrScores(i);
-                            if (rt > -1)
-                            {
+                            if (rt > -1) {
                                 CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], rt);
                                 return;
                             }
                         }
                     }
-
-                }
-                else if (whoseOrder == 3)
-                {
+                } else if (whoseOrder == 3) {
                     maxCards = currentPokers[3].GetMaxCards(i);
-                    if (maxCards == -1)
-                    {
+                    if (maxCards == -1) {
                         continue;
                     }
-                    if ((!currentPokers[0].CompareTo(maxCards)) && (!currentPokers[1].CompareTo(maxCards)))
-                    {
+                    if ((!currentPokers[0].CompareTo(maxCards)) && (!currentPokers[1].CompareTo(maxCards))) {
                         int max2 = currentPokers[2].GetMaxCard(i);
                         int max3 = currentPokers[2].GetMaxCard(i);
-
-                        if (CommonMethods.CompareTo(max2, max3, cp.Suit, cp.Rank, i))
-                        {
+                        if (CommonMethods.CompareTo(max2, max3, cp.Suit, cp.Rank, i)) {
                             int rt = currentPokers[whoseOrder - 1].GetMinCardsOrScores(i);
-                            if (rt > -1)
-                            {
+                            if (rt > -1) {
                                 CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], rt);
                                 return;
                             }
                         }
                     }
-                }
-                else if (whoseOrder == 4)
-                {
+                } else if (whoseOrder == 4) {
                     maxCards = currentPokers[2].GetMaxCards(i);
-                    if (maxCards == -1)
-                    {
+                    if (maxCards == -1) {
                         continue;
                     }
-
-                    if ((!currentPokers[0].CompareTo(maxCards)) && (!currentPokers[1].CompareTo(maxCards)))
-                    {
-                         int max2 = currentPokers[2].GetMaxCard(i);
+                    if ((!currentPokers[0].CompareTo(maxCards)) && (!currentPokers[1].CompareTo(maxCards))) {
+                        int max2 = currentPokers[2].GetMaxCard(i);
                         int max3 = currentPokers[2].GetMaxCard(i);
-
-                        if (CommonMethods.CompareTo(max2, max3, cp.Suit, cp.Rank, i))
-                        {
+                        if (CommonMethods.CompareTo(max2, max3, cp.Suit, cp.Rank, i)) {
                             int rt = currentPokers[whoseOrder - 1].GetMinCardsOrScores(i);
-                            if (rt > -1)
-                            {
+                            if (rt > -1) {
                                 CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], rt);
                                 return;
                             }
@@ -394,162 +282,104 @@ namespace Kuaff.Tractor
                     }
                 }
             }
-            #endregion // ËäÈ»Ã»ÓÐ×î´ó¸±ÅÆ,¼ì²é¶Ô¼ÒÊÇ·ñÓÐ×î´óµÄ¸±ÅÆ
-
-           
-
-            //3.ÊÇ·ñÄÜÇåÖ÷
-
-            #region Èç¹ûÃ»ÓÐ¸±ÅÆ¿É³ö£¬µ÷Ö÷
-            if (currentPokers[whoseOrder - 1].GetMasterCardsTotal() > 0)
-            {
+#endregion // è™½ç„¶æ²¡æœ‰æœ€å¤§å‰¯ç‰Œ,æ£€æŸ¥å¯¹å®¶æ˜¯å¦æœ‰æœ€å¤§çš„å‰¯ç‰Œ
+            // 3.æ˜¯å¦èƒ½æ¸…ä¸»
+#region å¦‚æžœæ²¡æœ‰å‰¯ç‰Œå¯å‡ºï¼Œè°ƒä¸»
+            if (currentPokers[whoseOrder - 1].GetMasterCardsTotal() > 0) {
                 t = currentPokers[whoseOrder - 1].GetMasterTractor();
-                if (t > -1 && t != 53)
-                {
+                if (t > -1 && t != 53) {
                     int[] ttt = currentPokers[whoseOrder - 1].GetTractorOtherCards(t);
                     CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], t);
                     CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], t);
                     CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], ttt[1]);
                     CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], ttt[1]);
-
-                  
                     return;
                 }
-
-                //¶Ô
+                // å¯¹
                 ArrayList al = currentPokers[whoseOrder - 1].GetMasterPairs();
-
                 int[] users = CommonMethods.OtherUsers(whoseOrder);
-
-                if (currentPokers[whoseOrder - 1].Count<= 12 && al.Count>0)
-                {
+                if (currentPokers[whoseOrder - 1].Count<= 12 && al.Count>0) {
                     int t1 = currentPokers[whoseOrder - 1].GetMasterCardsTotal();
                     int t2 = currentPokers[users[0] - 1].GetMasterCardsTotal();
                     int t3 = currentPokers[users[2] - 1].GetMasterCardsTotal();
-
-                    if (t1 > t2 && t1 > t3 )
-                    {
+                    if (t1 > t2 && t1 > t3 ) {
                         CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], (int)al[al.Count - 1]);
                         CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], (int)al[al.Count - 1]);
                         return;
                     }
-                   
-                    
                 }
-
                 int rt = currentPokers[whoseOrder - 1].GetMinCardsNoScores(cp.Suit);
-                if (rt > -1 && currentPokers[whoseOrder - 1].GetCardCount(rt) == 1)
-                {
+                if (rt > -1 && currentPokers[whoseOrder - 1].GetCardCount(rt) == 1) {
                     CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], rt);
-                    
                     return;
                 }
-                //
-                if (cp.Suit != 1)
-                {
-                    if (cp.HeartsRankTotal == 1)
-                    {
+                // 
+                if (cp.Suit != 1) {
+                    if (cp.HeartsRankTotal == 1) {
                         CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], cp.Rank);
-                      
                         return;
                     }
                 }
-                if (cp.Suit != 2)
-                {
-                    if (cp.PeachsRankTotal == 1)
-                    {
+                if (cp.Suit != 2) {
+                    if (cp.PeachsRankTotal == 1) {
                         CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], cp.Rank + 13);
-                   
                         return;
                     }
                 }
-                if (cp.Suit != 3)
-                {
-                    if (cp.DiamondsRankTotal == 1)
-                    {
+                if (cp.Suit != 3) {
+                    if (cp.DiamondsRankTotal == 1) {
                         CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], cp.Rank + 26);
-                     
                         return;
                     }
                 }
-                if (cp.Suit != 4)
-                {
-                    if (cp.ClubsRankTotal == 1)
-                    {
+                if (cp.Suit != 4) {
+                    if (cp.ClubsRankTotal == 1) {
                         CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], cp.Rank + 39);
-                    
                         return;
                     }
                 }
-
             }
-            
-            //µ÷Ö÷µÄ¶Ô
-
-            #endregion // Èç¹ûÃ»ÓÐ¸±ÅÆ¿É³ö£¬µ÷Ö÷
-
-           
-            //5.Ëæ±ã³öÐ¡µÄ¸±ÅÆ
-            #region ²»ÄÜ¼ÌÐøµ÷Ö÷µÄ»°£¬Ëæ±ã³öÒ»ÕÅ²»ÊÇ·ÖµÄ¸±ÅÆ
-            for (int i = 0; i < 5; i++)
-            {
-                if (i == cp.Suit)
-                {
+            // è°ƒä¸»çš„å¯¹
+#endregion // å¦‚æžœæ²¡æœ‰å‰¯ç‰Œå¯å‡ºï¼Œè°ƒä¸»
+            // 5.éšä¾¿å‡ºå°çš„å‰¯ç‰Œ
+#region ä¸èƒ½ç»§ç»­è°ƒä¸»çš„è¯ï¼Œéšä¾¿å‡ºä¸€å¼ ä¸æ˜¯åˆ†çš„å‰¯ç‰Œ
+            for (int i = 0; i < 5; i++) {
+                if (i == cp.Suit) {
                     continue;
                 }
                 int rt = currentPokers[whoseOrder - 1].GetMinCardsNoScores(i);
-                if (rt != 3 && rt != 8 && rt != 11)
-                {
-
-                    if (rt > -1)
-                    {
+                if (rt != 3 && rt != 8 && rt != 11) {
+                    if (rt > -1) {
                         CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], rt);
-
                         return;
                     }
                 }
             }
-            #endregion // ²»ÄÜ¼ÌÐøµ÷Ö÷µÄ»°£¬Ëæ±ã³öÒ»ÕÅ²»ÊÇ·ÖµÄ¸±ÅÆ
-
-
-            
-
-            //6.È«Ê£Ö÷ÅÆºÍ·Ö¸±ÅÆ£¬³öÖ÷
-            #region È«Ê£Ö÷ÅÆºÍ·Ö¸±ÅÆ
+#endregion // ä¸èƒ½ç»§ç»­è°ƒä¸»çš„è¯ï¼Œéšä¾¿å‡ºä¸€å¼ ä¸æ˜¯åˆ†çš„å‰¯ç‰Œ
+            // 6.å…¨å‰©ä¸»ç‰Œå’Œåˆ†å‰¯ç‰Œï¼Œå‡ºä¸»
+#region å…¨å‰©ä¸»ç‰Œå’Œåˆ†å‰¯ç‰Œ
             ArrayList mPairs = currentPokers[whoseOrder - 1].GetMasterPairs();
-            if (mPairs.Count > 0) //ÏÈ³öÖ÷¶Ô
-            {
+            if (mPairs.Count > 0) { // å…ˆå‡ºä¸»å¯¹
                 int rt = (int)mPairs[mPairs.Count - 1];
                 CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], rt);
                 CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], rt);
-               
                 return;
             }
             int maserMin = currentPokers[whoseOrder - 1].GetMinMasterCards(cp.Suit);
-            //if ((maserMin > -1) && (maserMin % 13 = 3) && (maserMin % 13 = 8) && (maserMin % 13 = 11))
-            if (maserMin > -1)
-            {
+// if ((maserMin > -1) && (maserMin % 13 = 3) && (maserMin % 13 = 8) && (maserMin % 13 = 11))
+            if (maserMin > -1) {
                 CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], maserMin);
-               
                 return;
             }
-
-            for (int i = 1; i < 5; i++)
-            {
+            for (int i = 1; i < 5; i++) {
                 int rt = currentPokers[whoseOrder - 1].GetMinCards(i);
-                if (rt > -1)
-                {
+                if (rt > -1) {
                     CommonMethods.SendCards(sendedCards, currentPokers[whoseOrder - 1], mainForm.pokerList[whoseOrder - 1], rt);
-                   
                     return;
                 }
             }
-            #endregion // È«Ê£Ö÷ÅÆºÍ·Ö¸±ÅÆ
-
+#endregion // å…¨å‰©ä¸»ç‰Œå’Œåˆ†å‰¯ç‰Œ
            
         }
-
-
-
     }
 }

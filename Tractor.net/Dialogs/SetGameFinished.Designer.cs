@@ -1,33 +1,14 @@
-namespace Kuaff.Tractor
-{
-    partial class SetGameFinished
-    {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
+namespace Kuaff.Tractor {
+    partial class SetGameFinished {
         private System.ComponentModel.IContainer components = null;
-
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
+        protected override void Dispose(bool disposing) {
+            if (disposing && (components != null)) {
                 components.Dispose();
             }
             base.Dispose(disposing);
         }
-
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
+#region Windows Form Designer generated code
+        private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetGameFinished));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -37,19 +18,15 @@ namespace Kuaff.Tractor
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
-            // 
             // groupBox1
-            // 
             this.groupBox1.Controls.Add(this.textBox1);
             this.groupBox1.Location = new System.Drawing.Point(20, 42);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(188, 87);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "ÌáÊ¾";
-            // 
+            this.groupBox1.Text = "æç¤º";
             // textBox1
-            // 
             this.textBox1.BackColor = System.Drawing.SystemColors.Control;
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox1.Location = new System.Drawing.Point(6, 15);
@@ -58,48 +35,38 @@ namespace Kuaff.Tractor
             this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(176, 66);
             this.textBox1.TabIndex = 8;
-            this.textBox1.Text = "´Ó2´òµ½ÍõÎªÒ»ÂÖ£»\r\nÃ¿´òÒ»¸öÊı×ÖÎªÒ»¾Ö£»\r\nÈç¹ûÉèÖÃ½áÊøÂÖÊıÎª1,ÔòÏÈ´òÍêÒ»ÂÖµÄÒ»·½»ñÊ¤£»\r\n0ÎªÓÀ²»½áÊø£¬ÎŞÏŞÑ­»·£»";
-            // 
+            this.textBox1.Text = "ä»2æ‰“åˆ°ç‹ä¸ºä¸€è½®ï¼›\r\næ¯æ‰“ä¸€ä¸ªæ•°å­—ä¸ºä¸€å±€ï¼›\r\nå¦‚æœè®¾ç½®ç»“æŸè½®æ•°ä¸º1,åˆ™å…ˆæ‰“å®Œä¸€è½®çš„ä¸€æ–¹è·èƒœï¼›\r\n0ä¸ºæ°¸ä¸ç»“æŸï¼Œæ— é™å¾ªç¯ï¼›";
             // label1
-            // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(24, 13);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(89, 12);
             this.label1.TabIndex = 5;
-            this.label1.Text = "ÓÎÏ·½áÊøÂÖÊı£º";
-            // 
+            this.label1.Text = "æ¸¸æˆç»“æŸè½®æ•°ï¼š";
             // textBox2
-            // 
             this.textBox2.Location = new System.Drawing.Point(119, 10);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(39, 21);
             this.textBox2.TabIndex = 1;
             this.textBox2.Text = "0";
-            // 
             // button1
-            // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.button1.Location = new System.Drawing.Point(38, 137);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(62, 26);
             this.button1.TabIndex = 9;
-            this.button1.Text = "±£´æ";
+            this.button1.Text = "ä¿å­˜";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // button2
-            // 
             this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button2.Location = new System.Drawing.Point(128, 137);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(62, 26);
             this.button2.TabIndex = 10;
-            this.button2.Text = "È¡Ïû";
+            this.button2.Text = "å–æ¶ˆ";
             this.button2.UseVisualStyleBackColor = true;
-            // 
             // SetGameFinished
-            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(229, 172);
@@ -114,16 +81,13 @@ namespace Kuaff.Tractor
             this.MinimizeBox = false;
             this.Name = "SetGameFinished";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "ÉèÖÃÓÎÏ·½áÊøÂÖÊı";
+            this.Text = "è®¾ç½®æ¸¸æˆç»“æŸè½®æ•°";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
-
-        #endregion
-
+#endregion
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label1;

@@ -7,233 +7,160 @@ using System.Text;
 using System.Windows.Forms;
 using System.Reflection;
 using System.IO;
-
-
 using Kuaff.Tractor.Plugins;
+namespace Kuaff.Tractor {
 
-namespace Kuaff.Tractor
-{
-    partial class SelectUserAlgorithm : Form
-    {
+    partial class SelectUserAlgorithm : Form {
         MainForm mainForm;
         Hashtable ht;
 
-        internal SelectUserAlgorithm(MainForm mainForm)
-        {
+        internal SelectUserAlgorithm(MainForm mainForm) {
             InitializeComponent();
             this.mainForm = mainForm;
-            //³õÊ¼»¯Ëã·¨
+            // åˆå§‹åŒ–ç®—æ³•
             ht = new Hashtable();
             InitUserAlgorithm();
-
-            comboBox1.Items.Add("ÄÚÖÃµÄËã·¨");
-            comboBox2.Items.Add("ÄÚÖÃµÄËã·¨");
-            comboBox3.Items.Add("ÄÚÖÃµÄËã·¨");
-            comboBox4.Items.Add("ÄÚÖÃµÄËã·¨");
-
+            comboBox1.Items.Add("å†…ç½®çš„ç®—æ³•");
+            comboBox2.Items.Add("å†…ç½®çš„ç®—æ³•");
+            comboBox3.Items.Add("å†…ç½®çš„ç®—æ³•");
+            comboBox4.Items.Add("å†…ç½®çš„ç®—æ³•");
             comboBox1.SelectedIndex = 0;
             comboBox2.SelectedIndex = 0;
             comboBox3.SelectedIndex = 0;
             comboBox4.SelectedIndex = 0;
-
-            foreach (DictionaryEntry en in ht)
-            {
+            foreach (DictionaryEntry en in ht) {
                 int i = comboBox1.Items.Add(en.Key);
-                if (mainForm.UserAlgorithms[0] != null)
-                {
+                if (mainForm.UserAlgorithms[0] != null) {
                     IUserAlgorithm ua = (IUserAlgorithm)mainForm.UserAlgorithms[0];
-                    if (ua.Name == en.Key.ToString())
-                    {
+                    if (ua.Name == en.Key.ToString()) {
                         comboBox1.SelectedIndex = i;
                     }
                 }
                 i = comboBox2.Items.Add(en.Key);
-                if (mainForm.UserAlgorithms[1] != null)
-                {
+                if (mainForm.UserAlgorithms[1] != null) {
                     IUserAlgorithm ua = (IUserAlgorithm)mainForm.UserAlgorithms[1];
-                    if (ua.Name == en.Key.ToString())
-                    {
+                    if (ua.Name == en.Key.ToString()) {
                         comboBox2.SelectedIndex = i;
                     }
                 }
                 i = comboBox3.Items.Add(en.Key);
-                if (mainForm.UserAlgorithms[2] != null)
-                {
+                if (mainForm.UserAlgorithms[2] != null) {
                     IUserAlgorithm ua = (IUserAlgorithm)mainForm.UserAlgorithms[2];
-                    if (ua.Name == en.Key.ToString())
-                    {
+                    if (ua.Name == en.Key.ToString()) {
                         comboBox3.SelectedIndex = i;
                     }
                 }
                 i = comboBox4.Items.Add(en.Key);
-                if (mainForm.UserAlgorithms[3] != null)
-                {
+                if (mainForm.UserAlgorithms[3] != null) {
                     IUserAlgorithm ua = (IUserAlgorithm)mainForm.UserAlgorithms[3];
-                    if (ua.Name == en.Key.ToString())
-                    {
+                    if (ua.Name == en.Key.ToString()) {
                         comboBox4.SelectedIndex = i;
                     }
                 }
             }
-
-
-
         }
-
-        private void InitUserAlgorithm()
-        {
-            if (!Directory.Exists("plugins"))
-            {
+        private void InitUserAlgorithm() {
+            if (!Directory.Exists("plugins")) {
                 return;
             }
-
             string[] assemFiles = Directory.GetFiles("plugins", "*.dll");
-
-            foreach (string assemFile in assemFiles)
-            {
+            foreach (string assemFile in assemFiles) {
                 Assembly assem = Assembly.LoadFile(Path.GetFullPath(assemFile));
                 Type[] types = assem.GetTypes();
-                foreach (Type type in types)
-                {
-
-                    if (type.IsClass && !type.IsAbstract) //Èç¹û¼Ì³Ð½Ó¿Ú
-                    {
+                foreach (Type type in types) {
+                    if (type.IsClass && !type.IsAbstract) { // å¦‚æžœç»§æ‰¿æŽ¥å£
                         IUserAlgorithm ua = Activator.CreateInstance(type) as IUserAlgorithm;
-                        if (ua != null)
-                        {
+                        if (ua != null) {
                             ht.Add(ua.Name, type);
                         }
                     }
                 }
             }
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (comboBox1.SelectedIndex > 0)
-            {
+        private void button1_Click(object sender, EventArgs e) {
+            if (comboBox1.SelectedIndex > 0) {
                 Type type = (Type)ht[comboBox1.SelectedItem];
                 IUserAlgorithm ua = (IUserAlgorithm)((Activator.CreateInstance(type)));
                 mainForm.UserAlgorithms[0] = ua;
-            }
-            else
-            {
+            } else {
                 mainForm.UserAlgorithms[0] = null;
             }
-
-            //±±
-            if (comboBox2.SelectedIndex > 0)
-            {
+            // åŒ—
+            if (comboBox2.SelectedIndex > 0) {
                 Type type = (Type)ht[comboBox2.SelectedItem];
                 IUserAlgorithm ua = (IUserAlgorithm)((Activator.CreateInstance(type)));
                 mainForm.UserAlgorithms[1] = ua;
-            }
-            else
-            {
+            } else {
                 mainForm.UserAlgorithms[1] = null;
             }
-
-            //Î÷
-            if (comboBox3.SelectedIndex > 0)
-            {
+            // è¥¿
+            if (comboBox3.SelectedIndex > 0) {
                 Type type = (Type)ht[comboBox3.SelectedItem];
                 IUserAlgorithm ua = (IUserAlgorithm)((Activator.CreateInstance(type)));
                 mainForm.UserAlgorithms[2] = ua;
-            }
-            else
-            {
+            } else {
                 mainForm.UserAlgorithms[2] = null;
             }
-
-            //¶«
-            if (comboBox4.SelectedIndex > 0)
-            {
+            // ä¸œ
+            if (comboBox4.SelectedIndex > 0) {
                 Type type = (Type)ht[comboBox4.SelectedItem];
                 IUserAlgorithm ua = (IUserAlgorithm)((Activator.CreateInstance(type)));
                 mainForm.UserAlgorithms[3] = ua;
-            }
-            else
-            {
+            } else {
                 mainForm.UserAlgorithms[3] = null;
             }
         }
-
-        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBox1.SelectedIndex > 0)
-            {
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e) {
+            if (comboBox1.SelectedIndex > 0) {
                 Type type = (Type)ht[comboBox1.SelectedItem];
                 IUserAlgorithm ua = (IUserAlgorithm)((Activator.CreateInstance(type)));
-
                 label12.Text = ua.Name + "";
                 label11.Text = ua.Email + "";
                 textBox3.Text = ua.Description + "";
-            }
-            else
-            {
+            } else {
                 label12.Text = "smallnest";
                 label11.Text = "smallnest@gmail.com";
-                textBox3.Text = "ÄÚÖÃµÄ³öÅÆËã·¨";
+                textBox3.Text = "å†…ç½®çš„å‡ºç‰Œç®—æ³•";
             }
         }
-
-        private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBox1.SelectedIndex > 0)
-            {
+        private void comboBox4_SelectedIndexChanged(object sender, EventArgs e) {
+            if (comboBox1.SelectedIndex > 0) {
                 Type type = (Type)ht[comboBox1.SelectedItem];
                 IUserAlgorithm ua = (IUserAlgorithm)((Activator.CreateInstance(type)));
-
                 label17.Text = ua.Name + "";
                 label16.Text = ua.Email + "";
                 textBox4.Text = ua.Description + "";
-            }
-            else
-            {
+            } else {
                 label17.Text = "smallnest";
                 label16.Text = "smallnest@gmail.com";
-                textBox4.Text = "ÄÚÖÃµÄ³öÅÆËã·¨";
+                textBox4.Text = "å†…ç½®çš„å‡ºç‰Œç®—æ³•";
             }
         }
-
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBox1.SelectedIndex > 0)
-            {
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e) {
+            if (comboBox1.SelectedIndex > 0) {
                 Type type = (Type)ht[comboBox1.SelectedItem];
                 IUserAlgorithm ua = (IUserAlgorithm)((Activator.CreateInstance(type)));
-
                 label7.Text = ua.Name + "";
                 label6.Text = ua.Email + "";
                 textBox2.Text = ua.Description + "";
-            }
-            else
-            {
+            } else {
                 label7.Text = "smallnest";
                 label6.Text = "smallnest@gmail.com";
-                textBox2.Text = "ÄÚÖÃµÄ³öÅÆËã·¨";
+                textBox2.Text = "å†…ç½®çš„å‡ºç‰Œç®—æ³•";
             }
         }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBox1.SelectedIndex > 0)
-            {
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e) {
+            if (comboBox1.SelectedIndex > 0) {
                 Type type = (Type)ht[comboBox1.SelectedItem];
                 IUserAlgorithm ua = (IUserAlgorithm)((Activator.CreateInstance(type)));
-
                 label4.Text = ua.Name + "";
                 label5.Text = ua.Email + "";
                 textBox1.Text = ua.Description + "";
-            }
-            else
-            {
+            } else {
                 label4.Text = "smallnest";
                 label5.Text = "smallnest@gmail.com";
-                textBox1.Text = "ÄÚÖÃµÄ³öÅÆËã·¨";
+                textBox1.Text = "å†…ç½®çš„å‡ºç‰Œç®—æ³•";
             }
         }
     }
-
-
 }

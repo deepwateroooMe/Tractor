@@ -1,33 +1,14 @@
-namespace Kuaff.TractorFere
-{
-    partial class Fere
-    {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
+namespace Kuaff.TractorFere {
+    partial class Fere {
         private System.ComponentModel.IContainer components = null;
-
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
+        protected override void Dispose(bool disposing) {
+            if (disposing && (components != null)) {
                 components.Dispose();
             }
             base.Dispose(disposing);
         }
-
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
+#region Windows Form Designer generated code
+        private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Fere));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -96,7 +77,7 @@ namespace Kuaff.TractorFere
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(358, 303);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "ÖÆ×÷ÅÆÃæÍ¼°¸";
+            this.tabPage1.Text = "åˆ¶ä½œç‰Œé¢å›¾æ¡ˆ";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // checkBox1
@@ -108,7 +89,7 @@ namespace Kuaff.TractorFere
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(72, 16);
             this.checkBox1.TabIndex = 9;
-            this.checkBox1.Text = "ÊÊµ±²Ã¼õ";
+            this.checkBox1.Text = "é€‚å½“è£å‡";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // progressBar1
@@ -128,7 +109,7 @@ namespace Kuaff.TractorFere
             this.groupBox1.Size = new System.Drawing.Size(324, 73);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "ÌáÊ¾";
+            this.groupBox1.Text = "æç¤º";
             // 
             // textBox1
             // 
@@ -140,7 +121,7 @@ namespace Kuaff.TractorFere
             this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(306, 36);
             this.textBox1.TabIndex = 0;
-            this.textBox1.Text = "1.Í¼Æ¬ÎÄ¼ş¼ĞÄÚµÄÍ¼Æ¬µÄ³¤¿í±ÈÀı×îºÃÊÇ47£º76£¬·ñÔò²úÉúµÄÍ¼°¸»áÓĞĞ©±äĞÎ¡£\r\n2.Í¼Æ¬²úÉúµÄËÙ¶ÈºÍÍ¼Æ¬µÄ´óĞ¡ÓĞ¹Ø¡£";
+            this.textBox1.Text = "1.å›¾ç‰‡æ–‡ä»¶å¤¹å†…çš„å›¾ç‰‡çš„é•¿å®½æ¯”ä¾‹æœ€å¥½æ˜¯47ï¼š76ï¼Œå¦åˆ™äº§ç”Ÿçš„å›¾æ¡ˆä¼šæœ‰äº›å˜å½¢ã€‚\r\n2.å›¾ç‰‡äº§ç”Ÿçš„é€Ÿåº¦å’Œå›¾ç‰‡çš„å¤§å°æœ‰å…³ã€‚";
             // 
             // button2
             // 
@@ -148,7 +129,7 @@ namespace Kuaff.TractorFere
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(82, 26);
             this.button2.TabIndex = 6;
-            this.button2.Text = "Éú³É";
+            this.button2.Text = "ç”Ÿæˆ";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -166,7 +147,7 @@ namespace Kuaff.TractorFere
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(113, 12);
             this.label2.TabIndex = 4;
-            this.label2.Text = "Éú³ÉµÄÆË¿ËÅÆµÄÃû³Æ";
+            this.label2.Text = "ç”Ÿæˆçš„æ‰‘å…‹ç‰Œçš„åç§°";
             // 
             // selectImgFolder
             // 
@@ -174,7 +155,7 @@ namespace Kuaff.TractorFere
             this.selectImgFolder.Name = "selectImgFolder";
             this.selectImgFolder.Size = new System.Drawing.Size(63, 22);
             this.selectImgFolder.TabIndex = 3;
-            this.selectImgFolder.Text = "Ñ¡Ôñ";
+            this.selectImgFolder.Text = "é€‰æ‹©";
             this.selectImgFolder.UseVisualStyleBackColor = true;
             this.selectImgFolder.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -192,7 +173,7 @@ namespace Kuaff.TractorFere
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(89, 12);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Ñ¡ÔñÍ¼Æ¬ÎÄ¼ş¼Ğ";
+            this.label1.Text = "é€‰æ‹©å›¾ç‰‡æ–‡ä»¶å¤¹";
             // 
             // pictureBox1
             // 
@@ -217,7 +198,7 @@ namespace Kuaff.TractorFere
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Size = new System.Drawing.Size(358, 303);
             this.tabPage2.TabIndex = 3;
-            this.tabPage2.Text = "ÖÆ×÷ÅÆ±³Í¼°¸";
+            this.tabPage2.Text = "åˆ¶ä½œç‰ŒèƒŒå›¾æ¡ˆ";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // checkBox2
@@ -229,7 +210,7 @@ namespace Kuaff.TractorFere
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(72, 16);
             this.checkBox2.TabIndex = 13;
-            this.checkBox2.Text = "ÊÊµ±²Ã¼õ";
+            this.checkBox2.Text = "é€‚å½“è£å‡";
             this.checkBox2.UseVisualStyleBackColor = true;
             // 
             // textBox2
@@ -246,7 +227,7 @@ namespace Kuaff.TractorFere
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(77, 12);
             this.label3.TabIndex = 11;
-            this.label3.Text = "±³¾°Í¼Æ¬Ãû³Æ";
+            this.label3.Text = "èƒŒæ™¯å›¾ç‰‡åç§°";
             // 
             // groupBox4
             // 
@@ -256,7 +237,7 @@ namespace Kuaff.TractorFere
             this.groupBox4.Size = new System.Drawing.Size(324, 141);
             this.groupBox4.TabIndex = 10;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "ÌáÊ¾";
+            this.groupBox4.Text = "æç¤º";
             // 
             // textBox5
             // 
@@ -268,7 +249,7 @@ namespace Kuaff.TractorFere
             this.textBox5.ReadOnly = true;
             this.textBox5.Size = new System.Drawing.Size(306, 36);
             this.textBox5.TabIndex = 0;
-            this.textBox5.Text = "1.Í¼Æ¬µÄ³¤¿í±ÈÀı×îºÃÊÇ71£º96£¬·ñÔò²úÉúµÄÍ¼°¸»áÓĞĞ©±äĞÎ¡£\r\n2.Í¼Æ¬²úÉúµÄËÙ¶ÈºÍÍ¼Æ¬µÄ´óĞ¡ÓĞ¹Ø¡£";
+            this.textBox5.Text = "1.å›¾ç‰‡çš„é•¿å®½æ¯”ä¾‹æœ€å¥½æ˜¯71ï¼š96ï¼Œå¦åˆ™äº§ç”Ÿçš„å›¾æ¡ˆä¼šæœ‰äº›å˜å½¢ã€‚\r\n2.å›¾ç‰‡äº§ç”Ÿçš„é€Ÿåº¦å’Œå›¾ç‰‡çš„å¤§å°æœ‰å…³ã€‚";
             // 
             // button5
             // 
@@ -277,7 +258,7 @@ namespace Kuaff.TractorFere
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(68, 26);
             this.button5.TabIndex = 9;
-            this.button5.Text = "±£´æ";
+            this.button5.Text = "ä¿å­˜";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
@@ -287,7 +268,7 @@ namespace Kuaff.TractorFere
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(68, 27);
             this.button8.TabIndex = 8;
-            this.button8.Text = "Ñ¡ÔñÍ¼Æ¬";
+            this.button8.Text = "é€‰æ‹©å›¾ç‰‡";
             this.button8.UseVisualStyleBackColor = true;
             this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
@@ -308,7 +289,7 @@ namespace Kuaff.TractorFere
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(358, 303);
             this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "°ïÖú";
+            this.tabPage3.Text = "å¸®åŠ©";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // groupBox5
@@ -319,7 +300,7 @@ namespace Kuaff.TractorFere
             this.groupBox5.Size = new System.Drawing.Size(325, 197);
             this.groupBox5.TabIndex = 18;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "°ïÖú";
+            this.groupBox5.Text = "å¸®åŠ©";
             // 
             // textBox11
             // 
@@ -331,12 +312,12 @@ namespace Kuaff.TractorFere
             this.textBox11.ReadOnly = true;
             this.textBox11.Size = new System.Drawing.Size(310, 110);
             this.textBox11.TabIndex = 1;
-            this.textBox11.Text = "ÀûÓÃÍÏÀ­»ú°éÂÂ¿ÉÒÔËæÒâÉú³ÉÊÊºÏÍÏÀ­»ú´óÕ½ÓÎÏ·ËùĞèµÄÅÆÃæ¡£\r\nÄú¿ÉÒÔ½«ÄúµÄÊıÂëÕÕÆ¬Éú³ÉÅÆÃæÍ¼°¸£¬ÄúÒ²¿ÉÒÔ½«ÄúÏ²»¶µÄÕÕÆ¬×ö³ÉÅÆÃæ£¬ÄúÖ»ĞèÇáµã¼¸´ÎÊó±ê£¬¾Í¿ÉÒÔÍê³É´Ë¹¦ÄÜ" +
-                "¡£\r\n\r\nÅÆÃæÕÕÆ¬µÄ³¤¿í±ÈÀı×îºÃÊÇ47:76,ÅÆ±³ÕÕÆ¬µÄ³¤¿í±ÈÀı×îºÃÎª71:96£¬ÕâÑùÉú³ÉµÄÅÆÃæ×îÃÀ¹Û¡£";
+            this.textBox11.Text = "åˆ©ç”¨æ‹–æ‹‰æœºä¼´ä¾£å¯ä»¥éšæ„ç”Ÿæˆé€‚åˆæ‹–æ‹‰æœºå¤§æˆ˜æ¸¸æˆæ‰€éœ€çš„ç‰Œé¢ã€‚\r\næ‚¨å¯ä»¥å°†æ‚¨çš„æ•°ç ç…§ç‰‡ç”Ÿæˆç‰Œé¢å›¾æ¡ˆï¼Œæ‚¨ä¹Ÿå¯ä»¥å°†æ‚¨å–œæ¬¢çš„ç…§ç‰‡åšæˆç‰Œé¢ï¼Œæ‚¨åªéœ€è½»ç‚¹å‡ æ¬¡é¼ æ ‡ï¼Œå°±å¯ä»¥å®Œæˆæ­¤åŠŸèƒ½" +
+                "ã€‚\r\n\r\nç‰Œé¢ç…§ç‰‡çš„é•¿å®½æ¯”ä¾‹æœ€å¥½æ˜¯47:76,ç‰ŒèƒŒç…§ç‰‡çš„é•¿å®½æ¯”ä¾‹æœ€å¥½ä¸º71:96ï¼Œè¿™æ ·ç”Ÿæˆçš„ç‰Œé¢æœ€ç¾è§‚ã€‚";
             // 
             // openFileDialog1
             // 
-            this.openFileDialog1.Filter = "pngÍ¼Æ¬|*.PNG|jpgÍ¼Æ¬|*.JPG|bmpÍ¼Æ¬|*.BMP|gifÍ¼Æ¬|*.GIF|ËùÓĞÎÄ¼ş|*.*";
+            this.openFileDialog1.Filter = "pngå›¾ç‰‡|*.PNG|jpgå›¾ç‰‡|*.JPG|bmpå›¾ç‰‡|*.BMP|gifå›¾ç‰‡|*.GIF|æ‰€æœ‰æ–‡ä»¶|*.*";
             this.openFileDialog1.FilterIndex = 4;
             // 
             // Fere
@@ -351,7 +332,7 @@ namespace Kuaff.TractorFere
             this.MinimizeBox = false;
             this.Name = "Fere";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "ÍÏÀ­»ú°éÂÂ";
+            this.Text = "æ‹–æ‹‰æœºä¼´ä¾£";
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
@@ -367,11 +348,8 @@ namespace Kuaff.TractorFere
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
-
         }
-
-        #endregion
-
+#endregion
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.PictureBox pictureBox1;
@@ -385,7 +363,6 @@ namespace Kuaff.TractorFere
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.TextBox textBox1;
-  
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.TextBox textBox11;
@@ -400,7 +377,5 @@ namespace Kuaff.TractorFere
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.CheckBox checkBox2;
-
     }
 }
-

@@ -8,361 +8,250 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Drawing.Imaging;
-
 using ICSharpCode.SharpZipLib.Checksums;
 using ICSharpCode.SharpZipLib.Zip;
 using ICSharpCode.SharpZipLib.GZip;
-
-
-namespace Kuaff.TractorFere
-{
+namespace Kuaff.TractorFere {
     
-    internal partial class Fere : Form
-    {
+    internal partial class Fere : Form {
         private Bitmap backImage = null;
-
-        internal Fere()
-        {
+        internal Fere() {
             InitializeComponent();
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (folderBrowserDialog1.ShowDialog(this) == DialogResult.OK)
-            {
+        private void button1_Click(object sender, EventArgs e) {
+            if (folderBrowserDialog1.ShowDialog(this) == DialogResult.OK) {
                 srcFolderName.Text = folderBrowserDialog1.SelectedPath;
                 cardsName.Text = Path.GetFileName(srcFolderName.Text);
             }
         }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
+        private void button2_Click(object sender, EventArgs e) {
             String errorMessage = "";
-
-
-            if (cardsName.Text.Length == 0)
-            {
-                errorMessage = "ÆË¿ËÅÆµÄÃû³Æ²»ÄÜÎª¿Õ£¡" + Environment.NewLine + Environment.NewLine;
+            if (cardsName.Text.Length == 0) {
+                errorMessage = "æ‰‘å…‹ç‰Œçš„åç§°ä¸èƒ½ä¸ºç©ºï¼" + Environment.NewLine + Environment.NewLine;
             }
-
-            if (srcFolderName.Text.Length == 0)
-            {
-                errorMessage += "±ØĞëÑ¡ÔñÍ¼Æ¬Ô´ÎÄ¼ş¼Ğ£¡";
+            if (srcFolderName.Text.Length == 0) {
+                errorMessage += "å¿…é¡»é€‰æ‹©å›¾ç‰‡æºæ–‡ä»¶å¤¹ï¼";
             }
-            else
-            {
-                if (!Directory.Exists(srcFolderName.Text))
-                {
-                    errorMessage += "Í¼Æ¬Ô´ÎÄ¼ş¼Ğ²»´æÔÚ£¡";
+            else {
+                if (!Directory.Exists(srcFolderName.Text)) {
+                    errorMessage += "å›¾ç‰‡æºæ–‡ä»¶å¤¹ä¸å­˜åœ¨ï¼";
                 }
             }
-
-            if (errorMessage.Length>0)
-            {
-                MessageBox.Show(errorMessage,"¾¯¸æ",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+            if (errorMessage.Length>0) {
+                MessageBox.Show(errorMessage,"è­¦å‘Š",MessageBoxButtons.OK,MessageBoxIcon.Warning);
                 return;
             }
-
            
             String pathName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), cardsName.Text);
-            if (Directory.Exists(pathName))
-            {
+            if (Directory.Exists(pathName)) {
                 Directory.Delete(pathName,true);
             }
             DirectoryInfo dir = Directory.CreateDirectory(pathName);
             
-            //ÒÔÉÏÄ¿Â¼ÒÑ¾­´´½¨Íê±Ï£¬ÏÂÒ»²½ÒÀ´Î¶ÁÈ¡Ô´ÎÄ¼ş¼ĞÏÂµÄÍ¼Æ¬
-            //½«Í¼Æ¬½øĞĞ¸´ºÏ,´´½¨µ½Ä¿±êÎÄ¼ş¼ĞÖĞ
-
-            if (CreateCards(srcFolderName.Text, pathName, cardsName.Text))
-            {
+            // ä»¥ä¸Šç›®å½•å·²ç»åˆ›å»ºå®Œæ¯•ï¼Œä¸‹ä¸€æ­¥ä¾æ¬¡è¯»å–æºæ–‡ä»¶å¤¹ä¸‹çš„å›¾ç‰‡
+            // å°†å›¾ç‰‡è¿›è¡Œå¤åˆ,åˆ›å»ºåˆ°ç›®æ ‡æ–‡ä»¶å¤¹ä¸­
+            if (CreateCards(srcFolderName.Text, pathName, cardsName.Text)) {
                 ZipCards(pathName, cardsName.Text);
             }
-
             progressBar1.Value = 75;
-
-            if (Directory.Exists(pathName))
-            {
+            if (Directory.Exists(pathName)) {
                 Directory.Delete(pathName, true);
             }
-
             progressBar1.Value = 80;
         }
-
-        //47*76
-        private bool CreateCards(String sourceFolder, String destFolder,String name)
-        {
+        // 47*76
+        private bool CreateCards(String sourceFolder, String destFolder,String name) {
             string[] files = Directory.GetFiles(sourceFolder,"*",SearchOption.AllDirectories);
-
-            for (int i = 0; i < 54; i++)
-            {
+            for (int i = 0; i < 54; i++) {
                 Image cardImage = GetSourceImage(files,i);
-
-                if (cardImage == null)
-                {
+                if (cardImage == null) {
                     return false;
                 }
-
                 pictureBox1.BackgroundImage = cardImage;
                 pictureBox1.Refresh();
                 cardImage.Save(Path.Combine(destFolder,i + ".png"));
                 progressBar1.Value = i;
             }
-
             return true;
         }
-
-        private Image GetSourceImage(string[] files, int number)
-        {
+        private Image GetSourceImage(string[] files, int number) {
             Bitmap src = GetBlankCard(number);
-
-            if (number >= files.Length)
-            {
+            if (number >= files.Length) {
                 number -= files.Length;
             }
-
             
             Bitmap bmp = null;
-
            
             int k = 0;
-            while (true)
-            {
-                try
-                {
+            while (true) {
+                try {
                     bmp = new Bitmap(files[number]);
                     break;
                 }
-                catch (Exception ex)
-                {
+                catch (Exception ex) {
                     number++;
                     if (number >= files.Length)
                     {
                         number -= files.Length;
                     }
-
                     k++;
                     if (k >= files.Length)
                     {
-                        return null; //Ã¿¸öÎÄ¼ş¶¼½øĞĞÁËÑéÖ¤£¬¿ÉÊÇÃ»ÓĞÒ»ÕÅÊ±Í¼Æ¬ÎÄ¼ş
+                        return null; // æ¯ä¸ªæ–‡ä»¶éƒ½è¿›è¡Œäº†éªŒè¯ï¼Œå¯æ˜¯æ²¡æœ‰ä¸€å¼ æ—¶å›¾ç‰‡æ–‡ä»¶
                     }
                 }
             }
-
-            //ÊÊµ±²Ã¼õ£¬È¡ÖĞĞÄÎ»ÖÃ
-            if (checkBox1.Checked)
-            {
+            // é€‚å½“è£å‡ï¼Œå–ä¸­å¿ƒä½ç½®
+            if (checkBox1.Checked) {
                 int height = 0, width = 0;
                 int x = 0, y = 0;
-                if (bmp.Height * 47 >= bmp.Width * 76) //¹ı³¤
-                {
+                if (bmp.Height * 47 >= bmp.Width * 76) { // è¿‡é•¿
                     width = bmp.Width;
                     height = width * 76 / 47;
                     x = 0;
                     y = (bmp.Height - height) / 2;
                 }
-                else
-                {
+                else {
                     height = bmp.Height;
                     width = height * 47 / 76;
                     x = (bmp.Width - width) / 2;
                     y = 0;
                 }
-
                 Rectangle destRect = new Rectangle(12, 10, 47, 76);
                 Rectangle srcRect = new Rectangle(x, y, width, height);
-
                 
-                using ( Graphics g = Graphics.FromImage(src))
-                {
+                using ( Graphics g = Graphics.FromImage(src)) {
                     g.DrawImage(bmp, destRect,srcRect,GraphicsUnit.Pixel);
                 }
             }
-
-            else
-            {
-                //µÃµ½Í¼Æ¬µÄËõÂÔÍ¼
+            else {
+                // å¾—åˆ°å›¾ç‰‡çš„ç¼©ç•¥å›¾
                 Image img = bmp.GetThumbnailImage(47, 76, null, IntPtr.Zero);
-
                 Graphics g = Graphics.FromImage(src);
                 g.DrawImage(img, 12, 10, 47, 76);
                 g.Dispose();
             }
-
             return src;
            
         }
-
-
-        private Bitmap GetBlankCard(int number)
-        {
+        private Bitmap GetBlankCard(int number) {
             return (Bitmap)Kuaff.TractorFere.Properties.Resources.ResourceManager.GetObject("_" + number);
         }
-
-        private static void ZipCards(String destFolder, String name)
-        {
+        private static void ZipCards(String destFolder, String name) {
             string[] filenames = Directory.GetFiles(destFolder);
-
-            //ÅĞ¶ÏÎÄ¼ş¼ĞÊÇ·ñ´æÔÚ
+            // åˆ¤æ–­æ–‡ä»¶å¤¹æ˜¯å¦å­˜åœ¨
             String filePath = Path.Combine(Environment.CurrentDirectory,"cards");
-
-            if (!Directory.Exists(filePath))
-            {
+            if (!Directory.Exists(filePath)) {
                 Directory.CreateDirectory(filePath);
             }
-
-
             Crc32 crc = new Crc32();
             ZipOutputStream s = new ZipOutputStream(File.Create(Path.Combine(filePath, name + ".cds")));
-
             s.SetLevel(9); 
-
-            foreach (string file in filenames)
-            {
+            foreach (string file in filenames) {
                 FileStream fs = File.OpenRead(file);
-
                 byte[] buffer = new byte[fs.Length];
                 fs.Read(buffer, 0, buffer.Length);
                 ZipEntry entry = new ZipEntry(Path.GetFileName(file));
-
                 entry.DateTime = DateTime.Now;
                 entry.Size = fs.Length;
                 fs.Close();
-
                 crc.Reset();
                 crc.Update(buffer);
                 entry.Crc = crc.Value;
-
                 s.PutNextEntry(entry);
-
                 s.Write(buffer, 0, buffer.Length);
-
             }
-
             s.Finish();
             s.Close();
         }
-
     
-        private void button5_Click(object sender, EventArgs e)
-        {
-            //±£´æ
-
+        private void button5_Click(object sender, EventArgs e) {
+            // ä¿å­˜
             string pathName = Path.Combine(Environment.CurrentDirectory, "cardbackimgs");
-            if (!Directory.Exists(pathName))
-            {
+            if (!Directory.Exists(pathName)) {
                 Directory.CreateDirectory(pathName);
             }
-
             backImage.Save(Path.Combine(pathName,textBox2.Text + ".png"));
-
             button5.Enabled = false;
             textBox2.Text = "";
             button8.Select();
-
         }
-
-        private void button8_Click(object sender, EventArgs e)
-        {
+        private void button8_Click(object sender, EventArgs e) {
             Bitmap bmp = null;
             string oldPath = Environment.CurrentDirectory;
            
-            if (openFileDialog1.ShowDialog(this) == DialogResult.OK)
-            {
-                try
-                {
+            if (openFileDialog1.ShowDialog(this) == DialogResult.OK) {
+                try {
                     bmp = new Bitmap(openFileDialog1.OpenFile());
                     textBox2.Text = Path.GetFileNameWithoutExtension(openFileDialog1.FileName);
                 }
-                catch (Exception ex)
-                {
-
+                catch (Exception ex) {
                 }
             }
-
             Environment.CurrentDirectory = oldPath;
-
-            if (bmp == null)
-            {
+            if (bmp == null) {
                 return;
             }
-
             int height = 0, width = 0;
             int x = 0, y = 0;
-
-            if (checkBox2.Checked)
-            {
-                if (bmp.Height * 71 >= bmp.Width * 96) //¹ı³¤
-                {
+            if (checkBox2.Checked) {
+                if (bmp.Height * 71 >= bmp.Width * 96) { // è¿‡é•¿
                     width = bmp.Width;
                     height = width * 96 / 71;
                     x = 0;
                     y = (bmp.Height - height) / 2;
                 }
-                else
-                {
+                else {
                     height = bmp.Height;
                     width = height * 71 / 96;
                     x = (bmp.Width - width) / 2;
                     y = 0;
                 }
             }
-            else
-            {
+            else {
                 x = 0;
                 y = 0;
                 height = bmp.Height;
                 width = bmp.Width;
             }
-            //µÃµ½Ò»ÕÅÍ¼Æ¬ÎÄ¼ş
+            // å¾—åˆ°ä¸€å¼ å›¾ç‰‡æ–‡ä»¶
             Bitmap img = new Bitmap(71, 96);
             
             Rectangle destRect = new Rectangle(0,0,71,96);
             Rectangle srcRect = new Rectangle(x, y, width, height);
-
-            using (Graphics g = Graphics.FromImage(img))
-            {
-                //»­Í¼
+            using (Graphics g = Graphics.FromImage(img)) {
+                // ç”»å›¾
                 g.DrawImage(bmp, destRect, srcRect, GraphicsUnit.Pixel);
                 Pen pen = new Pen(Color.Black);
                 Point p1 = new Point(0, 0);
                 Point p2 = new Point(0, 95);
                 Point p3 = new Point(70, 0);
                 Point p4 = new Point(70, 95);
-
                 g.DrawLines(pen, new Point[] {p1,p2});
                 g.DrawLines(pen, new Point[] { p1, p3 });
                 g.DrawLines(pen, new Point[] { p2, p4 });
                 g.DrawLines(pen, new Point[] { p3, p4 });
-
             }
 
-
-
-            //ĞŞÊÎ±ß½Ç
+            // ä¿®é¥°è¾¹è§’
             img.SetPixel(0,0,Color.Transparent);
             img.SetPixel(0, 1, Color.Transparent);
             img.SetPixel(1, 0, Color.Transparent);
             img.SetPixel(1, 1, Color.Black);
-
             img.SetPixel(70, 0, Color.Transparent);
             img.SetPixel(70, 1, Color.Transparent);
             img.SetPixel(69, 0, Color.Transparent);
             img.SetPixel(69, 1, Color.Black);
-
             img.SetPixel(0, 94, Color.Transparent);
             img.SetPixel(0, 95, Color.Transparent);
             img.SetPixel(1, 95, Color.Transparent);
             img.SetPixel(1, 94, Color.Black);
-
             img.SetPixel(70, 95, Color.Transparent);
             img.SetPixel(70, 94, Color.Transparent);
             img.SetPixel(69, 95, Color.Transparent);
             img.SetPixel(69, 94, Color.Black);
-
             backImage = img;
             pictureBox3.Image = img;
-
             button5.Enabled = true;
         }
     }

@@ -7,50 +7,33 @@ using System.Drawing.Imaging;
 using System.Text;
 using System.Windows.Forms;
 using System.Threading;
-
 using Kuaff.CardResouces;
-
-namespace Kuaff.Tractor
-{
-    /// <summary>
-    /// Ìá¹©Éı¼¶µÄ¹æÔò
-    /// </summary>
-    class TractorRules
-    {
-
-        //ÅĞ¶ÏÎÒ³öµÄÅÆÊÇ·ñºÏ·¨
-        internal static bool IsInvalid(MainForm mainForm, ArrayList[] currentSendedCards, int who)
-        {
+namespace Kuaff.Tractor {
+    // æä¾›å‡çº§çš„è§„åˆ™
+    class TractorRules {
+        // åˆ¤æ–­æˆ‘å‡ºçš„ç‰Œæ˜¯å¦åˆæ³•
+        internal static bool IsInvalid(MainForm mainForm, ArrayList[] currentSendedCards, int who) {
             
             CurrentPoker[] cp = new CurrentPoker[4];
             int suit = mainForm.currentState.Suit;
             int first = mainForm.firstSend;
-
             int rank = mainForm.currentRank;
-
             cp[who-1] = new CurrentPoker();
             cp[who - 1].Suit = suit;
             cp[who - 1].Rank = rank;
-
             ArrayList list = new ArrayList();
             CurrentPoker tmpCP = new CurrentPoker();
             tmpCP.Suit = suit;
             tmpCP.Rank = rank;
-
-            for (int i = 0; i < mainForm.myCardIsReady.Count; i++)
-            {
-                if ((bool)mainForm.myCardIsReady[i])
-                {
+            for (int i = 0; i < mainForm.myCardIsReady.Count; i++) {
+                if ((bool)mainForm.myCardIsReady[i]) {
                     cp[who - 1].AddCard((int)mainForm.myCardsNumber[i]);
                     list.Add((int)mainForm.myCardsNumber[i]);
-                }
-                else
-                {
+                } else {
                     tmpCP.AddCard((int)mainForm.myCardsNumber[i]);
                 }
             }
             int[] users = CommonMethods.OtherUsers(who);
-
             cp[users[0] - 1] = CommonMethods.parse(mainForm.currentSendCards[users[0] - 1], suit, rank);
             cp[users[1] - 1] = CommonMethods.parse(mainForm.currentSendCards[users[1] - 1], suit, rank);
             cp[users[2] - 1] = CommonMethods.parse(mainForm.currentSendCards[users[2] - 1], suit, rank);
@@ -58,141 +41,83 @@ namespace Kuaff.Tractor
             cp[1].Sort();
             cp[2].Sort();
             cp[3].Sort();
-
-            
-
-            //Èç¹ûÎÒ³öÅÆ
-            if (first == who)
-            {
-                if (cp[who -1].Count ==0)
-                {
+// å¦‚æœæˆ‘å‡ºç‰Œ
+            if (first == who) {
+                if (cp[who -1].Count ==0) {
                     return false;
                 }
-
-                if (cp[who-1].IsMixed())
-                {
+                if (cp[who-1].IsMixed()) {
                     return false;
                 }
-
                 return true;
-            }
-            else
-            {
-                if (list.Count != currentSendedCards[first - 1].Count)
-                {
+            } else {
+                if (list.Count != currentSendedCards[first - 1].Count) {
                     return false;
                 }
-
-
-                //µÃµ½µÚÒ»¸ö¼Ò»ï³öµÄ»¨É«
+                // å¾—åˆ°ç¬¬ä¸€ä¸ªå®¶ä¼™å‡ºçš„èŠ±è‰²
                 int previousSuit = CommonMethods.GetSuit((int)currentSendedCards[first - 1][0], suit, rank);
-               
-                //0.Èç¹ûÎÒÊÇ»ìºÏµÄ£¬ÔòÅĞ¶ÏÎÒÊÖÖĞÊÇ·ñ»¹Ê£³öµÄ»¨É«£¬Èç¹ûÊ£,false;Èç¹û²»Ê£;true
-                if (cp[who-1].IsMixed())
-                {
-                    if (tmpCP.HasSomeCards(previousSuit))
-                    {
+                // 0.å¦‚æœæˆ‘æ˜¯æ··åˆçš„ï¼Œåˆ™åˆ¤æ–­æˆ‘æ‰‹ä¸­æ˜¯å¦è¿˜å‰©å‡ºçš„èŠ±è‰²ï¼Œå¦‚æœå‰©,false;å¦‚æœä¸å‰©;true
+                if (cp[who-1].IsMixed()) {
+                    if (tmpCP.HasSomeCards(previousSuit)) {
                         return false;
-                    }
-                    else
-                    {
+                    } else {
                         return true;
                     }
                 }
-
-
-                //Èç¹û³öµÄ»¨É«²»Ò»ÖÂ
+                // å¦‚æœå‡ºçš„èŠ±è‰²ä¸ä¸€è‡´
                 int mysuit = CommonMethods.GetSuit((int)list[0], suit, rank);
-
-
-                //Èç¹ûÈ·Êµ»¨É«²»Ò»ÖÂ
-                if (mysuit != previousSuit) 
-                {
-                    //¶øÇÒÈ·ÊµÃ»ÓĞ´Ë»¨É«
-                    if (tmpCP.HasSomeCards(previousSuit))
-                    {
+                // å¦‚æœç¡®å®èŠ±è‰²ä¸ä¸€è‡´
+                if (mysuit != previousSuit)  {
+                    // è€Œä¸”ç¡®å®æ²¡æœ‰æ­¤èŠ±è‰²
+                    if (tmpCP.HasSomeCards(previousSuit)) {
                         return false;
-                    }
-                    else
-                    {
+                    } else {
                         return true;
                     }
                 }
-
-
-                //3.±ğÈËÈç¹û³ö¶Ô£¬ÎÒÒ²Ó¦¸Ã³ö¶Ô
+                // 3.åˆ«äººå¦‚æœå‡ºå¯¹ï¼Œæˆ‘ä¹Ÿåº”è¯¥å‡ºå¯¹
                 int firstPairs = cp[first - 1].GetPairs().Count;
                 int mypairs = cp[who - 1].GetPairs().Count;
                 int myCurrentPairs = mainForm.currentPokers[who - 1].GetPairs(previousSuit).Count;
-
-
-                //2.Èç¹û±ğÈË³öÍÏÀ­»ú£¬ÎÒÈç¹ûÓĞ£¬Ò²Ó¦¸Ã³öÍÏÀ­»ú
-                if (cp[first-1].HasTractors())
-                {
-                    if ((!cp[who - 1].HasTractors()) && (mainForm.currentPokers[who-1].GetTractor(previousSuit) > -1))
-                    {
+                // 2.å¦‚æœåˆ«äººå‡ºæ‹–æ‹‰æœºï¼Œæˆ‘å¦‚æœæœ‰ï¼Œä¹Ÿåº”è¯¥å‡ºæ‹–æ‹‰æœº
+                if (cp[first-1].HasTractors()) {
+                    if ((!cp[who - 1].HasTractors()) && (mainForm.currentPokers[who-1].GetTractor(previousSuit) > -1)) {
                         return false;
-                    }
-                    else if ((mypairs == 1) && (myCurrentPairs> 1)) //³öÁËµ¥¸ö¶Ô£¬µ«ÊÇÊµ¼Ê¶àÓÚ1¸ö¶Ô
-                    {
+                    } else if ((mypairs == 1) && (myCurrentPairs> 1))å¯¹ { // å‡ºäº†å•ä¸ªå¯¹ï¼Œä½†æ˜¯å®é™…å¤šäº1ä¸ª
+                            return false;
+                        } else if ((mypairs == 0) && (myCurrentPairs > 0)) { // æ²¡å‡ºå¯¹ï¼Œä½†å®é™…æœ‰å¯¹
                         return false;
-                    }
-                    else if ((mypairs == 0) && (myCurrentPairs > 0)) //Ã»³ö¶Ô£¬µ«Êµ¼ÊÓĞ¶Ô
-                    {
-                        return false;
-                    }
-                    else
-                    {
+                    } else {
                         return true;
                     }
                 }
-
-                
-
-                if (firstPairs > 0)
-                {
-                    if ((myCurrentPairs >= firstPairs) && (mypairs < firstPairs))
-                    {
+                if (firstPairs > 0) {
+                    if ((myCurrentPairs >= firstPairs) && (mypairs < firstPairs)) {
                         return false;
-                    }
-                    else
-                    {
+                    } else {
                         return true;
                     }
                 }
-
             }
             return true;
-
         }
-
-        internal static bool IsInvalid(MainForm mainForm, ArrayList[] currentSendedCards,ArrayList currentSendedCard, int who)
-        {
-
+        internal static bool IsInvalid(MainForm mainForm, ArrayList[] currentSendedCards,ArrayList currentSendedCard, int who) {
             CurrentPoker[] cp = new CurrentPoker[4];
             int suit = mainForm.currentState.Suit;
             int first = mainForm.firstSend;
-
             int rank = mainForm.currentRank;
-
             cp[who - 1] = new CurrentPoker();
             cp[who - 1].Suit = suit;
             cp[who - 1].Rank = rank;
-
             ArrayList list = new ArrayList();
             CurrentPoker tmpCP = new CurrentPoker();
             tmpCP.Suit = suit;
             tmpCP.Rank = rank;
-
-            for (int i = 0; i < currentSendedCard.Count; i++)
-            {
-
+            for (int i = 0; i < currentSendedCard.Count; i++) {
                 cp[who - 1].AddCard((int)currentSendedCard[i]);
                 list.Add((int)currentSendedCard[i]);
-               
             }
             int[] users = CommonMethods.OtherUsers(who);
-
             cp[users[0] - 1] = CommonMethods.parse(mainForm.currentSendCards[users[0] - 1], suit, rank);
             cp[users[1] - 1] = CommonMethods.parse(mainForm.currentSendCards[users[1] - 1], suit, rank);
             cp[users[2] - 1] = CommonMethods.parse(mainForm.currentSendCards[users[2] - 1], suit, rank);
@@ -200,504 +125,293 @@ namespace Kuaff.Tractor
             cp[1].Sort();
             cp[2].Sort();
             cp[3].Sort();
-
-
-
-            //Èç¹ûÎÒ³öÅÆ
-            if (first == who)
-            {
-                if (cp[who-1].Count == 0)
-                {
+// å¦‚æœæˆ‘å‡ºç‰Œ
+            if (first == who) {
+                if (cp[who-1].Count == 0) {
                     return false;
                 }
-
-                if (cp[who - 1].IsMixed())
-                {
+                if (cp[who - 1].IsMixed()) {
                     return false;
                 }
-
                 return true;
-            }
-            else
-            {
-                if (list.Count != currentSendedCards[first - 1].Count)
-                {
+            } else {
+                if (list.Count != currentSendedCards[first - 1].Count) {
                     return false;
                 }
-
-
-                //µÃµ½µÚÒ»¸ö¼Ò»ï³öµÄ»¨É«
+                // å¾—åˆ°ç¬¬ä¸€ä¸ªå®¶ä¼™å‡ºçš„èŠ±è‰²
                 int previousSuit = CommonMethods.GetSuit((int)currentSendedCards[first - 1][0], suit, rank);
-
-                //0.Èç¹ûÎÒÊÇ»ìºÏµÄ£¬ÔòÅĞ¶ÏÎÒÊÖÖĞÊÇ·ñ»¹Ê£³öµÄ»¨É«£¬Èç¹ûÊ£,false;Èç¹û²»Ê£;true
-                if (cp[who - 1].IsMixed())
-                {
-                    if (tmpCP.HasSomeCards(previousSuit))
-                    {
+                // 0.å¦‚æœæˆ‘æ˜¯æ··åˆçš„ï¼Œåˆ™åˆ¤æ–­æˆ‘æ‰‹ä¸­æ˜¯å¦è¿˜å‰©å‡ºçš„èŠ±è‰²ï¼Œå¦‚æœå‰©,false;å¦‚æœä¸å‰©;true
+                if (cp[who - 1].IsMixed()) {
+                    if (tmpCP.HasSomeCards(previousSuit)) {
                         return false;
-                    }
-                    else
-                    {
+                    } else {
                         return true;
                     }
                 }
-
-
-                //Èç¹û³öµÄ»¨É«²»Ò»ÖÂ
+                // å¦‚æœå‡ºçš„èŠ±è‰²ä¸ä¸€è‡´
                 int mysuit = CommonMethods.GetSuit((int)list[0], suit, rank);
-
-
-                //Èç¹ûÈ·Êµ»¨É«²»Ò»ÖÂ
-                if (mysuit != previousSuit)
-                {
-                    //¶øÇÒÈ·ÊµÃ»ÓĞ´Ë»¨É«
-                    if (tmpCP.HasSomeCards(previousSuit))
-                    {
+                // å¦‚æœç¡®å®èŠ±è‰²ä¸ä¸€è‡´
+                if (mysuit != previousSuit) {
+                    // è€Œä¸”ç¡®å®æ²¡æœ‰æ­¤èŠ±è‰²
+                    if (tmpCP.HasSomeCards(previousSuit)) {
                         return false;
-                    }
-                    else
-                    {
+                    } else {
                         return true;
                     }
                 }
-
-
-                //3.±ğÈËÈç¹û³ö¶Ô£¬ÎÒÒ²Ó¦¸Ã³ö¶Ô
+                // 3.åˆ«äººå¦‚æœå‡ºå¯¹ï¼Œæˆ‘ä¹Ÿåº”è¯¥å‡ºå¯¹
                 int firstPairs = cp[first - 1].GetPairs().Count;
                 int mypairs = cp[who - 1].GetPairs().Count;
                 int myCurrentPairs = mainForm.currentPokers[who - 1].GetPairs(previousSuit).Count;
-
-
-                //2.Èç¹û±ğÈË³öÍÏÀ­»ú£¬ÎÒÈç¹ûÓĞ£¬Ò²Ó¦¸Ã³öÍÏÀ­»ú
-                if (cp[first - 1].HasTractors())
-                {
-                    if ((!cp[who - 1].HasTractors()) && (mainForm.currentPokers[who - 1].GetTractor(previousSuit) > -1))
-                    {
+                // 2.å¦‚æœåˆ«äººå‡ºæ‹–æ‹‰æœºï¼Œæˆ‘å¦‚æœæœ‰ï¼Œä¹Ÿåº”è¯¥å‡ºæ‹–æ‹‰æœº
+                if (cp[first - 1].HasTractors()) {
+                    if ((!cp[who - 1].HasTractors()) && (mainForm.currentPokers[who - 1].GetTractor(previousSuit) > -1)) {
                         return false;
-                    }
-                    else if ((mypairs == 1) && (myCurrentPairs > 1)) //³öÁËµ¥¸ö¶Ô£¬µ«ÊÇÊµ¼Ê¶àÓÚ1¸ö¶Ô
-                    {
+                    } else if ((mypairs == 1) && (myCurrentPairs > 1)) { // å‡ºäº†å•ä¸ªå¯¹ï¼Œä½†æ˜¯å®é™…å¤šäº1ä¸ªå¯¹
                         return false;
-                    }
-                    else if ((mypairs == 0) && (myCurrentPairs > 0)) //Ã»³ö¶Ô£¬µ«Êµ¼ÊÓĞ¶Ô
-                    {
+                    } else if ((mypairs == 0) && (myCurrentPairs > 0)) { // æ²¡å‡ºå¯¹ï¼Œä½†å®é™…æœ‰å¯¹
                         return false;
-                    }
-                    else
-                    {
+                    } else {
                         return true;
                     }
                 }
-
-
-
-                if (firstPairs > 0)
-                {
-                    if ((myCurrentPairs >= firstPairs) && (mypairs < firstPairs))
-                    {
+                if (firstPairs > 0) {
+                    if ((myCurrentPairs >= firstPairs) && (mypairs < firstPairs)) {
                         return false;
-                    }
-                    else
-                    {
+                    } else {
                         return true;
                     }
                 }
-
             }
             return true;
-
         }
-
-
-        //¸ù¾İµÃ·ÖÅĞ¶ÏÓ¦¸ÃÌø¼¸¼¶
-        internal static void GetNextRank(MainForm mainForm, bool success)
-        {
-            
-            int user = mainForm.currentState.Master; //´ò±¾´ÎÊ±µÄÖ÷
+// æ ¹æ®å¾—åˆ†åˆ¤æ–­åº”è¯¥è·³å‡ çº§
+        internal static void GetNextRank(MainForm mainForm, bool success) {
+            int user = mainForm.currentState.Master; // æ‰“æœ¬æ¬¡æ—¶çš„ä¸»
             int rank = 0;
-
             int number = 0;
-            if (success)
-            {
-                if (mainForm.Scores == 0)  //´ó¹â
-                {
+            if (success) {
+                if (mainForm.Scores == 0) {  // å¤§å…‰
                     number += 3;
-                }
-                else if ((mainForm.Scores >= 0) && (mainForm.Scores < 40)) //Ğ¡¹â
-                {
+                } else if ((mainForm.Scores >= 0) && (mainForm.Scores < 40)) { // å°å…‰
                     number += 2;
-                }
-                else
-                {
+                } else {
                     number++;
                 }
-            }
-            else
-            {
+            } else {
                 number = (mainForm.Scores - 80) / 40;
             }
-
-
-            
             string mustRank = "," + mainForm.gameConfig.MustRank + ",";
-
-            if ((user == 1) || (user == 2))
-            {
+            if ((user == 1) || (user == 2)) {
                 rank = mainForm.currentState.OurCurrentRank;
                 int oldRank = rank;
-
-                if (rank == 53)
-                {
+                if (rank == 53) {
                     rank = 13;
                 }
                 rank += number;
-
-                //ÅĞ¶ÏÊÇ·ñ±Ø´ò
-                if (oldRank < 3 && rank > 3)
-                {
-                    if (mustRank.IndexOf(",3,")>=0)
-                    {
+                // åˆ¤æ–­æ˜¯å¦å¿…æ‰“
+                if (oldRank < 3 && rank > 3) {
+                    if (mustRank.IndexOf(",3,")>=0) {
                         rank = 3;
                     }
-                }
-                else if (oldRank < 8 && rank > 8)
-                {
-                    if (mustRank.IndexOf(",8,") >= 0)
-                    {
+                } else if (oldRank < 8 && rank > 8) {
+                    if (mustRank.IndexOf(",8,") >= 0) {
                         rank = 8;
                     }
-                }
-                else if (oldRank < 9 && rank > 9)
-                {
-                    if (mustRank.IndexOf(",9,") >= 0)
-                    {
+                } else if (oldRank < 9 && rank > 9) {
+                    if (mustRank.IndexOf(",9,") >= 0) {
                         rank = 9;
                     }
-                }
-                else if (oldRank < 10 && rank > 10)
-                {
-                    if (mustRank.IndexOf(",10,") >= 0)
-                    {
+                } else if (oldRank < 10 && rank > 10) {
+                    if (mustRank.IndexOf(",10,") >= 0) {
                         rank = 10;
                     }
-                }
-                else if (oldRank < 11 && rank > 11)
-                {
-                    if (mustRank.IndexOf(",11,") >= 0)
-                    {
+                } else if (oldRank < 11 && rank > 11) {
+                    if (mustRank.IndexOf(",11,") >= 0) {
                         rank = 11;
                     }
-                }
-                else if (oldRank < 12 && rank > 12)
-                {
-                    if (mustRank.IndexOf(",12,") >= 0)
-                    {
+                } else if (oldRank < 12 && rank > 12) {
+                    if (mustRank.IndexOf(",12,") >= 0) {
                         rank = 12;
                     }
-                }
-                else if (oldRank < 13 && rank > 13)
-                {
-                    if (mustRank.IndexOf(",13,") >= 0)
-                    {
+                } else if (oldRank < 13 && rank > 13) {
+                    if (mustRank.IndexOf(",13,") >= 0) {
                         rank = 13;
                     }
                 }
-
-
-                if (rank > 13)
-                {
-                    if ((user == 1) || (user == 2))
-                    {
+                if (rank > 13) {
+                    if ((user == 1) || (user == 2)) {
                         mainForm.currentState.OurTotalRound++;
-                    }
-                    else
-                    {
+                    } else {
                         mainForm.currentState.OpposedTotalRound++;
                     }
                     rank -= 14;
-                }
-                else if (rank == 13)
-                {
+                } else if (rank == 13) {
                     rank = 53;
                 }
-
-              
                 mainForm.currentState.OurCurrentRank = rank;
                 mainForm.currentRank = rank;
-            }
-            else if ((user == 3) || (user == 4))
-            {
+            } else if ((user == 3) || (user == 4)) {
                 rank = mainForm.currentState.OpposedCurrentRank;
                 int oldRank = rank;
-
-                if (rank == 53)
-                {
+                if (rank == 53) {
                     rank = 13;
                 }
                 rank += number;
-
-                //ÅĞ¶ÏÊÇ·ñ±Ø´ò
-                if (oldRank < 3 && rank > 3)
-                {
-                    if (mustRank.IndexOf(",3,") >= 0)
-                    {
+                // åˆ¤æ–­æ˜¯å¦å¿…æ‰“
+                if (oldRank < 3 && rank > 3) {
+                    if (mustRank.IndexOf(",3,") >= 0) {
                         rank = 3;
                     }
-                }
-                else if (oldRank < 8 && rank > 8)
-                {
-                    if (mustRank.IndexOf(",8,") >= 0)
-                    {
+                } else if (oldRank < 8 && rank > 8) {
+                    if (mustRank.IndexOf(",8,") >= 0) {
                         rank = 8;
                     }
-                }
-                else if (oldRank < 9 && rank > 9)
-                {
-                    if (mustRank.IndexOf(",9,") >= 0)
-                    {
+                } else if (oldRank < 9 && rank > 9) {
+                    if (mustRank.IndexOf(",9,") >= 0) {
                         rank = 9;
                     }
-                }
-                else if (oldRank < 10 && rank > 10)
-                {
-                    if (mustRank.IndexOf(",10,") >= 0)
-                    {
+                } else if (oldRank < 10 && rank > 10) {
+                    if (mustRank.IndexOf(",10,") >= 0) {
                         rank = 10;
                     }
-                }
-                else if (oldRank < 11 && rank > 11)
-                {
-                    if (mustRank.IndexOf(",11,") >= 0)
-                    {
+                } else if (oldRank < 11 && rank > 11) {
+                    if (mustRank.IndexOf(",11,") >= 0) {
                         rank = 11;
                     }
-                }
-                else if (oldRank < 12 && rank > 12)
-                {
-                    if (mustRank.IndexOf(",12,") >= 0)
-                    {
+                } else if (oldRank < 12 && rank > 12) {
+                    if (mustRank.IndexOf(",12,") >= 0) {
                         rank = 12;
                     }
-                }
-                else if (oldRank < 13 && rank > 13)
-                {
-                    if (mustRank.IndexOf(",13,") >= 0)
-                    {
+                } else if (oldRank < 13 && rank > 13) {
+                    if (mustRank.IndexOf(",13,") >= 0) {
                         rank = 13;
                     }
                 }
-
-                if (rank > 13)
-                {
+                if (rank > 13) {
                     rank -= 13;
-                }
-                else if (rank == 13)
-                {
+                } else if (rank == 13) {
                     rank = 53;
                 }
-
-                
                 mainForm.currentState.OpposedCurrentRank = rank;
                 mainForm.currentRank = rank;
             }
-
         }
-
-
-        //×îºóÒ»°ÑÊÇ·ñ»¤×¡ÁËµ×
-        internal static bool IsMasterOK(MainForm mainForm, int who)
-        {
+// æœ€åä¸€æŠŠæ˜¯å¦æŠ¤ä½äº†åº•
+        internal static bool IsMasterOK(MainForm mainForm, int who) {
             bool success = false;
-
-            if (mainForm.currentState.Master == 1)
-            {
-                if ((who == 1) || (who == 2))
-                {
+            if (mainForm.currentState.Master == 1) {
+                if ((who == 1) || (who == 2)) {
+                    success = true;
+                }
+            } else if (mainForm.currentState.Master == 2) {
+                if ((who == 1) || (who == 2)) {
+                    success = true;
+                }
+            } else if (mainForm.currentState.Master == 3) {
+                if ((who == 3) || (who == 4)) {
+                    success = true;
+                }
+            } else if (mainForm.currentState.Master == 4) {
+                if ((who == 3) || (who == 4)) {
                     success = true;
                 }
             }
-            else if (mainForm.currentState.Master == 2)
-            {
-                if ((who == 1) || (who == 2))
-                {
-                    success = true;
-                    
-                }
-               
-            }
-            else if (mainForm.currentState.Master == 3)
-            {
-                if ((who == 3) || (who == 4))
-                {
-                    success = true;
-                }
-                
-            }
-            else if (mainForm.currentState.Master == 4)
-            {
-                if ((who == 3) || (who == 4))
-                {
-                    success = true;
-                }
-            }
-
             return success;
         }
-
-        //ÊÇ·ñ³É¹¦
-        internal static int CalculateNextMaster(MainForm mainForm,bool success)
-        {
+// æ˜¯å¦æˆåŠŸ
+        internal static int CalculateNextMaster(MainForm mainForm,bool success) {
             int master = mainForm.currentState.Master;
-
-            if (mainForm.currentState.Master == 1)
-            {
-                if (success)
-                {
+            if (mainForm.currentState.Master == 1) {
+                if (success) {
                     master = 2;
-                }
-                else
-                {
+                } else {
                     master = 4;
                 }
-            }
-            else if (mainForm.currentState.Master == 2)
-            {
-                if (success)
-                {
+            } else if (mainForm.currentState.Master == 2) {
+                if (success) {
                     master = 1;
-                }
-                else
-                {
+                } else {
                     master = 3;
                 }
-            }
-            else if (mainForm.currentState.Master == 3)
-            {
-                if (success)
-                {
+            } else if (mainForm.currentState.Master == 3) {
+                if (success) {
                     master = 4;
-                }
-                else
-                {
+                } else {
                     master = 1;
                 }
-            }
-            else if (mainForm.currentState.Master == 4)
-            {
-                if (success)
-                {
+            } else if (mainForm.currentState.Master == 4) {
+                if (success) {
                     master = 3;
-                }
-                else
-                {
+                } else {
                     master = 2;
                 }
             }
-
             return master;
         }
-
-       
-        internal static void GetNextMasterUser(MainForm mainForm)
-        {
-            
-
-            //×îºóÒ»°ÑË­Ó®µÃ
+        internal static void GetNextMasterUser(MainForm mainForm) {
+// æœ€åä¸€æŠŠè°èµ¢å¾—
             int who = GetNextOrder(mainForm);
-            //È·¶¨ÊÇ·ñ»¤×¡µ×
+// ç¡®å®šæ˜¯å¦æŠ¤ä½åº•
             bool lastMasterOk = IsMasterOK(mainForm,who);
-
             CurrentPoker CP = new CurrentPoker();
             CP.Suit = mainForm.currentState.Suit;
             CP.Rank = mainForm.currentRank;
             CP = CommonMethods.parse(mainForm.currentSendCards[who - 1],CP.Suit,CP.Rank);
-
-           
-            if (!lastMasterOk)
-            {
+            if (!lastMasterOk) {
                 CalculateScore(mainForm);
                 int howmany = 2;
-
-                if (CP.HasTractors()) //TODO:¿ÉÄÜÊÇ³¤ÍÏÀ­»ú
-                {
+                if (CP.HasTractors()) { // TODO:å¯èƒ½æ˜¯é•¿æ‹–æ‹‰æœº
                     howmany = 8;
-                }
-                else if (CP.GetPairs().Count > 0)
-                {
+                } else if (CP.GetPairs().Count > 0) {
                     howmany = 4;
-                }
-                else
-                {
+                } else {
                     howmany = 2;
                 }
-
-                //¼ÆËã×ÜµÃ·Ö
+                // è®¡ç®—æ€»å¾—åˆ†
                 Calculate8CardsScore(mainForm, howmany);
             }
-
-
-            //ÒÑ¾­¼ÆËã±¾´ÎµÄ×ÜµÃ·Ö
-
-            //ÊÇ·ñ³É¹¦½ú¼¶,Ğ¡ÓÚ80·Ö,³É¹¦½ú¼¶
+// å·²ç»è®¡ç®—æœ¬æ¬¡çš„æ€»å¾—åˆ†
+// æ˜¯å¦æˆåŠŸæ™‹çº§,å°äº80åˆ†,æˆåŠŸæ™‹çº§
             bool success = mainForm.Scores < 80;
             int oldMaster = mainForm.currentState.Master;
-
             int master = CalculateNextMaster(mainForm, success);
-
             mainForm.currentState.Master = master;
-
             GetNextRank(mainForm, success);
-
-            //Jµ½µ×,Qµ½°ë
-            if (mainForm.gameConfig.JToBottom && (CP.Rank == 9) && (!success))
-            {
-                if (mainForm.currentSendCards[who - 1].Contains(9) || mainForm.currentSendCards[who - 1].Contains(22) || mainForm.currentSendCards[who - 1].Contains(35) || mainForm.currentSendCards[who - 1].Contains(48))
-                {
-                    if ((oldMaster == 1) || (oldMaster == 2))
-                    {
+// Jåˆ°åº•,Qåˆ°åŠ
+            if (mainForm.gameConfig.JToBottom && (CP.Rank == 9) && (!success)) {
+                if (mainForm.currentSendCards[who - 1].Contains(9) || mainForm.currentSendCards[who - 1].Contains(22) || mainForm.currentSendCards[who - 1].Contains(35) || mainForm.currentSendCards[who - 1].Contains(48)) {
+                    if ((oldMaster == 1) || (oldMaster == 2)) {
                         mainForm.currentState.OurCurrentRank = 0;
                     }
-                    if ((oldMaster == 3) || (oldMaster == 4))
-                    {
+                    if ((oldMaster == 3) || (oldMaster == 4)) {
                         mainForm.currentState.OpposedCurrentRank = 0;
                     }
                 }
             }
-            if (mainForm.gameConfig.QToHalf && (CP.Rank == 10) && (!success))
-            {
-                if (mainForm.currentSendCards[who - 1].Contains(10) || mainForm.currentSendCards[who - 1].Contains(23) || mainForm.currentSendCards[who - 1].Contains(36) || mainForm.currentSendCards[who - 1].Contains(49))
-                {
-                    if ((oldMaster == 1) || (oldMaster == 2))
-                    {
+            if (mainForm.gameConfig.QToHalf && (CP.Rank == 10) && (!success)) {
+                if (mainForm.currentSendCards[who - 1].Contains(10) || mainForm.currentSendCards[who - 1].Contains(23) || mainForm.currentSendCards[who - 1].Contains(36) || mainForm.currentSendCards[who - 1].Contains(49)) {
+                    if ((oldMaster == 1) || (oldMaster == 2)) {
                         mainForm.currentState.OurCurrentRank = 4;
                     }
-                    if ((oldMaster == 3) || (oldMaster == 4))
-                    {
+                    if ((oldMaster == 3) || (oldMaster == 4)) {
                         mainForm.currentState.OpposedCurrentRank = 4;
                     }
                 }
             }
-
-            if (mainForm.gameConfig.AToJ && (CP.Rank == 12) && (!success))
-            {
-                if (mainForm.currentSendCards[who - 1].Contains(12) || mainForm.currentSendCards[who - 1].Contains(25) || mainForm.currentSendCards[who - 1].Contains(38) || mainForm.currentSendCards[who - 1].Contains(51))
-                {
-                    if ((oldMaster == 1) || (oldMaster == 2))
-                    {
+            if (mainForm.gameConfig.AToJ && (CP.Rank == 12) && (!success)) {
+                if (mainForm.currentSendCards[who - 1].Contains(12) || mainForm.currentSendCards[who - 1].Contains(25) || mainForm.currentSendCards[who - 1].Contains(38) || mainForm.currentSendCards[who - 1].Contains(51)) {
+                    if ((oldMaster == 1) || (oldMaster == 2)) {
                         mainForm.currentState.OurCurrentRank = 9;
                     }
-                    if ((oldMaster == 3) || (oldMaster == 4))
-                    {
+                    if ((oldMaster == 3) || (oldMaster == 4)) {
                         mainForm.currentState.OpposedCurrentRank = 9;
                     }
                 }
             }
         }
-
-       
-        //È·¶¨ÏÂÒ»´Î¸ÃË­³öÅÆ
-        internal static int GetNextOrder(MainForm mainForm)
-        {
+// ç¡®å®šä¸‹ä¸€æ¬¡è¯¥è°å‡ºç‰Œ
+        internal static int GetNextOrder(MainForm mainForm) {
             CurrentPoker[] cp = new CurrentPoker[4];
             int suit = mainForm.currentState.Suit;
             int rank = mainForm.currentRank;
@@ -709,331 +423,229 @@ namespace Kuaff.Tractor
             cp[1].Sort();
             cp[2].Sort();
             cp[3].Sort();
-
-
-
             int count = mainForm.currentSendCards[0].Count;
-            
-
             int order = mainForm.firstSend;
-
             int firstSuit = CommonMethods.GetSuit((int)mainForm.currentSendCards[order-1][0],suit,rank);
-
-
-
             int[] users = CommonMethods.OtherUsers(order);
-
-            //Èç¹ûÊÇ»ìºÏÅÆ£¨Ë¦ÅÆ»òÕß¶à¸ö¶Ô£©,·µ»ØÊ×¼Òorder
-            if ((cp[order - 1].HasTractors()) && (cp[order - 1].Count > 4)) //ÓĞ¶ÔÓĞµ¥ÕÅÅÆ
-            {
+// å¦‚æœæ˜¯æ··åˆç‰Œï¼ˆç”©ç‰Œæˆ–è€…å¤šä¸ªå¯¹ï¼‰,è¿”å›é¦–å®¶order
+            if ((cp[order - 1].HasTractors()) && (cp[order - 1].Count > 4)) { // æœ‰å¯¹æœ‰å•å¼ ç‰Œ
                 int orderMax = cp[order - 1].GetTractor();
-                if (cp[users[0] - 1].HasTractors() && (!cp[users[0] - 1].IsMixed()))
-                {
+                if (cp[users[0] - 1].HasTractors() && (!cp[users[0] - 1].IsMixed())) {
                     int tmpMax = cp[users[0] - 1].GetTractor();
-                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit))
-                    {
+                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit)) {
                         order = users[0];
                         orderMax = tmpMax;
                     }
                 }
-                if (cp[users[1] - 1].HasTractors() && (!cp[users[1] - 1].IsMixed()))
-                {
+                if (cp[users[1] - 1].HasTractors() && (!cp[users[1] - 1].IsMixed())) {
                     int tmpMax = cp[users[1] - 1].GetTractor();
-                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit))
-                    {
+                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit)) {
                         order = users[1];
                         orderMax = tmpMax;
                     }
                 }
-                if (cp[users[2] - 1].HasTractors() && (!cp[users[2] - 1].IsMixed()))
-                {
+                if (cp[users[2] - 1].HasTractors() && (!cp[users[2] - 1].IsMixed())) {
                     int tmpMax = cp[users[2] - 1].GetTractor();
-                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit))
-                    {
+                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit)) {
                         order = users[2];
                         orderMax = tmpMax;
                     }
                 }
             }
-            if ((cp[order -1].GetPairs().Count*2 < count) && (cp[order -1].GetPairs().Count>0)) //ÓĞ¶ÔÓĞµ¥ÕÅÅÆ
-            {
-                //Èç¹ûÓĞµ¥¸ö¶Ô
+            if ((cp[order -1].GetPairs().Count*2 < count) && (cp[order -1].GetPairs().Count>0)) { // æœ‰å¯¹æœ‰å•å¼ ç‰Œ
+                // å¦‚æœæœ‰å•ä¸ªå¯¹
                 int orderMax = (int)cp[order - 1].GetPairs()[0];
-                if (cp[users[0] - 1].GetPairs().Count > 0 && (!cp[users[0] - 1].IsMixed()))
-                {
+                if (cp[users[0] - 1].GetPairs().Count > 0 && (!cp[users[0] - 1].IsMixed())) {
                     int tmpMax = (int)cp[users[0] - 1].GetPairs()[0];
-                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit))
-                    {
+                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit)) {
                         order = users[0];
                         orderMax = tmpMax;
                     }
                 }
-                if (cp[users[1] - 1].GetPairs().Count > 0 && (!cp[users[1] - 1].IsMixed()))
-                {
+                if (cp[users[1] - 1].GetPairs().Count > 0 && (!cp[users[1] - 1].IsMixed())) {
                     int tmpMax = (int)cp[users[1] - 1].GetPairs()[0];
-                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit))
-                    {
+                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit)) {
                         order = users[1];
                         orderMax = tmpMax;
                     }
                 }
-                if (cp[users[2] - 1].GetPairs().Count > 0 && (!cp[users[2] - 1].IsMixed()))
-                {
+                if (cp[users[2] - 1].GetPairs().Count > 0 && (!cp[users[2] - 1].IsMixed())) {
                     int tmpMax = (int)cp[users[2] - 1].GetPairs()[0];
-                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit))
-                    {
+                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit)) {
                         order = users[2];
                         orderMax = tmpMax;
                     }
                 }
-
-            }
-            else if ((count> 1) && (cp[order -1].GetPairs().Count == 0)) //Ë¦¶à¸öµ¥ÕÅÅÆ
-            {
+            } else if ((count> 1) && (cp[order -1].GetPairs().Count == 0)) { // ç”©å¤šä¸ªå•å¼ ç‰Œ
                 int orderMax = (int)mainForm.currentSendCards[order - 1][0];
                 int tmpMax = (int)mainForm.currentSendCards[users[0] - 1][0]; 
-                if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit))
-                {
+                if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit)) {
                     order = users[0];
                     orderMax = tmpMax;
                 }
-
                 tmpMax = (int)mainForm.currentSendCards[users[1] - 1][0]; 
-                if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit))
-                {
+                if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit)) {
                     order = users[1];
                     orderMax = tmpMax;
                 }
                 tmpMax = (int)mainForm.currentSendCards[users[2] - 1][0]; 
-                if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit))
-                {
+                if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit)) {
                     order = users[2];
                     orderMax = tmpMax;
                 }
             }
-            
-            else if (cp[order - 1].HasTractors())
-            {
-                //Èç¹ûÓĞÍÏÀ­»ú
+            else if (cp[order - 1].HasTractors()) {
+                // å¦‚æœæœ‰æ‹–æ‹‰æœº
                 int orderMax = cp[order - 1].GetTractor();
-                if (cp[users[0] - 1].HasTractors())
-                {
+                if (cp[users[0] - 1].HasTractors()) {
                     int tmpMax = cp[users[0] - 1].GetTractor();
-                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit))
-                    {
+                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit)) {
                         order = users[0];
                         orderMax = tmpMax;
                     }
                 }
-                if (cp[users[1] - 1].HasTractors())
-                {
+                if (cp[users[1] - 1].HasTractors()) {
                     int tmpMax = cp[users[1] - 1].GetTractor();
-                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit))
-                    {
+                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit)) {
                         order = users[1];
                         orderMax = tmpMax;
                     }
                 }
-                if (cp[users[2] - 1].HasTractors())
-                {
+                if (cp[users[2] - 1].HasTractors()) {
                     int tmpMax = cp[users[2] - 1].GetTractor();
-                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit))
-                    {
+                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit)) {
                         order = users[2];
                         orderMax = tmpMax;
                     }
                 }
-
                 return order;
-            }
-            else if (cp[order - 1].GetPairs().Count == 1 && (count ==2))
-            {
-                //Èç¹ûÓĞµ¥¸ö¶Ô
+            } else if (cp[order - 1].GetPairs().Count == 1 && (count ==2)) {
+                // å¦‚æœæœ‰å•ä¸ªå¯¹
                 int orderMax = (int)cp[order - 1].GetPairs()[0];
-                if (cp[users[0] - 1].GetPairs().Count>0)
-                {
+                if (cp[users[0] - 1].GetPairs().Count>0) {
                     int tmpMax = (int)cp[users[0] - 1].GetPairs()[0];
-                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit))
-                    {
+                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit)) {
                         order = users[0];
                         orderMax = tmpMax;
                     }
                 }
-                if (cp[users[1] - 1].GetPairs().Count>0)
-                {
+                if (cp[users[1] - 1].GetPairs().Count>0) {
                     int tmpMax = (int)cp[users[1] - 1].GetPairs()[0];
-                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit))
-                    {
+                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit)) {
                         order = users[1];
                         orderMax = tmpMax;
                     }
                 }
-                if (cp[users[2] - 1].GetPairs().Count>0)
-                {
+                if (cp[users[2] - 1].GetPairs().Count>0) {
                     int tmpMax = (int)cp[users[2] - 1].GetPairs()[0];
-                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit))
-                    {
+                    if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit)) {
                         order = users[2];
                         orderMax = tmpMax;
                     }
                 }
-
                 return order;
-            }
-            else if (count == 1)
-            {
-                //Èç¹ûÊÇµ¥ÕÅÅÆ
+            } else if (count == 1) {
+                // å¦‚æœæ˜¯å•å¼ ç‰Œ
                 int orderMax = (int)mainForm.currentSendCards[order - 1][0];
                 int tmpMax = (int)mainForm.currentSendCards[users[0] - 1][0]; 
-                if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit))
-                {
+                if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit)) {
                     order = users[0];
                     orderMax = tmpMax;
                 }
-
                 tmpMax = (int)mainForm.currentSendCards[users[1] - 1][0]; 
-                if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit))
-                {
+                if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit)) {
                     order = users[1];
                     orderMax = tmpMax;
                 }
                 tmpMax = (int)mainForm.currentSendCards[users[2] - 1][0]; 
-                if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit))
-                {
+                if (!CommonMethods.CompareTo(orderMax, tmpMax, suit, rank, firstSuit)) {
                     order = users[2];
                     orderMax = tmpMax;
                 }
-
                 return order;
             }
-
             return order;
         }
-
-
-        //¼ÆËãÃ¿´ÎµÄµÃ·Ö
-        internal static void CalculateScore(MainForm mainForm)
-        {
+// è®¡ç®—æ¯æ¬¡çš„å¾—åˆ†
+        internal static void CalculateScore(MainForm mainForm) {
             int score = 0;
-
             score += GetScores(mainForm.currentSendCards[0]);
             score += GetScores(mainForm.currentSendCards[1]);
             score += GetScores(mainForm.currentSendCards[2]);
             score += GetScores(mainForm.currentSendCards[3]);
-
             mainForm.Scores += score;
-
-            //mainForm.Text = mainForm.Scores + "";
+// mainForm.Text = mainForm.Scores + "";
         }
-
-        //µÃµ½µ×ÅÆµÄ·ÖÊı
-        internal static void Calculate8CardsScore(MainForm mainForm,int howmany)
-        {
+// å¾—åˆ°åº•ç‰Œçš„åˆ†æ•°
+        internal static void Calculate8CardsScore(MainForm mainForm,int howmany) {
             int score = GetScores(mainForm.send8Cards);
-
             score = score * howmany;
             mainForm.Scores += score;
-   
         }
-
-        private static int GetScores(ArrayList list)
-        {
+        private static int GetScores(ArrayList list) {
             int number = 0;
             int score = 0;
-
-            for (int i = 0; i < list.Count; i++)
-            {
+            for (int i = 0; i < list.Count; i++) {
                 number = (int)list[i] % 13;
-                if (number == 3)
-                {
+                if (number == 3) {
                     score += 5;
-                }
-                else if (number == 8)
-                {
+                } else if (number == 8) {
                     score += 10;
-                }
-                else if (number == 11)
-                {
+                } else if (number == 11) {
                     score += 10;
                 }
             }
             return score;
         }
-
-        //Íæ¼ÒË¦ÅÆÊ±µÄ¼ì²é,Èç¹ûËùÓĞµÄÅÆ¶¼ÊÇ×î´óµÄ£¬true
-        internal static bool CheckSendCards(MainForm mainForm, ArrayList minCards,int who)
-        {
-            //ArrayList minCards = new ArrayList();
+// ç©å®¶ç”©ç‰Œæ—¶çš„æ£€æŸ¥,å¦‚æœæ‰€æœ‰çš„ç‰Œéƒ½æ˜¯æœ€å¤§çš„ï¼Œtrue
+        internal static bool CheckSendCards(MainForm mainForm, ArrayList minCards,int who) {
+// ArrayList minCards = new ArrayList();
             int[] users = CommonMethods.OtherUsers(who);
-
             ArrayList list = new ArrayList();
             CurrentPoker cp = new CurrentPoker();
             int suit = mainForm.currentState.Suit;
             int rank = mainForm.currentRank;
             cp.Suit = suit;
             cp.Rank = rank;
-
-            
-            for (int i = 0; i < mainForm.myCardIsReady.Count; i++)
-            {
-                if ((bool)mainForm.myCardIsReady[i])
-                {
+            for (int i = 0; i < mainForm.myCardIsReady.Count; i++) {
+                if ((bool)mainForm.myCardIsReady[i]) {
                     list.Add(mainForm.myCardsNumber[i]);
                 }
             }
-
             int firstSuit = CommonMethods.GetSuit((int)list[0],cp.Suit,cp.Rank);
-
             cp = CommonMethods.parse(list, cp.Suit, cp.Rank);
             cp.Sort();
-
-           
-
-            if (list.Count == 1) //Èç¹ûÊÇµ¥ÕÅÅÆ
-            {
+            if (list.Count == 1) { // å¦‚æœæ˜¯å•å¼ ç‰Œ 
                 return true;
-            }
-            else if (list.Count == 2 && (cp.GetPairs().Count == 1)) //Èç¹ûÊÇÒ»¶Ô
-            {
+            } else if (list.Count == 2 && (cp.GetPairs().Count == 1)) { // å¦‚æœæ˜¯ä¸€å¯¹
                 return true;
-            }
-            else if (list.Count == 4 && (cp.HasTractors())) //Èç¹ûÊÇÍÏÀ­»ú
-            {
+            } else if (list.Count == 4 && (cp.HasTractors())) { // å¦‚æœæ˜¯æ‹–æ‹‰æœº
                 return true;
-            }
-            else //ÎÒË¦»ìºÏÅÆÊ±
-            {
-                if (cp.HasTractors())
-                {
+            } else { // æˆ‘ç”©æ··åˆç‰Œæ—¶
+                if (cp.HasTractors()) {
                     int myMax = cp.GetTractor();
                     int[] ttt = cp.GetTractorOtherCards(myMax);
                     cp.RemoveCard(myMax);
                     cp.RemoveCard(myMax);
                     cp.RemoveCard(ttt[1]);
                     cp.RemoveCard(ttt[1]);
-
                     int[] myMaxs = cp.GetTractorOtherCards(myMax);
                     int max4 = mainForm.currentPokers[users[0]].GetTractor(firstSuit);
                     int max2 = mainForm.currentPokers[users[1]].GetTractor(firstSuit);
                     int max3 = mainForm.currentPokers[users[2]].GetTractor(firstSuit);
-                    if (!CommonMethods.CompareTo(myMax, max2, suit, rank, firstSuit))
-                    {
+                    if (!CommonMethods.CompareTo(myMax, max2, suit, rank, firstSuit)) {
                         minCards.Add(myMax);
                         minCards.Add(myMax);
                         minCards.Add(ttt[1]);
                         minCards.Add(ttt[1]);
                         return false;
-                    }
-                    else if (!CommonMethods.CompareTo(myMax, max3, suit, rank, firstSuit))
-                    {
+                    } else if (!CommonMethods.CompareTo(myMax, max3, suit, rank, firstSuit)) {
                         minCards.Add(myMax);
                         minCards.Add(myMax);
                         minCards.Add(ttt[1]);
                         minCards.Add(ttt[1]);
                         return false;
-                    }
-                    else if (!CommonMethods.CompareTo(myMax, max4, suit, rank, firstSuit))
-                    {
+                    } else if (!CommonMethods.CompareTo(myMax, max4, suit, rank, firstSuit)) {
                         minCards.Add(myMax);
                         minCards.Add(myMax);
                         minCards.Add(ttt[1]);
@@ -1041,166 +653,110 @@ namespace Kuaff.Tractor
                         return false;
                     }
                 }
-
-                if (cp.GetPairs().Count>0)
-                {
+                if (cp.GetPairs().Count>0) {
                     ArrayList list0 = cp.GetPairs();
-
                     ArrayList list4 = mainForm.currentPokers[users[0]].GetPairs(firstSuit);
                     ArrayList list2 = mainForm.currentPokers[users[1]].GetPairs(firstSuit);
                     ArrayList list3 = mainForm.currentPokers[users[2]].GetPairs(firstSuit);
-
-                    
                     int max4 = -1;
                     int max2 = -1;
                     int max3 = -1;
-                    if (list4.Count > 0)
-                    {
+                    if (list4.Count > 0) {
                         max4 = (int)list4[list4.Count - 1];
                     }
-                    if (list3.Count > 0)
-                    {
+                    if (list3.Count > 0) {
                         max3 = (int)list3[list3.Count - 1];
                     }
-
-                    if (list2.Count > 0)
-                    {
+                    if (list2.Count > 0) {
                         max2 = (int)list2[list2.Count - 1];
                     }
-
-                    
-
-                    for (int i = 0; i < list0.Count; i++)
-                    {
+                    for (int i = 0; i < list0.Count; i++) {
                         int myMax = (int)list0[i];
                         cp.RemoveCard(myMax);
                         cp.RemoveCard(myMax);
-
-                        if (!CommonMethods.CompareTo(myMax, max2, suit, rank, firstSuit) && max2 > -1)
-                        {
+                        if (!CommonMethods.CompareTo(myMax, max2, suit, rank, firstSuit) && max2 > -1) {
                             minCards.Add(myMax);
                             minCards.Add(myMax);
                             return false;
-                        }
-                        else if (!CommonMethods.CompareTo(myMax, max3, suit, rank, firstSuit) && max3 > -1)
-                        {
+                        } else if (!CommonMethods.CompareTo(myMax, max3, suit, rank, firstSuit) && max3 > -1) {
                             minCards.Add(myMax);
                             minCards.Add(myMax);
                             return false;
-                        }
-                        else if (!CommonMethods.CompareTo(myMax, max4, suit, rank, firstSuit) && max4 > -1)
-                        {
+                        } else if (!CommonMethods.CompareTo(myMax, max4, suit, rank, firstSuit) && max4 > -1) {
                             minCards.Add(myMax);
                             minCards.Add(myMax);
                             return false;
                         }
                     }
-
                 }
-
-                //ÒÀ´Î¼ì²éÃ¿ÕÅÅÆÊÇ·ñÊÇ×î´ó¡£
+// ä¾æ¬¡æ£€æŸ¥æ¯å¼ ç‰Œæ˜¯å¦æ˜¯æœ€å¤§ã€‚
                 int[] cards = cp.GetCards();
                 int mmax4 = mainForm.currentPokers[users[0]].GetMaxCard(firstSuit);
                 int mmax2 = mainForm.currentPokers[users[1]].GetMaxCard(firstSuit);
                 int mmax3 = mainForm.currentPokers[users[2]].GetMaxCard(firstSuit);
-                for (int i = 0; i < 54; i++)
-                {
-                    if (cards[i] == 1)
-                    {
-                        if (!CommonMethods.CompareTo(i, mmax2, suit, rank, firstSuit))
-                        {
+                for (int i = 0; i < 54; i++) {
+                    if (cards[i] == 1) {
+                        if (!CommonMethods.CompareTo(i, mmax2, suit, rank, firstSuit)) {
                             minCards.Add(i);
                             return false;
-                        }
-                        else if (!CommonMethods.CompareTo(i, mmax3, suit, rank, firstSuit))
-                        {
+                        } else if (!CommonMethods.CompareTo(i, mmax3, suit, rank, firstSuit)) {
                             minCards.Add(i);
                             return false;
-                        }
-                        else if (!CommonMethods.CompareTo(i, mmax4, suit, rank, firstSuit))
-                        {
+                        } else if (!CommonMethods.CompareTo(i, mmax4, suit, rank, firstSuit)) {
                             minCards.Add(i);
                             return false;
                         }
                     }
                 }
             }
-
             return true;
         }
-
-
-        internal static bool CheckSendCards(MainForm mainForm, ArrayList sendCards,ArrayList minCards, int who)
-        {
-            //ArrayList minCards = new ArrayList();
+        internal static bool CheckSendCards(MainForm mainForm, ArrayList sendCards,ArrayList minCards, int who) {
+// ArrayList minCards = new ArrayList();
             int[] users = CommonMethods.OtherUsers(who);
-
             ArrayList list = new ArrayList();
             CurrentPoker cp = new CurrentPoker();
             int suit = mainForm.currentState.Suit;
             int rank = mainForm.currentRank;
             cp.Suit = suit;
             cp.Rank = rank;
-
-
-            for (int i = 0; i < sendCards.Count; i++)
-            {
-                 list.Add(sendCards[i]);
-                
+            for (int i = 0; i < sendCards.Count; i++) {
+                list.Add(sendCards[i]);
             }
-
             int firstSuit = CommonMethods.GetSuit((int)list[0], cp.Suit, cp.Rank);
-
             cp = CommonMethods.parse(list, cp.Suit, cp.Rank);
             cp.Sort();
-
-
-
-            if (list.Count == 1) //Èç¹ûÊÇµ¥ÕÅÅÆ
-            {
+            if (list.Count == 1) { // å¦‚æœæ˜¯å•å¼ ç‰Œ
                 return true;
-            }
-            else if (list.Count == 2 && (cp.GetPairs().Count == 1)) //Èç¹ûÊÇÒ»¶Ô
-            {
+            } else if (list.Count == 2 && (cp.GetPairs().Count == 1)) { // å¦‚æœæ˜¯ä¸€å¯¹
                 return true;
-            }
-            else if (list.Count == 4 && (cp.HasTractors())) //Èç¹ûÊÇÍÏÀ­»ú
-            {
+            } else if (list.Count == 4 && (cp.HasTractors())) { // å¦‚æœæ˜¯æ‹–æ‹‰æœº
                 return true;
-            }
-            else //ÎÒË¦»ìºÏÅÆÊ±
-            {
-                if (cp.HasTractors())
-                {
+            } else { // æˆ‘ç”©æ··åˆç‰Œæ—¶
+                if (cp.HasTractors()) {
                     int myMax = cp.GetTractor();
                     int[] ttt = cp.GetTractorOtherCards(myMax);
                     cp.RemoveCard(myMax);
                     cp.RemoveCard(myMax);
                     cp.RemoveCard(ttt[1]);
                     cp.RemoveCard(ttt[1]);
-
                     int[] myMaxs = cp.GetTractorOtherCards(myMax);
                     int max4 = mainForm.currentPokers[users[0]].GetTractor(firstSuit);
                     int max2 = mainForm.currentPokers[users[1]].GetTractor(firstSuit);
                     int max3 = mainForm.currentPokers[users[2]].GetTractor(firstSuit);
-                    if (!CommonMethods.CompareTo(myMax, max2, suit, rank, firstSuit))
-                    {
+                    if (!CommonMethods.CompareTo(myMax, max2, suit, rank, firstSuit)) {
                         minCards.Add(myMax);
                         minCards.Add(myMax);
                         minCards.Add(ttt[1]);
                         minCards.Add(ttt[1]);
                         return false;
-                    }
-                    else if (!CommonMethods.CompareTo(myMax, max3, suit, rank, firstSuit))
-                    {
+                    } else if (!CommonMethods.CompareTo(myMax, max3, suit, rank, firstSuit)) {
                         minCards.Add(myMax);
                         minCards.Add(myMax);
                         minCards.Add(ttt[1]);
                         minCards.Add(ttt[1]);
                         return false;
-                    }
-                    else if (!CommonMethods.CompareTo(myMax, max4, suit, rank, firstSuit))
-                    {
+                    } else if (!CommonMethods.CompareTo(myMax, max4, suit, rank, firstSuit)) {
                         minCards.Add(myMax);
                         minCards.Add(myMax);
                         minCards.Add(ttt[1]);
@@ -1208,93 +764,63 @@ namespace Kuaff.Tractor
                         return false;
                     }
                 }
-
-                if (cp.GetPairs().Count > 0)
-                {
+                if (cp.GetPairs().Count > 0) {
                     ArrayList list0 = cp.GetPairs();
-
                     ArrayList list4 = mainForm.currentPokers[users[0]].GetPairs(firstSuit);
                     ArrayList list2 = mainForm.currentPokers[users[1]].GetPairs(firstSuit);
                     ArrayList list3 = mainForm.currentPokers[users[2]].GetPairs(firstSuit);
-
-
                     int max4 = -1;
                     int max2 = -1;
                     int max3 = -1;
-                    if (list4.Count > 0)
-                    {
+                    if (list4.Count > 0) {
                         max4 = (int)list4[list4.Count - 1];
                     }
-                    if (list3.Count > 0)
-                    {
+                    if (list3.Count > 0) {
                         max3 = (int)list3[list3.Count - 1];
                     }
-
-                    if (list2.Count > 0)
-                    {
+                    if (list2.Count > 0) {
                         max2 = (int)list2[list2.Count - 1];
                     }
-
-
-
-                    for (int i = 0; i < list0.Count; i++)
-                    {
+                    for (int i = 0; i < list0.Count; i++) {
                         int myMax = (int)list0[i];
                         cp.RemoveCard(myMax);
                         cp.RemoveCard(myMax);
-
-                        if (!CommonMethods.CompareTo(myMax, max2, suit, rank, firstSuit) && max2 > -1)
-                        {
+                        if (!CommonMethods.CompareTo(myMax, max2, suit, rank, firstSuit) && max2 > -1) {
                             minCards.Add(myMax);
                             minCards.Add(myMax);
                             return false;
-                        }
-                        else if (!CommonMethods.CompareTo(myMax, max3, suit, rank, firstSuit) && max3 > -1)
-                        {
+                        } else if (!CommonMethods.CompareTo(myMax, max3, suit, rank, firstSuit) && max3 > -1) {
                             minCards.Add(myMax);
                             minCards.Add(myMax);
                             return false;
-                        }
-                        else if (!CommonMethods.CompareTo(myMax, max4, suit, rank, firstSuit) && max4 > -1)
-                        {
+                        } else if (!CommonMethods.CompareTo(myMax, max4, suit, rank, firstSuit) && max4 > -1) {
                             minCards.Add(myMax);
                             minCards.Add(myMax);
                             return false;
                         }
                     }
-
                 }
-
-                //ÒÀ´Î¼ì²éÃ¿ÕÅÅÆÊÇ·ñÊÇ×î´ó¡£
+// ä¾æ¬¡æ£€æŸ¥æ¯å¼ ç‰Œæ˜¯å¦æ˜¯æœ€å¤§ã€‚
                 int[] cards = cp.GetCards();
                 int mmax4 = mainForm.currentPokers[users[0]].GetMaxCard(firstSuit);
                 int mmax2 = mainForm.currentPokers[users[1]].GetMaxCard(firstSuit);
                 int mmax3 = mainForm.currentPokers[users[2]].GetMaxCard(firstSuit);
-                for (int i = 0; i < 54; i++)
-                {
-                    if (cards[i] == 1)
-                    {
-                        if (!CommonMethods.CompareTo(i, mmax2, suit, rank, firstSuit))
-                        {
+                for (int i = 0; i < 54; i++) {
+                    if (cards[i] == 1) {
+                        if (!CommonMethods.CompareTo(i, mmax2, suit, rank, firstSuit)) {
                             minCards.Add(i);
                             return false;
-                        }
-                        else if (!CommonMethods.CompareTo(i, mmax3, suit, rank, firstSuit))
-                        {
+                        } else if (!CommonMethods.CompareTo(i, mmax3, suit, rank, firstSuit)) {
                             minCards.Add(i);
                             return false;
-                        }
-                        else if (!CommonMethods.CompareTo(i, mmax4, suit, rank, firstSuit))
-                        {
+                        } else if (!CommonMethods.CompareTo(i, mmax4, suit, rank, firstSuit)) {
                             minCards.Add(i);
                             return false;
                         }
                     }
                 }
             }
-
             return true;
         }
-
     }
 }

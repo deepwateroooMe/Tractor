@@ -5,13 +5,10 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+namespace Kuaff.Tractor {
 
-namespace Kuaff.Tractor
-{
-    partial class About : Form
-    {
-        public About()
-        {
+    partial class About : Form {
+        public About() {
             InitializeComponent();
         }
     }

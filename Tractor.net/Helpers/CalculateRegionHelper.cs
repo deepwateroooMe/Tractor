@@ -7,68 +7,48 @@ using System.Drawing.Imaging;
 using System.Text;
 using System.Windows.Forms;
 using System.Threading;
-
 using Kuaff.CardResouces;
+namespace Kuaff.Tractor {
 
-namespace Kuaff.Tractor
-{
-    class CalculateRegionHelper
-    {
+    class CalculateRegionHelper {
         MainForm mainForm;
-        internal CalculateRegionHelper(MainForm mainForm)
-        {
+        internal CalculateRegionHelper(MainForm mainForm) {
             this.mainForm = mainForm;
         }
-
-        //¼ÆËãÊÇ·ñµã»÷µ½ÅÆÃæ
-        internal bool CalculateClickedRegion(MouseEventArgs e,int clicks)
-        {
-            //²ÉÓÃÇøÓò¼ÆËã
+        // è®¡ç®—æ˜¯å¦ç‚¹å‡»åˆ°ç‰Œé¢
+        internal bool CalculateClickedRegion(MouseEventArgs e,int clicks) {
+            // é‡‡ç”¨åŒºåŸŸè®¡ç®—
             Region[] regions = new Region[mainForm.myCardsLocation.Count];
-            for (int i = 0; i < mainForm.myCardsLocation.Count; i++)
-            {
-                if ((bool)mainForm.myCardIsReady[i])
-                {
+            for (int i = 0; i < mainForm.myCardsLocation.Count; i++) {
+                if ((bool)mainForm.myCardIsReady[i]) {
                     regions[i] = new Region(new Rectangle((int)mainForm.myCardsLocation[i], 355, 71, 96));
                 }
-                else
-                {
+                else {
                     regions[i] = new Region(new Rectangle((int)mainForm.myCardsLocation[i], 375, 71, 96));
                 }
             }
-
-            //¼ÆËã½»¼¯,×îºóÒ»¸ö¿Ï¶¨²»»á±»¸²¸Ç,×î¶àµÚ5¸ö»á¸²¸ÇµÚ0¸ö
+            // è®¡ç®—äº¤é›†,æœ€åä¸€ä¸ªè‚¯å®šä¸ä¼šè¢«è¦†ç›–,æœ€å¤šç¬¬5ä¸ªä¼šè¦†ç›–ç¬¬0ä¸ª
             int k = mainForm.myCardsLocation.Count;
             int m = 0;
-            if (mainForm.myCardsLocation.Count > 5)
-            {
-                for (int i = 0; i < mainForm.myCardsLocation.Count - 5; i++)
-                {
+            if (mainForm.myCardsLocation.Count > 5) {
+                for (int i = 0; i < mainForm.myCardsLocation.Count - 5; i++) {
                     regions[i].Exclude(regions[i + 1]);
                     regions[i].Exclude(regions[i + 2]);
                     regions[i].Exclude(regions[i + 3]);
                     regions[i].Exclude(regions[i + 4]);
                     regions[i].Exclude(regions[i + 5]);
                 }
-
                 m = mainForm.myCardsLocation.Count - 5;
                 k = 5;
             }
-
-            for (int i = 0; i < k - 1; i++)
-            {
-                for (int j = 1; j < (k - i); j++)
-                {
+            for (int i = 0; i < k - 1; i++) {
+                for (int j = 1; j < (k - i); j++) {
                     regions[i + m].Exclude(regions[m + i + j]);
                 }
             }
-
-
-            //¼ÆËãÊó±êµãÊÇ·ñÂäÈëÇøÓòÖĞ
-            for (int i = 0; i < mainForm.myCardsLocation.Count; i++)
-            {
-                if (regions[i].IsVisible(e.X, e.Y))
-                {
+            // è®¡ç®—é¼ æ ‡ç‚¹æ˜¯å¦è½å…¥åŒºåŸŸä¸­
+            for (int i = 0; i < mainForm.myCardsLocation.Count; i++) {
+                if (regions[i].IsVisible(e.X, e.Y)) {
                     if (clicks == 2)
                     {
                         mainForm.myCardIsReady[i] = true;
@@ -80,122 +60,86 @@ namespace Kuaff.Tractor
                     return true;
                 }
             }
-
             return false;
         }
-
-        //¼ÆËãÊÇ·ñµã»÷µ½ÅÆÃæ
-        internal bool CalculateDoubleClickedRegion(MouseEventArgs e)
-        {
-            //²ÉÓÃÇøÓò¼ÆËã
+        // è®¡ç®—æ˜¯å¦ç‚¹å‡»åˆ°ç‰Œé¢
+        internal bool CalculateDoubleClickedRegion(MouseEventArgs e) {
+            // é‡‡ç”¨åŒºåŸŸè®¡ç®—
             Region[] regions = new Region[mainForm.myCardsLocation.Count];
-            for (int i = 0; i < mainForm.myCardsLocation.Count; i++)
-            {
-                if ((bool)mainForm.myCardIsReady[i])
-                {
+            for (int i = 0; i < mainForm.myCardsLocation.Count; i++) {
+                if ((bool)mainForm.myCardIsReady[i]) {
                     regions[i] = new Region(new Rectangle((int)mainForm.myCardsLocation[i], 355, 71, 96));
                 }
-                else
-                {
+                else {
                     regions[i] = new Region(new Rectangle((int)mainForm.myCardsLocation[i], 375, 71, 96));
                 }
             }
-
-            //¼ÆËã½»¼¯,×îºóÒ»¸ö¿Ï¶¨²»»á±»¸²¸Ç,×î¶àµÚ5¸ö»á¸²¸ÇµÚ0¸ö
+            // è®¡ç®—äº¤é›†,æœ€åä¸€ä¸ªè‚¯å®šä¸ä¼šè¢«è¦†ç›–,æœ€å¤šç¬¬5ä¸ªä¼šè¦†ç›–ç¬¬0ä¸ª
             int k = mainForm.myCardsLocation.Count;
             int m = 0;
-            if (mainForm.myCardsLocation.Count > 5)
-            {
-                for (int i = 0; i < mainForm.myCardsLocation.Count - 5; i++)
-                {
+            if (mainForm.myCardsLocation.Count > 5) {
+                for (int i = 0; i < mainForm.myCardsLocation.Count - 5; i++) {
                     regions[i].Exclude(regions[i + 1]);
                     regions[i].Exclude(regions[i + 2]);
                     regions[i].Exclude(regions[i + 3]);
                     regions[i].Exclude(regions[i + 4]);
                     regions[i].Exclude(regions[i + 5]);
                 }
-
                 m = mainForm.myCardsLocation.Count - 5;
                 k = 5;
             }
-
-            for (int i = 0; i < k - 1; i++)
-            {
-                for (int j = 1; j < (k - i); j++)
-                {
+            for (int i = 0; i < k - 1; i++) {
+                for (int j = 1; j < (k - i); j++) {
                     regions[i + m].Exclude(regions[m + i + j]);
                 }
             }
-
-
-            //¼ÆËãÊó±êµãÊÇ·ñÂäÈëÇøÓòÖĞ
-            for (int i = 0; i < mainForm.myCardsLocation.Count; i++)
-            {
-                if (regions[i].IsVisible(e.X, e.Y))
-                {
+            // è®¡ç®—é¼ æ ‡ç‚¹æ˜¯å¦è½å…¥åŒºåŸŸä¸­
+            for (int i = 0; i < mainForm.myCardsLocation.Count; i++) {
+                if (regions[i].IsVisible(e.X, e.Y)) {
                     mainForm.myCardIsReady[i] = true;
                     
                     return true;
                 }
             }
-
             return false;
         }
-
-
-        internal int CalculateRightClickedRegion(MouseEventArgs e)
-        {
-            //²ÉÓÃÇøÓò¼ÆËã
+        internal int CalculateRightClickedRegion(MouseEventArgs e) {
+            // é‡‡ç”¨åŒºåŸŸè®¡ç®—
             Region[] regions = new Region[mainForm.myCardsLocation.Count];
-            for (int i = 0; i < mainForm.myCardsLocation.Count; i++)
-            {
-                if ((bool)mainForm.myCardIsReady[i])
-                {
+            for (int i = 0; i < mainForm.myCardsLocation.Count; i++) {
+                if ((bool)mainForm.myCardIsReady[i]) {
                     regions[i] = new Region(new Rectangle((int)mainForm.myCardsLocation[i], 355, 71, 96));
                 }
-                else
-                {
+                else {
                     regions[i] = new Region(new Rectangle((int)mainForm.myCardsLocation[i], 375, 71, 96));
                 }
             }
-
-            //¼ÆËã½»¼¯,×îºóÒ»¸ö¿Ï¶¨²»»á±»¸²¸Ç,×î¶àµÚ5¸ö»á¸²¸ÇµÚ0¸ö
+            // è®¡ç®—äº¤é›†,æœ€åä¸€ä¸ªè‚¯å®šä¸ä¼šè¢«è¦†ç›–,æœ€å¤šç¬¬5ä¸ªä¼šè¦†ç›–ç¬¬0ä¸ª
             int k = mainForm.myCardsLocation.Count;
             int m = 0;
-            if (mainForm.myCardsLocation.Count > 5)
-            {
-                for (int i = 0; i < mainForm.myCardsLocation.Count - 5; i++)
-                {
+            if (mainForm.myCardsLocation.Count > 5) {
+                for (int i = 0; i < mainForm.myCardsLocation.Count - 5; i++) {
                     regions[i].Exclude(regions[i + 1]);
                     regions[i].Exclude(regions[i + 2]);
                     regions[i].Exclude(regions[i + 3]);
                     regions[i].Exclude(regions[i + 4]);
                     regions[i].Exclude(regions[i + 5]);
                 }
-
                 m = mainForm.myCardsLocation.Count - 5;
                 k = 5;
             }
-
-            for (int i = 0; i < k - 1; i++)
-            {
-                for (int j = 1; j < (k - i); j++)
-                {
+            for (int i = 0; i < k - 1; i++) {
+                for (int j = 1; j < (k - i); j++) {
                     regions[i + m].Exclude(regions[m + i + j]);
                 }
             }
-
-
-            //¼ÆËãÊó±êµãÊÇ·ñÂäÈëÇøÓòÖĞ
-            for (int i = 0; i < mainForm.myCardsLocation.Count; i++)
-            {
-                if (regions[i].IsVisible(e.X, e.Y))
-                {
+            // è®¡ç®—é¼ æ ‡ç‚¹æ˜¯å¦è½å…¥åŒºåŸŸä¸­
+            for (int i = 0; i < mainForm.myCardsLocation.Count; i++) {
+                if (regions[i].IsVisible(e.X, e.Y)) {
                     mainForm.myCardIsReady[i] = !(bool)mainForm.myCardIsReady[i];
                     return i;
                 }
             }
-
             return -1;
         }
     }

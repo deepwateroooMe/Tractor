@@ -1,97 +1,68 @@
 using System;
 using System.Collections;
 using System.Text;
-
-namespace Kuaff.Tractor
-{
-    /// <summary>
-    /// ÈçºÎ¸úÅÆµÄËã·¨
-    /// </summary>
-    class MustSendCardsAlgorithm
-    {
-        /// <summary>
-        /// ¸úÅÆ»ù±¾Ëã·¨
-        /// </summary>
-        /// <param name="mainForm">Ö÷´°Ìå</param>
-        /// <param name="currentPokers">µ±Ç°¸÷¼ÒÊÖÖĞµÄÆË¿Ë</param>
-        /// <param name="whoseOrder">¸ÃË­³öÅÆ</param>
-        /// <param name="sendedCards">whoseOrderÓ¦¸Ã³öµÄÅÆ</param>
-        /// <param name="count">³öÅÆÊıÁ¿</param>
-        internal static void MustSendCards(MainForm mainForm, CurrentPoker[] currentPokers, int whoseOrder, ArrayList sendedCards, int count)
-        {
-            //µ±Ç°µÄ»¨É«ºÍRank
+namespace Kuaff.Tractor {
+    // å¦‚ä½•è·Ÿç‰Œçš„ç®—æ³•
+    class MustSendCardsAlgorithm {
+        // è·Ÿç‰ŒåŸºæœ¬ç®—æ³•
+        // <param name="mainForm">ä¸»çª—ä½“</param>
+        // <param name="currentPokers">å½“å‰å„å®¶æ‰‹ä¸­çš„æ‰‘å…‹</param>
+        // <param name="whoseOrder">è¯¥è°å‡ºç‰Œ</param>
+        // <param name="sendedCards">whoseOrderåº”è¯¥å‡ºçš„ç‰Œ</param>
+        // <param name="count">å‡ºç‰Œæ•°é‡</param>
+        internal static void MustSendCards(MainForm mainForm, CurrentPoker[] currentPokers, int whoseOrder, ArrayList sendedCards, int count) {
+            // å½“å‰çš„èŠ±è‰²å’ŒRank
             int suit = mainForm.currentState.Suit;
             int rank = mainForm.currentRank;
-
-            //±¾´Î»¨É«
+            // æœ¬æ¬¡èŠ±è‰²
             int firstSuit = CommonMethods.GetSuit((int)mainForm.currentSendCards[mainForm.firstSend-1][0],suit,rank);
-
             int sendTotal = mainForm.currentSendCards[0].Count + mainForm.currentSendCards[1].Count + mainForm.currentSendCards[2].Count + mainForm.currentSendCards[3].Count;
-
-            if (sendTotal == count) //whoseOrderÊÇµÚ¶ş¸ö³öÅÆ
-            {
+            if (sendTotal == count) { // whoseOrderæ˜¯ç¬¬äºŒä¸ªå‡ºç‰Œ
                 WhoseOrderIs2(mainForm, currentPokers, whoseOrder, sendedCards, count, suit, rank, firstSuit);
                 
             }
-            else if (sendTotal == count*2) //whoseOrderÊÇµÚÈı¸ö³öÅÆ
-            {
+            else if (sendTotal == count*2) { // whoseOrderæ˜¯ç¬¬ä¸‰ä¸ªå‡ºç‰Œ
                 WhoseOrderIs3(mainForm, currentPokers, whoseOrder, sendedCards, count, suit, rank, firstSuit);
                 
             }
-            else if (sendTotal == count * 3) //whoseOrderÊÇµÚËÄ¸ö³öÅÆ
-            {
+            else if (sendTotal == count * 3) { // whoseOrderæ˜¯ç¬¬å››ä¸ªå‡ºç‰Œ 
                 WhoseOrderIs4(mainForm, currentPokers, whoseOrder, sendedCards, count, suit, rank, firstSuit);
                
             }
         }
-
-        //whoseOrderÊÇµÚ¶ş¸ö³öÅÆ
-        internal static void WhoseOrderIs2(MainForm mainForm, CurrentPoker[] currentPokers, int whoseOrder, ArrayList sendedCards, int count, int suit, int rank, int firstSuit)
-        {
-            ArrayList firstSendCards = mainForm.currentSendCards[mainForm.firstSend-1]; //Ê×¼Ò³öÅÆ
+// whoseOrderæ˜¯ç¬¬äºŒä¸ªå‡ºç‰Œ
+        internal static void WhoseOrderIs2(MainForm mainForm, CurrentPoker[] currentPokers, int whoseOrder, ArrayList sendedCards, int count, int suit, int rank, int firstSuit) {
+            ArrayList firstSendCards = mainForm.currentSendCards[mainForm.firstSend-1]; // é¦–å®¶å‡ºç‰Œ
             CurrentPoker firstCP = new CurrentPoker();
             firstCP.Suit = suit;
             firstCP.Rank = rank;
             firstCP = CommonMethods.parse(firstSendCards, suit, rank);
             
-            int firstMax = CommonMethods.GetMaxCard(firstSendCards, suit, rank); //Ê×¼ÒµÄ×î´óÅÆ
+            int firstMax = CommonMethods.GetMaxCard(firstSendCards, suit, rank); // é¦–å®¶çš„æœ€å¤§ç‰Œ
             int pairTotal = firstCP.GetPairs().Count;
-
             CurrentPoker myCP = currentPokers[whoseOrder - 1];
             ArrayList myPokerList = mainForm.pokerList[whoseOrder - 1];
-
-
-            //whoseµÄ´Ë»¨É«µÄÅÆÊı
+            // whoseçš„æ­¤èŠ±è‰²çš„ç‰Œæ•°
             int myTotal = CommonMethods.GetSuitCount(currentPokers[whoseOrder - 1], suit, rank, firstSuit); 
-            //´Ë»¨É«µÄÅÆ
+            // æ­¤èŠ±è‰²çš„ç‰Œ
             int[] cards = myCP.GetSuitCards(firstSuit);
-
             
-
             ArrayList myList = new ArrayList(cards);
-            CurrentPoker mySuitCP = new CurrentPoker(); //ÎÒ´Ë»¨É«µÄÅÆ
+            CurrentPoker mySuitCP = new CurrentPoker(); // æˆ‘æ­¤èŠ±è‰²çš„ç‰Œ
             mySuitCP.Suit = suit;
             mySuitCP.Rank = rank;
             mySuitCP = CommonMethods.parse(myList,suit,rank);
             mySuitCP.Sort();
-
             firstCP.Sort();
-
             myCP.Sort();
-
-
-           //¿¼ÂÇ±Ï
-            if (myTotal == 0)
-            {
-                if (firstSuit != suit)
-                {
-
-                    if (myCP.GetMasterCardsTotal() >= count && count == 1) //µ¥ÕÅÅÆ
-                    {
-                        //Èç¹ûÄ¿Ç°×î´óµÄÄÇÒ»¼ÒÊÇÖ÷ 
+            // è€ƒè™‘æ¯•
+            if (myTotal == 0) {
+                if (firstSuit != suit) {
+                    if (myCP.GetMasterCardsTotal() >= count && count == 1) {
+                        // å¦‚æœç›®å‰æœ€å¤§çš„é‚£ä¸€å®¶æ˜¯ä¸» 
                         int biggerMax = (int)mainForm.currentSendCards[mainForm.whoIsBigger - 1][0];
                         int maxMaster = myCP.GetMaxMasterCards();
-                        //Èç¹ûÎÒµÄÅÆÄÜ´ó¹ı×î´óµÄÄÇ¼ÒµÄÅÆ
+                        // å¦‚æœæˆ‘çš„ç‰Œèƒ½å¤§è¿‡æœ€å¤§çš„é‚£å®¶çš„ç‰Œ
                         if (!CommonMethods.CompareTo(biggerMax, maxMaster, suit, rank, firstSuit))
                         {
                             mainForm.whoIsBigger = whoseOrder;
@@ -99,12 +70,11 @@ namespace Kuaff.Tractor
                             return;
                         }
                     }
-                    else if (myCP.GetMasterCardsTotal() >= count && pairTotal == 1 && count == 2) //³öÒ»¸ö¶ÔÊ±
-                    {
-                        //Èç¹ûÄ¿Ç°×î´óµÄÄÇÒ»¼ÒÊÇÖ÷ 
+                    else if (myCP.GetMasterCardsTotal() >= count && pairTotal == 1 && count == 2)  { // å‡ºä¸€ä¸ªå¯¹æ—¶
+                        // å¦‚æœç›®å‰æœ€å¤§çš„é‚£ä¸€å®¶æ˜¯ä¸» 
                         int biggerMax = (int)mainForm.currentSendCards[mainForm.whoIsBigger - 1][0];
                         ArrayList masterPairs  = myCP.GetMasterPairs();
-                        //Èç¹ûÎÒµÄÅÆÄÜ´ó¹ı×î´óµÄÄÇ¼ÒµÄÅÆ
+                        // å¦‚æœæˆ‘çš„ç‰Œèƒ½å¤§è¿‡æœ€å¤§çš„é‚£å®¶çš„ç‰Œ
                         if (masterPairs.Count > 0)
                         {
                             mainForm.whoIsBigger = whoseOrder;
@@ -113,37 +83,29 @@ namespace Kuaff.Tractor
                             return;
                         }
                     }
-                    else if (myCP.GetMasterCardsTotal() >= count && pairTotal == 0 && count > 1) //µ¥ÕÅË¦ÅÆ
-                    {
-                        //Èç¹ûÄ¿Ç°×î´óµÄÄÇÒ»¼ÒÊÇÖ÷ 
+                    else if (myCP.GetMasterCardsTotal() >= count && pairTotal == 0 && count > 1) {
+                        // å¦‚æœç›®å‰æœ€å¤§çš„é‚£ä¸€å®¶æ˜¯ä¸» 
                         int biggerMax = (int)mainForm.currentSendCards[mainForm.whoIsBigger - 1][0];
                         int maxMaster = myCP.GetMaxMasterCards();
-                        //Èç¹ûÎÒµÄÅÆÄÜ´ó¹ı×î´óµÄÄÇ¼ÒµÄÅÆ
+                        // å¦‚æœæˆ‘çš„ç‰Œèƒ½å¤§è¿‡æœ€å¤§çš„é‚£å®¶çš„ç‰Œ
                         if (!CommonMethods.CompareTo(biggerMax, maxMaster, suit, rank, firstSuit))
                         {
                             mainForm.whoIsBigger = whoseOrder;
                             CommonMethods.SendCards(sendedCards, myCP, myPokerList, maxMaster);
-
                             SendMasterSuitOrScores(sendedCards, count, suit, myCP, myPokerList, true);
                             SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, true);
                             SendMasterSuitOrScores(sendedCards, count, suit, myCP, myPokerList, false);
                             SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, false);
-
                             return;
                         }
-
                     }
                 }
             }
-
-            if (myTotal < count) //±¾»¨É«ÉÙÅÆ
-            {
+            if (myTotal < count) { // æœ¬èŠ±è‰²å°‘ç‰Œ
                
-                for (int i = 0; i < myTotal; i++)
-                {
+                for (int i = 0; i < myTotal; i++) {
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, cards[i]);
                 }
-
                 SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList,true);
                 SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList,true);
                 SendMasterSuitNoScores(sendedCards, count, suit, myCP, myPokerList,true);
@@ -152,18 +114,14 @@ namespace Kuaff.Tractor
                 SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, false);
                 SendMasterSuitNoScores(sendedCards, count, suit, myCP, myPokerList, false);
                 SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, false);
-
                
                 return;
-
             }
           
-            //ÒÔÏÂÈ·±£´Ë»¨É«µÄÅÆ¾ø¶Ô¹»ÓÃ
-            else if (firstCP.HasTractors())  //Èç¹ûÊ×¼Ò³öÁËÍÏÀ­»ú
-            {
-                //Èç¹ûÎÒÓĞÍÏÀ­»ú£¬³ö×î´óµÄÍÏÀ­»ú
-                if (mySuitCP.HasTractors())
-                {
+// ä»¥ä¸‹ç¡®ä¿æ­¤èŠ±è‰²çš„ç‰Œç»å¯¹å¤Ÿç”¨
+            else if (firstCP.HasTractors()) {  // å¦‚æœé¦–å®¶å‡ºäº†æ‹–æ‹‰æœº
+                // å¦‚æœæˆ‘æœ‰æ‹–æ‹‰æœºï¼Œå‡ºæœ€å¤§çš„æ‹–æ‹‰æœº
+                if (mySuitCP.HasTractors()) {
                     int k = mySuitCP.GetTractor();
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, k);
                     int[] ks = mySuitCP.GetTractorOtherCards(k);
@@ -171,14 +129,11 @@ namespace Kuaff.Tractor
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, ks[i]);
                     }
-
-                    if (!CommonMethods.CompareTo(firstCP.GetTractor(), k, suit, rank, firstSuit)) //Èç¹ûÎÒµÄÍÏÀ­»úµÄÅÆ´ó
-                    {
+                    if (!CommonMethods.CompareTo(firstCP.GetTractor(), k, suit, rank, firstSuit)) { // å¦‚æœæˆ‘çš„æ‹–æ‹‰æœºçš„ç‰Œå¤§
                         mainForm.whoIsBigger = whoseOrder;
                     }
                 }
-                else if (mySuitCP.GetPairs().Count > 0) //Èç¹ûÓĞ¶Ô£¬³öÁ½¸ö¶Ô
-                {
+                else if (mySuitCP.GetPairs().Count > 0) { // å¦‚æœæœ‰å¯¹ï¼Œå‡ºä¸¤ä¸ªå¯¹
                     ArrayList list = mySuitCP.GetPairs();
                     if (list.Count >= 2)
                     {
@@ -192,67 +147,47 @@ namespace Kuaff.Tractor
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[0]);
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[0]);
                     }
-
                 }
-
-
-                //·ñÔò³ö×îĞ¡µÄÅÆ
+// å¦åˆ™å‡ºæœ€å°çš„ç‰Œ
                 SendThisSuitNoScores(sendedCards, count, suit,firstSuit, myCP, myPokerList,true);
                 SendThisSuit(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
-
                 SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
                 SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
-
                 
                 return;
             }
-            else if (count == 1) //Ê×¼Ò³öµ¥ÕÅÅÆ 
-            {
+            else if (count == 1) { // é¦–å®¶å‡ºå•å¼ ç‰Œ 
                 int myMax = -1;
-                if (firstSuit == suit)
-                {
+                if (firstSuit == suit) {
                     myMax = mySuitCP.GetMaxMasterCards();
                 }
-                else
-                {
+                else {
                     myMax = mySuitCP.GetMaxCards(firstSuit);
                 }
-
                
-
-                //Èç¹ûµÃµ½µÄ´Ë»¨É«µÄ×î´óµÄÅÆ´óÓÚÊ×¼ÒµÄÅÆ
-                if (!CommonMethods.CompareTo(firstMax,myMax,suit,rank,firstSuit))
-                {
+// å¦‚æœå¾—åˆ°çš„æ­¤èŠ±è‰²çš„æœ€å¤§çš„ç‰Œå¤§äºé¦–å®¶çš„ç‰Œ
+                if (!CommonMethods.CompareTo(firstMax,myMax,suit,rank,firstSuit)) {
                     if (myMax > -1)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myMax);
-
                         mainForm.whoIsBigger = whoseOrder;
                         
                         return;
                     }
                 }
-
                 
-
-
                 SendThisSuitNoScores(sendedCards, count, suit,firstSuit, myCP, myPokerList,true);
                 SendThisSuit(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
-
                 SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
                 SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
-
                
                 return;
             }
-            else if ((pairTotal == 1) && (count == 2)) //Ê×¼Ò³öÁËÒ»¸ö¶Ô
-            {
+            else if ((pairTotal == 1) && (count == 2)) { // é¦–å®¶å‡ºäº†ä¸€ä¸ªå¯¹
                 ArrayList list = mySuitCP.GetPairs();
-                if (list.Count >= 1)
-                {
+                if (list.Count >= 1) {
                     int myMax = (int)list[list.Count - 1];
-
-                    //Èç¹ûµÃµ½µÄ´Ë»¨É«µÄ×î´óµÄÅÆ´óÓÚÊ×¼ÒµÄÅÆ
+                    // å¦‚æœå¾—åˆ°çš„æ­¤èŠ±è‰²çš„æœ€å¤§çš„ç‰Œå¤§äºé¦–å®¶çš„ç‰Œ
                     if (!CommonMethods.CompareTo(firstMax, myMax, suit, rank, firstSuit))
                     {
                         mainForm.whoIsBigger = whoseOrder;
@@ -265,98 +200,68 @@ namespace Kuaff.Tractor
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[0]);
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[0]);
-
                         
                         return;
                     }
                 }
-                else
-                {
-                    //·ñÔò³ö×îĞ¡µÄÅÆ
+                else {
+                    // å¦åˆ™å‡ºæœ€å°çš„ç‰Œ
                     SendThisSuitNoScores(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
                     SendThisSuit(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
-
                     SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
                     SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
-
                     
                     return;
                 }
-
             }
-            else if (count == pairTotal * 2 && (count>0)) //¶¼ÊÇ¶Ô
-            {
+            else if (count == pairTotal * 2 && (count>0)) { // éƒ½æ˜¯å¯¹
                 ArrayList list = mySuitCP.GetPairs();
-                for (int i = 0; i < pairTotal && i < list.Count;i++ )
-                {
+                for (int i = 0; i < pairTotal && i < list.Count;i++ ) {
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[i]);
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[i]);
                 }
-
-                //·ñÔò³ö×îĞ¡µÄÅÆ
+// å¦åˆ™å‡ºæœ€å°çš„ç‰Œ
                 SendThisSuitNoScores(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
                 SendThisSuit(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
-
                 SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
                 SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
-
                 
                 return;
-
             }
-            else //ÓĞ¶ÔºÍÓĞµ¥ÕÅÅÆ£¬ÊÇË¦ÅÆ
-            {
+            else { // æœ‰å¯¹å’Œæœ‰å•å¼ ç‰Œï¼Œæ˜¯ç”©ç‰Œ {
                 ArrayList list = mySuitCP.GetPairs();
-                for (int i = 0; i < pairTotal && i < list.Count; i++)
-                {
+                for (int i = 0; i < pairTotal && i < list.Count; i++) {
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[i]);
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[i]);
                 }
-
-                //·ñÔò³ö×îĞ¡µÄÅÆ
+// å¦åˆ™å‡ºæœ€å°çš„ç‰Œ
                 SendThisSuitNoScores(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
                 SendThisSuit(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
-
                 SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
                 SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
-
                
                 return;
             }
-
-
         }
-
-        private static void SendOtherSuitNoScores(ArrayList sendedCards, int count, int firstSuit, CurrentPoker myCP, ArrayList myPokerList,bool protectPairs)
-        {
-
-
-            for (int asuit = 1; asuit < 5; asuit++)
-            {
-                if (asuit == firstSuit)
-                {
+        private static void SendOtherSuitNoScores(ArrayList sendedCards, int count, int firstSuit, CurrentPoker myCP, ArrayList myPokerList,bool protectPairs) {
+            for (int asuit = 1; asuit < 5; asuit++) {
+                if (asuit == firstSuit) {
                     continue;
                 }
-                if (asuit == myCP.Suit)
-                {
+                if (asuit == myCP.Suit) {
                     continue;
                 }
-
-
                 int[] cards = myCP.GetSuitAllCards(asuit);
-
-                for (int m = 0; m < 13; m++)
-                {
+                for (int m = 0; m < 13; m++) {
                     if (m == 3 || m == 8 || m ==11)
                     {
                         continue;
                     }
-
                     if (cards[m] > 0)
                     {
                         if (sendedCards.Count < count)
                         {
-                            if (protectPairs) //±£»¤¶Ô
+                            if (protectPairs) // ä¿æŠ¤å¯¹
                             {
                                 if (cards[m] == 1)
                                 {
@@ -378,37 +283,24 @@ namespace Kuaff.Tractor
                         }
                     }
                 }
-
             }
-
-
 
                
         }
-
-        private static void SendOtherSuitOrScores(ArrayList sendedCards, int count, int firstSuit, CurrentPoker myCP, ArrayList myPokerList, bool protectPairs)
-        {
-            for (int asuit = 1; asuit < 5; asuit++)
-            {
-                if (asuit == firstSuit)
-                {
+        private static void SendOtherSuitOrScores(ArrayList sendedCards, int count, int firstSuit, CurrentPoker myCP, ArrayList myPokerList, bool protectPairs) {
+            for (int asuit = 1; asuit < 5; asuit++) {
+                if (asuit == firstSuit) {
                     continue;
                 }
-                if (asuit == myCP.Suit)
-                {
+                if (asuit == myCP.Suit) {
                     continue;
                 }
-
-
                 int[] cards = myCP.GetSuitAllCards(asuit);
-
                 int n = 8;
-                if (cards[n] > 0)
-                {
+                if (cards[n] > 0) {
                     if (sendedCards.Count < count)
                     {
-                        if (protectPairs) //±£»¤¶Ô
-                        {
+                        if (protectPairs) { // ä¿æŠ¤å¯¹
                             if (cards[n] == 1)
                             {
                                 CommonMethods.SendCards(sendedCards, myCP, myPokerList, n + (asuit - 1) * 13);
@@ -429,13 +321,10 @@ namespace Kuaff.Tractor
                     }
                 }
                 n = 11;
-
-                if (cards[n] > 0)
-                {
+                if (cards[n] > 0) {
                     if (sendedCards.Count < count)
                     {
-                        if (protectPairs) //±£»¤¶Ô
-                        {
+                        if (protectPairs) { // ä¿æŠ¤å¯¹
                             if (cards[n] == 1)
                             {
                                 CommonMethods.SendCards(sendedCards, myCP, myPokerList, n + (asuit - 1) * 13);
@@ -455,16 +344,11 @@ namespace Kuaff.Tractor
                         }
                     }
                 }
-
-
                 n = 5;
-
-                if (cards[n] > 0)
-                {
+                if (cards[n] > 0) {
                     if (sendedCards.Count < count)
                     {
-                        if (protectPairs) //±£»¤¶Ô
-                        {
+                        if (protectPairs) { // ä¿æŠ¤å¯¹
                             if (cards[n] == 1)
                             {
                                 CommonMethods.SendCards(sendedCards, myCP, myPokerList, n + (asuit - 1) * 13);
@@ -480,20 +364,16 @@ namespace Kuaff.Tractor
                         }
                     }
                 }
-
-                for (int m = 0; m < 13; m++)
-                {
+                for (int m = 0; m < 13; m++) {
                     if (m == 3 || m == 8 || m == 11)
                     {
                         continue;
                     }
-
                     if (cards[m] > 0)
                     {
                         if (sendedCards.Count < count)
                         {
-                            if (protectPairs) //±£»¤¶Ô
-                            {
+                            if (protectPairs) { // ä¿æŠ¤å¯¹
                                 if (cards[m] == 1)
                                 {
                                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, m + (asuit - 1) * 13);
@@ -514,36 +394,23 @@ namespace Kuaff.Tractor
                         }
                     }
                 }
-
             }
-
-
         }
-
-        private static void SendOtherSuit(ArrayList sendedCards, int count, int firstSuit, CurrentPoker myCP, ArrayList myPokerList, bool protectPairs)
-        {
-            for (int asuit = 1; asuit < 5; asuit++)
-            {
-                if (asuit == firstSuit)
-                {
+        private static void SendOtherSuit(ArrayList sendedCards, int count, int firstSuit, CurrentPoker myCP, ArrayList myPokerList, bool protectPairs) {
+            for (int asuit = 1; asuit < 5; asuit++) {
+                if (asuit == firstSuit) {
                     continue;
                 }
-                if (asuit == myCP.Suit)
-                {
+                if (asuit == myCP.Suit) {
                     continue;
                 }
-
-
                 int[] cards = myCP.GetSuitAllCards(asuit);
-
-                for (int m = 0; m < 13; m++)
-                {
+                for (int m = 0; m < 13; m++) {
                     if (cards[m] > 0)
                     {
                         if (sendedCards.Count < count)
                         {
-                            if (protectPairs) //±£»¤¶Ô
-                            {
+                            if (protectPairs) { // ä¿æŠ¤å¯¹
                                 if (cards[m] == 1)
                                 {
                                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, m + (asuit - 1) * 13);
@@ -564,36 +431,22 @@ namespace Kuaff.Tractor
                         }
                     }
                 }
-
             }
-
-
         }
-
-
-        private static void SendThisSuitNoScores(ArrayList sendedCards, int count, int suit, int firstSuit, CurrentPoker myCP, ArrayList myPokerList, bool protectPairs)
-        {
-            if (suit == firstSuit)
-            {
+        private static void SendThisSuitNoScores(ArrayList sendedCards, int count, int suit, int firstSuit, CurrentPoker myCP, ArrayList myPokerList, bool protectPairs) {
+            if (suit == firstSuit) {
                 SendMasterSuitNoScores(sendedCards, count, suit, myCP, myPokerList, protectPairs);
                 return;
             }
-
             int[] cards = myCP.GetSuitAllCards(firstSuit);
-
-            for (int m = 0; m < 13; m++)
-            {
-                if (m == 3 || m == 8 || m == 11)
-                {
+            for (int m = 0; m < 13; m++) {
+                if (m == 3 || m == 8 || m == 11) {
                     continue;
                 }
-
-                if (cards[m] > 0)
-                {
+                if (cards[m] > 0) {
                     if (sendedCards.Count < count)
                     {
-                        if (protectPairs) //±£»¤¶Ô
-                        {
+                        if (protectPairs) {
                             if (cards[m] == 1)
                             {
                                 CommonMethods.SendCards(sendedCards, myCP, myPokerList, m + (firstSuit - 1) * 13);
@@ -607,7 +460,6 @@ namespace Kuaff.Tractor
                                 CommonMethods.SendCards(sendedCards, myCP, myPokerList, m + (firstSuit - 1) * 13);
                             }
                         }
-
                     }
                     if (sendedCards.Count >= count)
                     {
@@ -615,26 +467,17 @@ namespace Kuaff.Tractor
                     }
                 }
             }
-
         }
-
-        private static void SendThisSuitOrScores(ArrayList sendedCards, int count, int suit, int firstSuit, CurrentPoker myCP, ArrayList myPokerList, bool protectPairs)
-        {
-            if (suit == firstSuit)
-            {
+        private static void SendThisSuitOrScores(ArrayList sendedCards, int count, int suit, int firstSuit, CurrentPoker myCP, ArrayList myPokerList, bool protectPairs) {
+            if (suit == firstSuit) {
                 SendMasterSuitOrScores(sendedCards, count, suit, myCP, myPokerList,protectPairs);
                 return;
             }
-
             int[] cards = myCP.GetSuitAllCards(firstSuit);
-
             int n = 8;
-            if (cards[n] > 0)
-            {
-                if (sendedCards.Count < count)
-                {
-                    if (protectPairs) //±£»¤¶Ô
-                    {
+            if (cards[n] > 0) {
+                if (sendedCards.Count < count) {
+                    if (protectPairs) {
                         if (cards[n] == 1)
                         {
                             CommonMethods.SendCards(sendedCards, myCP, myPokerList, n + (firstSuit - 1) * 13);
@@ -648,21 +491,15 @@ namespace Kuaff.Tractor
                             CommonMethods.SendCards(sendedCards, myCP, myPokerList, n + (firstSuit - 1) * 13);
                         }
                     }
-
                 }
-                if (sendedCards.Count >= count)
-                {
+                if (sendedCards.Count >= count) {
                     return;
                 }
             }
-
             n = 11;
-            if (cards[n] > 0)
-            {
-                if (sendedCards.Count < count)
-                {
-                    if (protectPairs) //±£»¤¶Ô
-                    {
+            if (cards[n] > 0) {
+                if (sendedCards.Count < count) {
+                    if (protectPairs) {
                         if (cards[n] == 1)
                         {
                             CommonMethods.SendCards(sendedCards, myCP, myPokerList, n + (firstSuit - 1) * 13);
@@ -676,20 +513,15 @@ namespace Kuaff.Tractor
                             CommonMethods.SendCards(sendedCards, myCP, myPokerList, n + (firstSuit - 1) * 13);
                         }
                     }
-
                 }
-                if (sendedCards.Count >= count)
-                {
+                if (sendedCards.Count >= count) {
                     return;
                 }
             }
             n = 3;
-            if (cards[n] > 0)
-            {
-                if (sendedCards.Count < count)
-                {
-                    if (protectPairs) //±£»¤¶Ô
-                    {
+            if (cards[n] > 0) {
+                if (sendedCards.Count < count) {
+                    if (protectPairs) {
                         if (cards[n] == 1)
                         {
                             CommonMethods.SendCards(sendedCards, myCP, myPokerList, n + (firstSuit - 1) * 13);
@@ -703,25 +535,18 @@ namespace Kuaff.Tractor
                             CommonMethods.SendCards(sendedCards, myCP, myPokerList, n + (firstSuit - 1) * 13);
                         }
                     }
-
                 }
-                if (sendedCards.Count >= count)
-                {
+                if (sendedCards.Count >= count) {
                     return;
                 }
             }
 
-
-
-            for (int m = 0; m < 13; m++)
-            {
+            for (int m = 0; m < 13; m++) {
                
-                if (cards[m] > 0)
-                {
+                if (cards[m] > 0) {
                     if (sendedCards.Count < count)
                     {
-                        if (protectPairs) //±£»¤¶Ô
-                        {
+                        if (protectPairs) {
                             if (cards[m] == 1)
                             {
                                 CommonMethods.SendCards(sendedCards, myCP, myPokerList, m + (firstSuit - 1) * 13);
@@ -735,7 +560,6 @@ namespace Kuaff.Tractor
                                 CommonMethods.SendCards(sendedCards, myCP, myPokerList, m + (firstSuit - 1) * 13);
                             }
                         }
-
                     }
                     if (sendedCards.Count >= count)
                     {
@@ -743,27 +567,19 @@ namespace Kuaff.Tractor
                     }
                 }
             }
-
         }
-
-        private static void SendThisSuit(ArrayList sendedCards, int count, int suit, int firstSuit, CurrentPoker myCP, ArrayList myPokerList, bool protectPairs)
-        {
-            if (suit == firstSuit)
-            {
+        private static void SendThisSuit(ArrayList sendedCards, int count, int suit, int firstSuit, CurrentPoker myCP, ArrayList myPokerList, bool protectPairs) {
+            if (suit == firstSuit) {
                 SendMasterSuit(sendedCards, count, suit, myCP, myPokerList,protectPairs);
                 return;
             }
-
             int[] cards = myCP.GetSuitAllCards(firstSuit);
-
-            for (int m = 0; m < 13; m++)
-            {
+            for (int m = 0; m < 13; m++) {
                
-                if (cards[m] > 0)
-                {
+                if (cards[m] > 0) {
                     if (sendedCards.Count < count)
                     {
-                        if (protectPairs) //±£»¤¶Ô
+                        if (protectPairs)
                         {
                             if (cards[m] == 1)
                             {
@@ -778,7 +594,6 @@ namespace Kuaff.Tractor
                                 CommonMethods.SendCards(sendedCards, myCP, myPokerList, m + (firstSuit - 1) * 13);
                             }
                         }
-
                     }
                     if (sendedCards.Count >= count)
                     {
@@ -786,40 +601,26 @@ namespace Kuaff.Tractor
                     }
                 }
             }
-
         }
-
-
-        private static void SendMasterSuitNoScores(ArrayList sendedCards, int count, int suit, CurrentPoker myCP, ArrayList myPokerList, bool protectPairs)
-        {
-
-            if (sendedCards.Count >= count)
-            {
+        private static void SendMasterSuitNoScores(ArrayList sendedCards, int count, int suit, CurrentPoker myCP, ArrayList myPokerList, bool protectPairs) {
+            if (sendedCards.Count >= count) {
                 return;
             }
-
-            for (int asuit = 1; asuit < 5; asuit++)
-            {
-                if (asuit != suit)
-                {
+            for (int asuit = 1; asuit < 5; asuit++) {
+                if (asuit != suit) {
                     continue;
                 }
-
                 int[] cardsCount = myCP.GetSuitAllCards(asuit);
-
-
-                for (int m = 0; m < 13; m++)
-                {
+                for (int m = 0; m < 13; m++) {
                     if (m == 3 || m == 8 || m == 11)
                     {
                         continue;
                     }
-
                     if (cardsCount[m] > 0)
                     {
                         if (sendedCards.Count < count)
                         {
-                            if (protectPairs) //±£»¤¶Ô
+                            if (protectPairs)
                             {
                                 if (cardsCount[m] == 1)
                                 {
@@ -847,164 +648,122 @@ namespace Kuaff.Tractor
                 }
             }
 
-
-
-            if (protectPairs) //±£»¤¶Ô
-            {
-                if (sendedCards.Count < count)
-                {
+            if (protectPairs) {
+                if (sendedCards.Count < count) {
                     if (myCP.HeartsRankTotal == 1)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.PeachsRankTotal == 1)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 13);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.DiamondsRankTotal == 1)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 26);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.ClubsRankTotal == 1)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 39);
                     }
                 }
             }
-            else
-            {
-                if (sendedCards.Count < count)
-                {
+            else {
+                if (sendedCards.Count < count) {
                     if (myCP.HeartsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.HeartsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.PeachsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 13);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.PeachsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 13);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.DiamondsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 26);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.DiamondsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 26);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.ClubsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 39);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.ClubsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 39);
                     }
                 }
             }
-
-            //
-            if (myCP.SmallJack > 0)
-            {
-                if (sendedCards.Count < count)
-                {
+// 
+            if (myCP.SmallJack > 0) {
+                if (sendedCards.Count < count) {
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, 52);
-
                 }
             }
-            if (myCP.SmallJack > 0)
-            {
-                if (sendedCards.Count < count)
-                {
+            if (myCP.SmallJack > 0) {
+                if (sendedCards.Count < count) {
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, 52);
-
                 }
             }
-            if (myCP.BigJack > 0)
-            {
-                if (sendedCards.Count < count)
-                {
+            if (myCP.BigJack > 0) {
+                if (sendedCards.Count < count) {
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, 53);
-
                 }
             }
-            if (myCP.BigJack > 0)
-            {
-                if (sendedCards.Count < count)
-                {
+            if (myCP.BigJack > 0) {
+                if (sendedCards.Count < count) {
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, 53);
-
                 }
             }
         }
-
-        private static void SendMasterSuitOrScores(ArrayList sendedCards, int count, int suit, CurrentPoker myCP, ArrayList myPokerList, bool protectPairs)
-        {
-            if (sendedCards.Count >= count)
-            {
+        private static void SendMasterSuitOrScores(ArrayList sendedCards, int count, int suit, CurrentPoker myCP, ArrayList myPokerList, bool protectPairs) {
+            if (sendedCards.Count >= count) {
                 return;
             }
-
-            for (int asuit = 1; asuit < 5; asuit++)
-            {
-                if (asuit != suit)
-                {
+            for (int asuit = 1; asuit < 5; asuit++) {
+                if (asuit != suit) {
                     continue;
                 }
-
                 int[] cardsCount = myCP.GetSuitAllCards(asuit);
-
                 
-
                 int n = 8;
-
-                if (myCP.Rank == 8)
-                {
-                    n = 11; //´ò10Ê±£¬ÏÈ³öK
+                if (myCP.Rank == 8) {
+                    n = 11; // æ‰“10æ—¶ï¼Œå…ˆå‡ºK
                 }
-
-                if (cardsCount[n] > 0)
-                {
+                if (cardsCount[n] > 0) {
                     if (sendedCards.Count < count)
                     {
-                        if (protectPairs) //±£»¤¶Ô
+                        if (protectPairs)
                         {
                             if (cardsCount[n] == 1)
                             {
@@ -1025,23 +784,17 @@ namespace Kuaff.Tractor
                         return;
                     }
                 }
-                else
-                {
+                else {
                     continue;
                 }
-
                 n = 11;
-
-                if (myCP.Rank == 8)
-                {
-                    n = 8; //´ò10Ê±£¬ºó³ö10
+                if (myCP.Rank == 8) {
+                    n = 8; // æ‰“10æ—¶ï¼Œåå‡º10
                 }
-
-                if (cardsCount[n] > 0)
-                {
+                if (cardsCount[n] > 0) {
                     if (sendedCards.Count < count)
                     {
-                        if (protectPairs) //±£»¤¶Ô
+                        if (protectPairs)
                         {
                             if (cardsCount[n] == 1)
                             {
@@ -1062,18 +815,14 @@ namespace Kuaff.Tractor
                         return;
                     }
                 }
-                else
-                {
+                else {
                     continue;
                 }
-
                 n = 3;
-
-                if (cardsCount[n] > 0)
-                {
+                if (cardsCount[n] > 0) {
                     if (sendedCards.Count < count)
                     {
-                        if (protectPairs) //±£»¤¶Ô
+                        if (protectPairs)
                         {
                             if (cardsCount[n] == 1)
                             {
@@ -1094,33 +843,24 @@ namespace Kuaff.Tractor
                         return;
                     }
                 }
-                else
-                {
+                else {
                     continue;
                 }
             }
             
-
-            //·Ç·Ö
-            for (int asuit = 1; asuit < 5; asuit++)
-            {
-                if (asuit != suit)
-                {
+            // éåˆ†
+            for (int asuit = 1; asuit < 5; asuit++) {
+                if (asuit != suit) {
                     continue;
                 }
-
                 int[] cardsCount = myCP.GetSuitAllCards(asuit);
-
-
-                for (int m = 0; m < 13; m++)
-                {
+                for (int m = 0; m < 13; m++) {
                     
-
                     if (cardsCount[m] > 0)
                     {
                         if (sendedCards.Count < count)
                         {
-                            if (protectPairs) //±£»¤¶Ô
+                            if (protectPairs)
                             {
                                 if (cardsCount[m] == 1)
                                 {
@@ -1147,92 +887,77 @@ namespace Kuaff.Tractor
                     }
                 }
             }
-
-            //Rank
-            if (protectPairs) //±£»¤¶Ô
-            {
-                if (sendedCards.Count < count)
-                {
+            // Rank
+            if (protectPairs) {
+                if (sendedCards.Count < count) {
                     if (myCP.HeartsRankTotal == 1)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.PeachsRankTotal == 1)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 13);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.DiamondsRankTotal == 1)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 26);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.ClubsRankTotal == 1)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 39);
                     }
                 }
             }
-            else
-            {
-                if (sendedCards.Count < count)
-                {
+            else {
+                if (sendedCards.Count < count) {
                     if (myCP.HeartsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.HeartsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.PeachsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 13);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.PeachsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 13);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.DiamondsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 26);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.DiamondsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 26);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.ClubsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 39);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.ClubsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 39);
@@ -1240,67 +965,44 @@ namespace Kuaff.Tractor
                 }
             }
            
-            //
-            if (myCP.SmallJack > 0)
-            {
-                if (sendedCards.Count < count)
-                {
+// 
+            if (myCP.SmallJack > 0) {
+                if (sendedCards.Count < count) {
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, 52);
-
                 }
             }
-            if (myCP.SmallJack > 0)
-            {
-                if (sendedCards.Count < count)
-                {
+            if (myCP.SmallJack > 0) {
+                if (sendedCards.Count < count) {
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, 52);
-
                 }
             }
-            if (myCP.BigJack > 0)
-            {
-                if (sendedCards.Count < count)
-                {
+            if (myCP.BigJack > 0) {
+                if (sendedCards.Count < count) {
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, 53);
-
                 }
             }
-            if (myCP.BigJack > 0)
-            {
-                if (sendedCards.Count < count)
-                {
+            if (myCP.BigJack > 0) {
+                if (sendedCards.Count < count) {
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, 53);
-
                 }
             }
         }
-
-        private static void SendMasterSuit(ArrayList sendedCards, int count, int suit, CurrentPoker myCP, ArrayList myPokerList, bool protectPairs)
-        {
-            if (sendedCards.Count >= count)
-            {
+        private static void SendMasterSuit(ArrayList sendedCards, int count, int suit, CurrentPoker myCP, ArrayList myPokerList, bool protectPairs) {
+            if (sendedCards.Count >= count) {
                 return;
             }
-
-            for (int asuit = 1; asuit < 5; asuit++)
-            {
-                if (asuit != suit)
-                {
+            for (int asuit = 1; asuit < 5; asuit++) {
+                if (asuit != suit) {
                     continue;
                 }
-
                 int[] cardsCount = myCP.GetSuitAllCards(asuit);
-
-
-                for (int m = 0; m < 13; m++)
-                {
+                for (int m = 0; m < 13; m++) {
                    
-
                     if (cardsCount[m] > 0)
                     {
                         if (sendedCards.Count < count)
                         {
-                            if (protectPairs) //±£»¤¶Ô
+                            if (protectPairs)
                             {
                                 if (cardsCount[m] == 1)
                                 {
@@ -1328,92 +1030,76 @@ namespace Kuaff.Tractor
                 }
             }
 
-
-
-            if (protectPairs) //±£»¤¶Ô
-            {
-                if (sendedCards.Count < count)
-                {
+            if (protectPairs) {
+                if (sendedCards.Count < count) {
                     if (myCP.HeartsRankTotal == 1)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.PeachsRankTotal == 1)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 13);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.DiamondsRankTotal == 1)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 26);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.ClubsRankTotal == 1)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 39);
                     }
                 }
             }
-            else
-            {
-                if (sendedCards.Count < count)
-                {
+            else {
+                if (sendedCards.Count < count) {
                     if (myCP.HeartsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.HeartsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.PeachsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 13);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.PeachsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 13);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.DiamondsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 26);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.DiamondsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 26);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.ClubsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 39);
                     }
                 }
-                if (sendedCards.Count < count)
-                {
+                if (sendedCards.Count < count) {
                     if (myCP.ClubsRankTotal > 0)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myCP.Rank + 39);
@@ -1421,112 +1107,80 @@ namespace Kuaff.Tractor
                 }
             }
             
-            //
-            if (myCP.SmallJack > 0)
-            {
-                if (sendedCards.Count < count)
-                {
+// 
+            if (myCP.SmallJack > 0) {
+                if (sendedCards.Count < count) {
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, 52);
-
                 }
             }
-            if (myCP.SmallJack > 0)
-            {
-                if (sendedCards.Count < count)
-                {
+            if (myCP.SmallJack > 0) {
+                if (sendedCards.Count < count) {
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, 52);
-
                 }
             }
-            if (myCP.BigJack > 0)
-            {
-                if (sendedCards.Count < count)
-                {
+            if (myCP.BigJack > 0) {
+                if (sendedCards.Count < count) {
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, 53);
-
                 }
             }
-            if (myCP.BigJack > 0)
-            {
-                if (sendedCards.Count < count)
-                {
+            if (myCP.BigJack > 0) {
+                if (sendedCards.Count < count) {
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, 53);
-
                 }
             }
         }
-
-
-        //whoseOrderÊÇµÚÈı¸ö³öÅÆ
-        internal static void WhoseOrderIs3(MainForm mainForm, CurrentPoker[] currentPokers, int whoseOrder, ArrayList sendedCards, int count, int suit, int rank, int firstSuit)
-        {
-            ArrayList firstSendCards = mainForm.currentSendCards[mainForm.firstSend - 1]; //Ê×¼Ò³öµÄÅÆ
+// whoseOrderæ˜¯ç¬¬ä¸‰ä¸ªå‡ºç‰Œ
+        internal static void WhoseOrderIs3(MainForm mainForm, CurrentPoker[] currentPokers, int whoseOrder, ArrayList sendedCards, int count, int suit, int rank, int firstSuit) {
+            ArrayList firstSendCards = mainForm.currentSendCards[mainForm.firstSend - 1]; // é¦–å®¶å‡ºçš„ç‰Œ
             CurrentPoker firstCP = new CurrentPoker();
             firstCP.Suit = suit;
             firstCP.Rank = rank;
             firstCP = CommonMethods.parse(firstSendCards, suit, rank);
-
-            int firstMax = CommonMethods.GetMaxCard(firstSendCards, suit, rank); //Ê×¼Ò³öµÄ×î´óµÄÅÆ
-            int pairTotal = firstCP.GetPairs().Count; //Ê×¼Ò³öµÄ¶ÔµÄÊıÄ¿
-
-            CurrentPoker myCP = currentPokers[whoseOrder - 1]; //ÎÒÊÖÖĞµÄÅÆ
+            int firstMax = CommonMethods.GetMaxCard(firstSendCards, suit, rank); // é¦–å®¶å‡ºçš„æœ€å¤§çš„ç‰Œ
+            int pairTotal = firstCP.GetPairs().Count; // é¦–å®¶å‡ºçš„å¯¹çš„æ•°ç›®
+            CurrentPoker myCP = currentPokers[whoseOrder - 1]; // æˆ‘æ‰‹ä¸­çš„ç‰Œ
             ArrayList myPokerList = mainForm.pokerList[whoseOrder - 1];
-
-
-            //whoseµÄ´Ë»¨É«µÄÅÆÊı
+            // whoseçš„æ­¤èŠ±è‰²çš„ç‰Œæ•°
             int myTotal = CommonMethods.GetSuitCount(currentPokers[whoseOrder - 1], suit, rank, firstSuit);
-            //´Ë»¨É«µÄÅÆ
+            // æ­¤èŠ±è‰²çš„ç‰Œ
             int[] cards = myCP.GetSuitCards(firstSuit);
-
            
             
             ArrayList myList = new ArrayList(cards);
-            CurrentPoker mySuitCP = new CurrentPoker(); //ÎÒ´Ë»¨É«µÄÅÆ
+            CurrentPoker mySuitCP = new CurrentPoker(); // æˆ‘æ­¤èŠ±è‰²çš„ç‰Œ
             mySuitCP.Suit = suit;
             mySuitCP.Rank = rank;
             mySuitCP = CommonMethods.parse(myList, suit, rank);
             mySuitCP.Sort();
-
             firstCP.Sort();
             myCP.Sort();
-
             int[] users = CommonMethods.OtherUsers(mainForm.firstSend);
-
-            CurrentPoker secondCP = new CurrentPoker(); //µÚ¶ş¼Ò³öµÄÅÆ
+            CurrentPoker secondCP = new CurrentPoker(); // ç¬¬äºŒå®¶å‡ºçš„ç‰Œ
             secondCP.Suit = suit;
             secondCP.Rank = rank;
             secondCP = CommonMethods.parse(mainForm.currentSendCards[users[0]-1],suit,rank);
-
-            //
+            // 
             
-            //¿¼ÂÇÊÇ·ñ±Ï
-            //½«À´¿¼ÂÇÊ×¼Ò³öµÄÅÆµÄ´óĞ¡£¬Ä¿Ç°ÊÇÄÜ±ÏÔò±Ï
-            if (myTotal == 0) 
-            {
-                if (firstSuit != suit)
-                {
-                    //Èç¹ûÄ¿Ç°×î´óµÄÄÇÒ»¼ÒÊÇÖ÷ 
+            // è€ƒè™‘æ˜¯å¦æ¯•
+            // å°†æ¥è€ƒè™‘é¦–å®¶å‡ºçš„ç‰Œçš„å¤§å°ï¼Œç›®å‰æ˜¯èƒ½æ¯•åˆ™æ¯•
+            if (myTotal == 0)  {
+                if (firstSuit != suit) {
+                    // å¦‚æœç›®å‰æœ€å¤§çš„é‚£ä¸€å®¶æ˜¯ä¸» 
                     int biggerMax = (int)mainForm.currentSendCards[mainForm.whoIsBigger - 1][0];
                     int[] tmpUsers = CommonMethods.OtherUsers(whoseOrder);
-
                     if (myCP.GetMasterCardsTotal() >= count &&  (mainForm.whoIsBigger == tmpUsers[1]) && ((biggerMax % 13) > 8))
                     {
-                        //²»±Ï£¬µ«ÊÇÓĞ¿ÉÄÜÌùµÄ¸±ÅÆÒ²±È´óµÄÄÇÒ»¼Ò´ó
-                        SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList, true); //ÆäËû»¨É«·Ç·ÖÅÆ
-                        SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, true); //ÆäËû»¨É«·ÖÅÆ
-                        SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList, false); //ÆäËû»¨É«·Ç·ÖÅÆ
-                        SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, false); //ÆäËû»¨É«·ÖÅÆ
-
-
-                        int sendOtherSuitsTotal = sendedCards.Count; //Ã»ÓĞ¸±ÅÆ¿ÉÌù£¬Ö»ÄÜ³öÖ÷
-
-                        if (firstCP.HasTractors() && sendOtherSuitsTotal == 0) //µ¥ÕÅÅÆ
+                        // ä¸æ¯•ï¼Œä½†æ˜¯æœ‰å¯èƒ½è´´çš„å‰¯ç‰Œä¹Ÿæ¯”å¤§çš„é‚£ä¸€å®¶å¤§
+                        SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList, true); // å…¶ä»–èŠ±è‰²éåˆ†ç‰Œ
+                        SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, true); // å…¶ä»–èŠ±è‰²åˆ†ç‰Œ
+                        SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList, false); // å…¶ä»–èŠ±è‰²éåˆ†ç‰Œ
+                        SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, false); // å…¶ä»–èŠ±è‰²åˆ†ç‰Œ
+                        int sendOtherSuitsTotal = sendedCards.Count; // æ²¡æœ‰å‰¯ç‰Œå¯è´´ï¼Œåªèƒ½å‡ºä¸»
+                        if (firstCP.HasTractors() && sendOtherSuitsTotal == 0) // å•å¼ ç‰Œ
                         {
                             int minMaster = myCP.GetMasterTractor();
                             int tmpFirstTractor = firstCP.GetTractor();
-
-                            //Èç¹ûÎÒµÄÅÆÄÜ´ó¹ı×î´óµÄÄÇ¼ÒµÄÅÆ
-
+                            // å¦‚æœæˆ‘çš„ç‰Œèƒ½å¤§è¿‡æœ€å¤§çš„é‚£å®¶çš„ç‰Œ
                             if ((!CommonMethods.CompareTo(tmpFirstTractor, minMaster, suit, rank, firstSuit)) && (minMaster > -1))
                             {
                                 mainForm.whoIsBigger = whoseOrder;
@@ -1535,14 +1189,13 @@ namespace Kuaff.Tractor
                                 int[] ttt = myCP.GetTractorOtherCards(minMaster);
                                 CommonMethods.SendCards(sendedCards, myCP, myPokerList, ttt[1]);
                                 CommonMethods.SendCards(sendedCards, myCP, myPokerList, ttt[1]);
-
                                 return;
                             }
                         }
-                        else if (myCP.GetMasterCardsTotal() >= count && count == 1 && sendOtherSuitsTotal ==0) //µ¥ÕÅÅÆ
+                        else if (myCP.GetMasterCardsTotal() >= count && count == 1 && sendOtherSuitsTotal ==0) // å•å¼ ç‰Œ
                         {
                             int maxMaster = myCP.GetMaxMasterCards();
-                            //Èç¹ûÎÒµÄÅÆÄÜ´ó¹ı×î´óµÄÄÇ¼ÒµÄÅÆ
+                            // å¦‚æœæˆ‘çš„ç‰Œèƒ½å¤§è¿‡æœ€å¤§çš„é‚£å®¶çš„ç‰Œ
                             if (!CommonMethods.CompareTo(biggerMax, maxMaster, suit, rank, firstSuit))
                             {
                                 mainForm.whoIsBigger = whoseOrder;
@@ -1550,11 +1203,10 @@ namespace Kuaff.Tractor
                                 return;
                             }
                         }
-                        else if (myCP.GetMasterCardsTotal() >= count &&  pairTotal == 1 && count == 2 && sendOtherSuitsTotal == 0) //³öÒ»¸ö¶ÔÊ±
+                        else if (myCP.GetMasterCardsTotal() >= count &&  pairTotal == 1 && count == 2 && sendOtherSuitsTotal == 0) // å‡ºä¸€ä¸ªå¯¹æ—¶
                         {
-
                             ArrayList masterPairs = myCP.GetMasterPairs();
-                            //Èç¹ûÎÒµÄÅÆÄÜ´ó¹ı×î´óµÄÄÇ¼ÒµÄÅÆ
+                            // å¦‚æœæˆ‘çš„ç‰Œèƒ½å¤§è¿‡æœ€å¤§çš„é‚£å®¶çš„ç‰Œ
                             if (masterPairs.Count > 0)
                             {
                                 mainForm.whoIsBigger = whoseOrder;
@@ -1563,46 +1215,40 @@ namespace Kuaff.Tractor
                                 return;
                             }
                         }
-                        else if (myCP.GetMasterCardsTotal() >= count &&  pairTotal == 0 && count > 1 && sendOtherSuitsTotal == 0) //µ¥ÕÅË¦ÅÆ
+                        else if (myCP.GetMasterCardsTotal() >= count &&  pairTotal == 0 && count > 1 && sendOtherSuitsTotal == 0) // å•å¼ ç”©ç‰Œ
                         {
-
                             int maxMaster = myCP.GetMaxMasterCards();
-                            //Èç¹ûÎÒµÄÅÆÄÜ´ó¹ı×î´óµÄÄÇ¼ÒµÄÅÆ
+                            // å¦‚æœæˆ‘çš„ç‰Œèƒ½å¤§è¿‡æœ€å¤§çš„é‚£å®¶çš„ç‰Œ
                             if (!CommonMethods.CompareTo(biggerMax, maxMaster, suit, rank, firstSuit))
                             {
                                 mainForm.whoIsBigger = whoseOrder;
                                 CommonMethods.SendCards(sendedCards, myCP, myPokerList, maxMaster);
-
                                 SendMasterSuitOrScores(sendedCards, count, suit, myCP, myPokerList, true);
                                 SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, true);
                                 SendMasterSuitOrScores(sendedCards, count, suit, myCP, myPokerList, false);
                                 SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, false);
-
                                 return;
                             }
-
                         }
-
-                        SendMasterSuitNoScores(sendedCards, count, suit, myCP, myPokerList, true); //Ö÷ÅÆ·Ç·ÖÅÆ
-                        SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, true); //Ö÷ÅÆ·ÖÅÆ
-                        SendMasterSuitNoScores(sendedCards, count, suit, myCP, myPokerList, false); //Ö÷ÅÆ·Ç·ÖÅÆ
-                        SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, false); //Ö÷ÅÆ·ÖÅÆ
-
+                        SendMasterSuitNoScores(sendedCards, count, suit, myCP, myPokerList, true); // ä¸»ç‰Œéåˆ†ç‰Œ
+                        SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, true); // ä¸»ç‰Œåˆ†ç‰Œ
+                        SendMasterSuitNoScores(sendedCards, count, suit, myCP, myPokerList, false); // ä¸»ç‰Œéåˆ†ç‰Œ
+                        SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, false); // ä¸»ç‰Œåˆ†ç‰Œ
                     }
                     else
                     {
-                        if (firstCP.HasTractors()) //³öÒ»¸ö¶ÔÊ±
+                        if (firstCP.HasTractors()) // å‡ºä¸€ä¸ªå¯¹æ—¶
                         {
-                            SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList, true); //ÆäËû»¨É«·Ç·ÖÅÆ
-                            SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, true); //ÆäËû»¨É«·ÖÅÆ
-                            SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList, false); //ÆäËü»¨É«·Ç·ÖÅÆ
-                            SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, false); //ÆäËû»¨É«·ÖÅÆ
+                            SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList, true); // å…¶ä»–èŠ±è‰²éåˆ†ç‰Œ
+                            SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, true); // å…¶ä»–èŠ±è‰²åˆ†ç‰Œ
+                            SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList, false); // å…¶å®ƒèŠ±è‰²éåˆ†ç‰Œ
+                            SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, false); // å…¶ä»–èŠ±è‰²åˆ†ç‰Œ
                         }
-                        else if (myCP.GetMasterCardsTotal() >= count && count == 1) //µ¥ÕÅÅÆ
+                        else if (myCP.GetMasterCardsTotal() >= count && count == 1) // å•å¼ ç‰Œ
                         {
                             
                             int maxMaster = myCP.GetMaxMasterCards();
-                            //Èç¹ûÎÒµÄÅÆÄÜ´ó¹ı×î´óµÄÄÇ¼ÒµÄÅÆ
+                            // å¦‚æœæˆ‘çš„ç‰Œèƒ½å¤§è¿‡æœ€å¤§çš„é‚£å®¶çš„ç‰Œ
                             if (!CommonMethods.CompareTo(biggerMax, maxMaster, suit, rank, firstSuit))
                             {
                                 mainForm.whoIsBigger = whoseOrder;
@@ -1610,11 +1256,11 @@ namespace Kuaff.Tractor
                                 return;
                             }
                         }
-                        else if (myCP.GetMasterCardsTotal() >= count &&  pairTotal == 1 && count == 2) //³öÒ»¸ö¶ÔÊ±
+                        else if (myCP.GetMasterCardsTotal() >= count &&  pairTotal == 1 && count == 2) // å‡ºä¸€ä¸ªå¯¹æ—¶
                         {
                            
                             ArrayList masterPairs = myCP.GetMasterPairs();
-                            //Èç¹ûÎÒµÄÅÆÄÜ´ó¹ı×î´óµÄÄÇ¼ÒµÄÅÆ
+                            // å¦‚æœæˆ‘çš„ç‰Œèƒ½å¤§è¿‡æœ€å¤§çš„é‚£å®¶çš„ç‰Œ
                             if (masterPairs.Count > 0)
                             {
                                 mainForm.whoIsBigger = whoseOrder;
@@ -1623,58 +1269,44 @@ namespace Kuaff.Tractor
                                 return;
                             }
                         }
-                        else if (myCP.GetMasterCardsTotal() >= count &&  pairTotal == 0 && count > 1) //µ¥ÕÅË¦ÅÆ
+                        else if (myCP.GetMasterCardsTotal() >= count &&  pairTotal == 0 && count > 1) // å•å¼ ç”©ç‰Œ
                         {
                            
                             int maxMaster = myCP.GetMaxMasterCards();
-                            //Èç¹ûÎÒµÄÅÆÄÜ´ó¹ı×î´óµÄÄÇ¼ÒµÄÅÆ
+                            // å¦‚æœæˆ‘çš„ç‰Œèƒ½å¤§è¿‡æœ€å¤§çš„é‚£å®¶çš„ç‰Œ
                             if (!CommonMethods.CompareTo(biggerMax, maxMaster, suit, rank, firstSuit))
                             {
                                 mainForm.whoIsBigger = whoseOrder;
                                 CommonMethods.SendCards(sendedCards, myCP, myPokerList, maxMaster);
-
                                 SendMasterSuitOrScores(sendedCards, count, suit, myCP, myPokerList, true);
                                 SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, true);
                                 SendMasterSuitOrScores(sendedCards, count, suit, myCP, myPokerList, false);
                                 SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, false);
-
                                 return;
                             }
-
                         }
                     }
                 }
             }
-            if (myTotal < count) //±¾»¨É«ÉÙÅÆ
-            {
-
-                for (int i = 0; i < myTotal; i++)
-                {
+            if (myTotal < count) { // æœ¬èŠ±è‰²å°‘ç‰Œ
+                for (int i = 0; i < myTotal; i++) {
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, cards[i]);
                 }
-
-                SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList,true); //ÆäËû»¨É«·Ç·ÖÅÆ
-                SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList,true); //ÆäËû»¨É«·ÖÅÆ
-                SendMasterSuitNoScores(sendedCards, count, suit, myCP, myPokerList,true); //Ö÷ÅÆ·Ç·ÖÅÆ
-                SendMasterSuit(sendedCards, count, suit, myCP, myPokerList,true); //Ö÷ÅÆ·ÖÅÆ
-
-
-                SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList, false); //ÆäËû»¨É«·Ç·ÖÅÆ
-                SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, false); //ÆäËû»¨É«·ÖÅÆ
-                SendMasterSuitNoScores(sendedCards, count, suit, myCP, myPokerList, false); //Ö÷ÅÆ·Ç·ÖÅÆ
-                SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, false); //Ö÷ÅÆ·ÖÅÆ
-
+                SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList,true); // å…¶ä»–èŠ±è‰²éåˆ†ç‰Œ
+                SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList,true); // å…¶ä»–èŠ±è‰²åˆ†ç‰Œ
+                SendMasterSuitNoScores(sendedCards, count, suit, myCP, myPokerList,true); // ä¸»ç‰Œéåˆ†ç‰Œ
+                SendMasterSuit(sendedCards, count, suit, myCP, myPokerList,true); // ä¸»ç‰Œåˆ†ç‰Œ
+                SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList, false); // å…¶ä»–èŠ±è‰²éåˆ†ç‰Œ
+                SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, false); // å…¶ä»–èŠ±è‰²åˆ†ç‰Œ
+                SendMasterSuitNoScores(sendedCards, count, suit, myCP, myPokerList, false); // ä¸»ç‰Œéåˆ†ç‰Œ
+                SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, false); // ä¸»ç‰Œåˆ†ç‰Œ
               
-
                 return;
-
             }
             
-            else if (firstCP.HasTractors())  //Èç¹ûÊ×¼Ò³öÁËÍÏÀ­»ú
-            {
-                //Èç¹ûÎÒÓĞÍÏÀ­»ú£¬³ö×î´óµÄÍÏÀ­»ú
-                if (mySuitCP.HasTractors())
-                {
+            else if (firstCP.HasTractors()) {  // å¦‚æœé¦–å®¶å‡ºäº†æ‹–æ‹‰æœº
+                // å¦‚æœæˆ‘æœ‰æ‹–æ‹‰æœºï¼Œå‡ºæœ€å¤§çš„æ‹–æ‹‰æœº
+                if (mySuitCP.HasTractors()) {
                     int k = mySuitCP.GetTractor();
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, k);
                     int[] ks = mySuitCP.GetTractorOtherCards(k);
@@ -1682,8 +1314,6 @@ namespace Kuaff.Tractor
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, ks[i]);
                     }
-
-
                     CurrentPoker tmpCP = CommonMethods.parse(mainForm.currentSendCards[mainForm.whoIsBigger - 1], suit, rank);
                     int tmp = tmpCP.GetTractor();
                     if (!CommonMethods.CompareTo(tmp, k, suit, rank, firstSuit))
@@ -1692,10 +1322,9 @@ namespace Kuaff.Tractor
                     }
                     
                 }
-                else if (mySuitCP.GetPairs().Count > 0) //Èç¹ûÎÒÓĞ¶Ô£¬³öÁ½¸ö¶Ô
-                {
+                else if (mySuitCP.GetPairs().Count > 0) { // å¦‚æœæˆ‘æœ‰å¯¹ï¼Œå‡ºä¸¤ä¸ªå¯¹
                     ArrayList list = mySuitCP.GetPairs();
-                    if (list.Count >= 2) //³¬¹ıÁ½¸ö¶Ô
+                    if (list.Count >= 2) // è¶…è¿‡ä¸¤ä¸ªå¯¹
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[0]);
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[0]);
@@ -1707,53 +1336,37 @@ namespace Kuaff.Tractor
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[0]);
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[0]);
                     }
-
-
                 }
-
-                //·ñÔò³ö×îĞ¡µÄÅÆ
-                if (mainForm.whoIsBigger == users[1])
-                {
+// å¦åˆ™å‡ºæœ€å°çš„ç‰Œ
+                if (mainForm.whoIsBigger == users[1]) {
                     SendThisSuitOrScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, true);
                     SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, true);
-
                     SendThisSuitOrScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
                     SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
                 }
-                else
-                {
+                else {
                     SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, true);
                     SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, true);
-
                     SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
                     SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
                 }
-
                
                 return;
-
             }
-            else if (count == 1) //Ê×¼Ò³öÁËµ¥ÕÅÅÆ 
-            {
-                int myMax = -1;  //ÎÒµÄ´Ë»¨É«µÄ×î´óÖµ
-                if (firstSuit == suit)
-                {
+            else if (count == 1) { // é¦–å®¶å‡ºäº†å•å¼ ç‰Œ 
+                int myMax = -1;  // æˆ‘çš„æ­¤èŠ±è‰²çš„æœ€å¤§å€¼
+                if (firstSuit == suit) {
                     myMax = mySuitCP.GetMaxMasterCards();
                 }
-                else
-                {
+                else {
                     myMax = mySuitCP.GetMaxCards(firstSuit);
                 }
-
-                //µÚ¶ş¼Ò×î´óÅÆ
+// ç¬¬äºŒå®¶æœ€å¤§ç‰Œ
                 int max2 = CommonMethods.GetMaxCard(mainForm.currentSendCards[users[0]-1], suit, rank);
-
                
-
-                //Ê×¼Ò´óÓÚµÚ¶ş¼Ò
-                if (CommonMethods.CompareTo(firstMax, max2, suit, rank,firstSuit))
-                {
-                    //Èç¹ûµÚËÄ¼ÒÓĞ±ÈÊ×¼Ò´óµÄÅÆ£¬ÎÒÓ¦¸Ã¹Ü×¡
+// é¦–å®¶å¤§äºç¬¬äºŒå®¶
+                if (CommonMethods.CompareTo(firstMax, max2, suit, rank,firstSuit)) {
+                    // å¦‚æœç¬¬å››å®¶æœ‰æ¯”é¦–å®¶å¤§çš„ç‰Œï¼Œæˆ‘åº”è¯¥ç®¡ä½
                     int[] fourthCards = mainForm.currentPokers[users[2] - 1].GetSuitCards(firstSuit);
                     if (fourthCards.Length>0)
                     {
@@ -1761,21 +1374,18 @@ namespace Kuaff.Tractor
                         if (!CommonMethods.CompareTo(firstMax, fourthMax, suit, rank, firstSuit))
                         {
                             
-                            //µÚËÄ¼Ò×î´ó£¬ÎÒÓ¦¸Ã³ö×î´óµÄ·Ç·ÖÅÆ
-                            //Èç¹ûÎÒÓĞ±ÈµÚËÄ¼Ò´óµÄÅÆ
+                            // ç¬¬å››å®¶æœ€å¤§ï¼Œæˆ‘åº”è¯¥å‡ºæœ€å¤§çš„éåˆ†ç‰Œ
+                            // å¦‚æœæˆ‘æœ‰æ¯”ç¬¬å››å®¶å¤§çš„ç‰Œ
                             if (CommonMethods.CompareTo(myMax, fourthMax, suit, rank, firstSuit))
                             {
                                 CommonMethods.SendCards(sendedCards, myCP, myPokerList, myMax);
                             }
-                            else //ÎÒÒ²¹Ü²»×¡
-                            {
+                            else { // æˆ‘ä¹Ÿç®¡ä¸ä½
                                 SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, true);
                                 SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, true);
-
                                 SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
                                 SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
                             }
-
                         }
                         else
                         {
@@ -1785,63 +1395,48 @@ namespace Kuaff.Tractor
                     }
                     else
                     {
-                        SendThisSuitOrScores(sendedCards, count, suit, firstSuit, myCP, myPokerList,true); //³ö·ÖÅÆ»òÕß×îĞ¡µÄÅÆ
-                        SendThisSuitOrScores(sendedCards, count, suit, firstSuit, myCP, myPokerList,false); //³ö·ÖÅÆ»òÕß×îĞ¡µÄÅÆ
+                        SendThisSuitOrScores(sendedCards, count, suit, firstSuit, myCP, myPokerList,true); // å‡ºåˆ†ç‰Œæˆ–è€…æœ€å°çš„ç‰Œ
+                        SendThisSuitOrScores(sendedCards, count, suit, firstSuit, myCP, myPokerList,false); // å‡ºåˆ†ç‰Œæˆ–è€…æœ€å°çš„ç‰Œ
                     }
-
                     if ((!CommonMethods.CompareTo(firstMax, (int)sendedCards[0], suit, rank, firstSuit)) && (!CommonMethods.CompareTo(max2, (int)sendedCards[0], suit, rank, firstSuit)))
                     {
                         mainForm.whoIsBigger = whoseOrder;
                     }
-
                 }
-                else if (!CommonMethods.CompareTo(max2, myMax, suit, rank, firstSuit)) //Ê×¼Ò×îĞ¡£¬ÎÒµÄ×î´ó
-                {
-                    //³ö´óÅÆ
+                else if (!CommonMethods.CompareTo(max2, myMax, suit, rank, firstSuit)) { // é¦–å®¶æœ€å°ï¼Œæˆ‘çš„æœ€å¤§
+                    // å‡ºå¤§ç‰Œ
                     if (myMax > -1)
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myMax);
                         mainForm.whoIsBigger = whoseOrder;
-
-
                         return;
                     }
                 }
 
-
-
                 SendThisSuitNoScores(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
                 SendThisSuit(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
-
                 SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
                 SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
-
                 return;
-
             }
-            else if ((pairTotal == 1) && (count == 2)) //Ê×¼Ò³öÁËÒ»¸ö¶Ô
-            {
+            else if ((pairTotal == 1) && (count == 2)) { // é¦–å®¶å‡ºäº†ä¸€ä¸ªå¯¹
                 ArrayList list = mySuitCP.GetPairs();
-                if (list.Count >= 1 && (secondCP.GetPairs().Count < 1)) //ÎÒÃÇÓĞ¶Ô£¬µÚ¶ş¼ÒÎŞ¶Ô
-                {
+                if (list.Count >= 1 && (secondCP.GetPairs().Count < 1)) { // æˆ‘ä»¬æœ‰å¯¹ï¼Œç¬¬äºŒå®¶æ— å¯¹
                     if (!CommonMethods.CompareTo((int)mainForm.currentSendCards[mainForm.firstSend-1][0],(int)list[0],suit,rank,firstSuit))
                     {
                         mainForm.whoIsBigger = whoseOrder;
                     }
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[0]);
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[0]);
-
                    
                     return;
                     
                 }
-                else if (list.Count >= 1 && (secondCP.GetPairs().Count >= 1)) //ÎÒÃÇ¶¼ÓĞ¶Ô
-                {
+                else if (list.Count >= 1 && (secondCP.GetPairs().Count >= 1)) { // æˆ‘ä»¬éƒ½æœ‰å¯¹
                     int myMax = (int)list[list.Count - 1];
                    
                     int max2 = (int)secondCP.GetPairs()[0];
-
-                    //Èç¹ûÎÒµÄµÄÅÆ´óÓÚµÚ¶ş¼ÒµÄÅÆ
+// å¦‚æœæˆ‘çš„çš„ç‰Œå¤§äºç¬¬äºŒå®¶çš„ç‰Œ
                     if (!CommonMethods.CompareTo(max2, myMax, suit, rank,firstSuit))
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[list.Count - 1]);
@@ -1853,26 +1448,23 @@ namespace Kuaff.Tractor
                         
                         return;
                     }
-                    else //·ñÔò
+                    else // å¦åˆ™
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[0]);
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[0]);
-
                      
                         return;
                     }
                 }
-                else if (list.Count < 1 && secondCP.GetPairs().Count >= 1) //Èç¹ûµÚ¶ş¼ÒÒ²³öÁË¶Ô,ÎÒÎŞ¶Ô
-                {
+                else if (list.Count < 1 && secondCP.GetPairs().Count >= 1) { // å¦‚æœç¬¬äºŒå®¶ä¹Ÿå‡ºäº†å¯¹,æˆ‘æ— å¯¹
                     int max2 = (int)secondCP.GetPairs()[0];
-                    //Ê×¼Ò´ó
+// é¦–å®¶å¤§
                     if (CommonMethods.CompareTo(firstMax, max2, suit, rank, firstSuit))
                     {
                         SendThisSuitOrScores(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
                         SendThisSuit(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
                         SendThisSuitOrScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
                         SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
-
                         
                         return;
                     }
@@ -1882,21 +1474,19 @@ namespace Kuaff.Tractor
                         SendThisSuit(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
                         SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
                         SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
-
                        
                         return;
                     }
                 }
-                else if (list.Count < 1 && secondCP.GetPairs().Count < 1)
-                {
-                    //Ä¿Ç°Ö»ÓĞ¶Ô¼Ò³öÁË¶Ô
+                else if (list.Count < 1 && secondCP.GetPairs().Count < 1) {
+                    // ç›®å‰åªæœ‰å¯¹å®¶å‡ºäº†å¯¹
                     ArrayList fourthPairs = mainForm.currentPokers[users[2] - 1].GetPairs(firstSuit);
                     if (fourthPairs.Count > 0)
                     {
                         int fourthMax = (int)fourthPairs[fourthPairs.Count-1];
                         if (!CommonMethods.CompareTo(firstMax, fourthMax, suit, rank, firstSuit))
                         {
-                            //µÚËÄ¼Ò×î´ó£¬ÎÒÓ¦¸Ã³ö×î´óµÄ·Ç·ÖÅÆ
+                            // ç¬¬å››å®¶æœ€å¤§ï¼Œæˆ‘åº”è¯¥å‡ºæœ€å¤§çš„éåˆ†ç‰Œ
                             SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList,true);
                             SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
                         }
@@ -1908,127 +1498,94 @@ namespace Kuaff.Tractor
                     }
                     else
                     {
-                        SendThisSuitOrScores(sendedCards, count, suit, firstSuit, myCP, myPokerList,true); //³ö·ÖÅÆ»òÕß×îĞ¡µÄÅÆ
+                        SendThisSuitOrScores(sendedCards, count, suit, firstSuit, myCP, myPokerList,true); // å‡ºåˆ†ç‰Œæˆ–è€…æœ€å°çš„ç‰Œ
                         SendThisSuitOrScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
                     }
-
-
                     SendThisSuit(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
                     SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
-
                    
                     return;
                 }
-
             }
-            else if (count == pairTotal * 2 && count > 0) //¶à¸ö¶Ô£¬¿Ï¶¨Ê×¼Ò×î´ó
-            {
+            else if (count == pairTotal * 2 && count > 0) { // å¤šä¸ªå¯¹ï¼Œè‚¯å®šé¦–å®¶æœ€å¤§
                 ArrayList list = mySuitCP.GetPairs();
-                for (int i = 0; i < pairTotal && i < list.Count; i++)
-                {
+                for (int i = 0; i < pairTotal && i < list.Count; i++) {
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[i]);
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[i]);
                 }
                 SendThisSuitOrScores(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
                 SendThisSuitOrScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
-
                 return;
             }
-            else //Èç¹ûÊÇË¦ÅÆ
-            {
+            else { // å¦‚æœæ˜¯ç”©ç‰Œ
                 ArrayList list = mySuitCP.GetPairs();
-                for (int i = 0; i < pairTotal && i < list.Count; i++)
-                {
+                for (int i = 0; i < pairTotal && i < list.Count; i++) {
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[i]);
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[i]);
                 }
-
-                //·ñÔò³ö×îĞ¡µÄÅÆ
+// å¦åˆ™å‡ºæœ€å°çš„ç‰Œ
                 SendThisSuitOrScores(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
                 SendThisSuitOrScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
-
               
                 return;
             }
-
-
            
-
         }
-        //whoseOrderÊÇµÚËÄ¸ö³öÅÆ
-        internal static void WhoseOrderIs4(MainForm mainForm, CurrentPoker[] currentPokers, int whoseOrder, ArrayList sendedCards, int count, int suit, int rank, int firstSuit)
-        {
-            ArrayList firstSendCards = mainForm.currentSendCards[mainForm.firstSend - 1]; //Ê×¼Ò³öµÄÅÆ
+// whoseOrderæ˜¯ç¬¬å››ä¸ªå‡ºç‰Œ
+        internal static void WhoseOrderIs4(MainForm mainForm, CurrentPoker[] currentPokers, int whoseOrder, ArrayList sendedCards, int count, int suit, int rank, int firstSuit) {
+            ArrayList firstSendCards = mainForm.currentSendCards[mainForm.firstSend - 1]; // é¦–å®¶å‡ºçš„ç‰Œ
             CurrentPoker firstCP = new CurrentPoker();
             firstCP.Suit = suit;
             firstCP.Rank = rank;
-            firstCP = CommonMethods.parse(firstSendCards, suit, rank); //Ê×¼Ò³öµÄÅÆ
-
-            int firstMax = CommonMethods.GetMaxCard(firstSendCards, suit, rank); //µÃµ½Ê×¼Ò³öµÄ×î´óµÄÅÆ
+            firstCP = CommonMethods.parse(firstSendCards, suit, rank); // é¦–å®¶å‡ºçš„ç‰Œ
+            int firstMax = CommonMethods.GetMaxCard(firstSendCards, suit, rank); // å¾—åˆ°é¦–å®¶å‡ºçš„æœ€å¤§çš„ç‰Œ
             int pairTotal = firstCP.GetPairs().Count;
-
-            CurrentPoker myCP = currentPokers[whoseOrder - 1];         //ÎÒµÄÅÆ
-            ArrayList myPokerList = mainForm.pokerList[whoseOrder - 1]; //ÎÒµÄÅÆ
-
-
-            //whoseµÄ´Ë»¨É«µÄÅÆÊı
-            int myTotal = CommonMethods.GetSuitCount(currentPokers[whoseOrder - 1], suit, rank, firstSuit); //´Ë»¨É«ÅÆÊı
-            //´Ë»¨É«µÄÅÆ
-            int[] cards = myCP.GetSuitCards(firstSuit); //´Ë»¨É«µÄÅÆ
+            CurrentPoker myCP = currentPokers[whoseOrder - 1];         // æˆ‘çš„ç‰Œ
+            ArrayList myPokerList = mainForm.pokerList[whoseOrder - 1]; // æˆ‘çš„ç‰Œ
+            // whoseçš„æ­¤èŠ±è‰²çš„ç‰Œæ•°
+            int myTotal = CommonMethods.GetSuitCount(currentPokers[whoseOrder - 1], suit, rank, firstSuit); // æ­¤èŠ±è‰²ç‰Œæ•°
+            // æ­¤èŠ±è‰²çš„ç‰Œ
+            int[] cards = myCP.GetSuitCards(firstSuit); // æ­¤èŠ±è‰²çš„ç‰Œ
            
            
-
             ArrayList myList = new ArrayList(cards);
-            CurrentPoker mySuitCP = new CurrentPoker();  //ÎÒµÄ´Ë»¨É«µÄÅÆ
+            CurrentPoker mySuitCP = new CurrentPoker();  // æˆ‘çš„æ­¤èŠ±è‰²çš„ç‰Œ
             mySuitCP.Suit = suit;
             mySuitCP.Rank = rank;
             mySuitCP = CommonMethods.parse(myList, suit, rank);
             mySuitCP.Sort();
-
             firstCP.Sort();
             myCP.Sort();
-
-            int[] users = CommonMethods.OtherUsers(mainForm.firstSend); //ÆäËûÈıÎ»ÓÃ»§
-
+            int[] users = CommonMethods.OtherUsers(mainForm.firstSend); // å…¶ä»–ä¸‰ä½ç”¨æˆ·
             CurrentPoker secondCP = new CurrentPoker();
             secondCP.Suit = suit;
             secondCP.Rank = rank;
-            secondCP = CommonMethods.parse(mainForm.currentSendCards[users[0] - 1], suit, rank); //Ê×¼ÒºóÏÂÒ»¼ÒÓÃ»§
-
+            secondCP = CommonMethods.parse(mainForm.currentSendCards[users[0] - 1], suit, rank); // é¦–å®¶åä¸‹ä¸€å®¶ç”¨æˆ·
             CurrentPoker thirdCP = new CurrentPoker();
             thirdCP.Suit = suit;
             thirdCP.Rank = rank;
-            thirdCP = CommonMethods.parse(mainForm.currentSendCards[users[1] - 1], suit, rank); //Ê×¼ÒºóµÚ¶ş¼ÒÓÃ»§
-
+            thirdCP = CommonMethods.parse(mainForm.currentSendCards[users[1] - 1], suit, rank); // é¦–å®¶åç¬¬äºŒå®¶ç”¨æˆ·
             int[] tmpUsers = CommonMethods.OtherUsers(whoseOrder);
             
-            //¿¼ÂÇ±Ï
-            if (myTotal == 0)
-            {
-                if (firstSuit != suit)
-                {
-                    //Èç¹ûÄ¿Ç°×î´óµÄÄÇÒ»¼ÒÊÇÖ÷ 
+            // è€ƒè™‘æ¯•
+            if (myTotal == 0) {
+                if (firstSuit != suit) {
+                    // å¦‚æœç›®å‰æœ€å¤§çš„é‚£ä¸€å®¶æ˜¯ä¸» 
                     int biggerMax = (int)mainForm.currentSendCards[mainForm.whoIsBigger - 1][0];
                     
-
                     if (mainForm.whoIsBigger == tmpUsers[1])
                     {
-                        //²»±Ï£¬µ«ÊÇÓĞ¿ÉÄÜÌùµÄ¸±ÅÆÒ²±È´óµÄÄÇÒ»¼Ò´ó
-                        SendOtherSuitOrScores(sendedCards, count, firstSuit, myCP, myPokerList, true); //ÆäËû»¨É«·Ç·ÖÅÆ
-                        SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, true); //ÆäËû»¨É«·ÖÅÆ
-                        SendOtherSuitOrScores(sendedCards, count, firstSuit, myCP, myPokerList, false); //ÆäËü»¨É«·Ç·ÖÅÆ
-                        SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, false); //ÆäËû»¨É«·ÖÅÆ
-
-
-                        int sendOtherSuitsTotal = sendedCards.Count; //Ã»ÓĞ¸±ÅÆ¿ÉÌù£¬Ö»ÄÜ³öÖ÷
-
-                        if (firstCP.HasTractors() && sendOtherSuitsTotal == 0) //µ¥ÕÅÅÆ
+                        // ä¸æ¯•ï¼Œä½†æ˜¯æœ‰å¯èƒ½è´´çš„å‰¯ç‰Œä¹Ÿæ¯”å¤§çš„é‚£ä¸€å®¶å¤§
+                        SendOtherSuitOrScores(sendedCards, count, firstSuit, myCP, myPokerList, true); // å…¶ä»–èŠ±è‰²éåˆ†ç‰Œ
+                        SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, true); // å…¶ä»–èŠ±è‰²åˆ†ç‰Œ
+                        SendOtherSuitOrScores(sendedCards, count, firstSuit, myCP, myPokerList, false); // å…¶å®ƒèŠ±è‰²éåˆ†ç‰Œ
+                        SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, false); // å…¶ä»–èŠ±è‰²åˆ†ç‰Œ
+                        int sendOtherSuitsTotal = sendedCards.Count; // æ²¡æœ‰å‰¯ç‰Œå¯è´´ï¼Œåªèƒ½å‡ºä¸»
+                        if (firstCP.HasTractors() && sendOtherSuitsTotal == 0) // å•å¼ ç‰Œ
                         {
                             int minMaster = myCP.GetMasterTractor();
                             int tmpFirstTractor = firstCP.GetTractor();
-
-                            //Èç¹ûÎÒµÄÅÆÄÜ´ó¹ı×î´óµÄÄÇ¼ÒµÄÅÆ
-
+                            // å¦‚æœæˆ‘çš„ç‰Œèƒ½å¤§è¿‡æœ€å¤§çš„é‚£å®¶çš„ç‰Œ
                             if ((!CommonMethods.CompareTo(tmpFirstTractor, minMaster, suit, rank, firstSuit)) && (minMaster> -1))
                             {
                                 mainForm.whoIsBigger = whoseOrder;
@@ -2039,10 +1596,10 @@ namespace Kuaff.Tractor
                                 CommonMethods.SendCards(sendedCards, myCP, myPokerList, ttt[1]);
                             }
                         }
-                        else if (myCP.GetMasterCardsTotal() >= count && count == 1 && sendOtherSuitsTotal== 0) //µ¥ÕÅÅÆ
+                        else if (myCP.GetMasterCardsTotal() >= count && count == 1 && sendOtherSuitsTotal== 0) // å•å¼ ç‰Œ
                         {
                             int minMaster = myCP.GetMinMasterCards(suit);
-                            //Èç¹ûÎÒµÄÅÆÄÜ´ó¹ı×î´óµÄÄÇ¼ÒµÄÅÆ
+                            // å¦‚æœæˆ‘çš„ç‰Œèƒ½å¤§è¿‡æœ€å¤§çš„é‚£å®¶çš„ç‰Œ
                             if (!CommonMethods.CompareTo(biggerMax, minMaster, suit, rank, firstSuit))
                             {
                                 mainForm.whoIsBigger = whoseOrder;
@@ -2050,10 +1607,10 @@ namespace Kuaff.Tractor
                                 return;
                             }
                         }
-                        else if (myCP.GetMasterCardsTotal() >= count &&  pairTotal == 1 && count == 2 && sendOtherSuitsTotal == 0) //³öÒ»¸ö¶ÔÊ±
+                        else if (myCP.GetMasterCardsTotal() >= count &&  pairTotal == 1 && count == 2 && sendOtherSuitsTotal == 0) // å‡ºä¸€ä¸ªå¯¹æ—¶
                         {
                             ArrayList masterPairs = myCP.GetMasterPairs();
-                            //Èç¹ûÎÒµÄÅÆÄÜ´ó¹ı×î´óµÄÄÇ¼ÒµÄÅÆ
+                            // å¦‚æœæˆ‘çš„ç‰Œèƒ½å¤§è¿‡æœ€å¤§çš„é‚£å®¶çš„ç‰Œ
                             if (masterPairs.Count > 0)
                             {
                                 mainForm.whoIsBigger = whoseOrder;
@@ -2062,49 +1619,43 @@ namespace Kuaff.Tractor
                                 return;
                             }
                         }
-                        else if (myCP.GetMasterCardsTotal() >= count &&  pairTotal == 0 && count > 1 && sendOtherSuitsTotal == 0) //µ¥ÕÅË¦ÅÆ
+                        else if (myCP.GetMasterCardsTotal() >= count &&  pairTotal == 0 && count > 1 && sendOtherSuitsTotal == 0) // å•å¼ ç”©ç‰Œ
                         {
                             int minMaster = myCP.GetMinMasterCards(suit);
-                            //Èç¹ûÎÒµÄÅÆÄÜ´ó¹ı×î´óµÄÄÇ¼ÒµÄÅÆ
+                            // å¦‚æœæˆ‘çš„ç‰Œèƒ½å¤§è¿‡æœ€å¤§çš„é‚£å®¶çš„ç‰Œ
                             if (!CommonMethods.CompareTo(biggerMax, minMaster, suit, rank, firstSuit))
                             {
                                 mainForm.whoIsBigger = whoseOrder;
                                 CommonMethods.SendCards(sendedCards, myCP, myPokerList, minMaster);
-
                                 SendMasterSuitOrScores(sendedCards, count, suit, myCP, myPokerList, true);
                                 SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, true);
                                 SendMasterSuitOrScores(sendedCards, count, suit, myCP, myPokerList, false);
                                 SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, false);
-
                                 return;
                             }
-
                         }
-
-                        SendMasterSuitOrScores(sendedCards, count, suit, myCP, myPokerList, true); //Ö÷·Ç·ÖÅÆ
-                        SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, true); //Ö÷·ÖÅÆ
-                        SendMasterSuitOrScores(sendedCards, count, suit, myCP, myPokerList, false); //Ö÷·Ç·ÖÅÆ
-                        SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, false); //Ö÷·ÖÅÆ
-
+                        SendMasterSuitOrScores(sendedCards, count, suit, myCP, myPokerList, true); // ä¸»éåˆ†ç‰Œ
+                        SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, true); // ä¸»åˆ†ç‰Œ
+                        SendMasterSuitOrScores(sendedCards, count, suit, myCP, myPokerList, false); // ä¸»éåˆ†ç‰Œ
+                        SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, false); // ä¸»åˆ†ç‰Œ
                        
                     }
                     else
                     {
-                        if (firstCP.HasTractors()) //³öÒ»¸ö¶ÔÊ±
+                        if (firstCP.HasTractors()) // å‡ºä¸€ä¸ªå¯¹æ—¶
                         {
-                            SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList, true); //ÆäËû»¨É«·Ç·ÖÅÆ
-                            SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, true); //ÆäËû»¨É«·ÖÅÆ
-                            SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList, false); //ÆäËü»¨É«·Ç·ÖÅÆ
-                            SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, false); //ÆäËû»¨É«·ÖÅÆ
+                            SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList, true); // å…¶ä»–èŠ±è‰²éåˆ†ç‰Œ
+                            SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, true); // å…¶ä»–èŠ±è‰²åˆ†ç‰Œ
+                            SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList, false); // å…¶å®ƒèŠ±è‰²éåˆ†ç‰Œ
+                            SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, false); // å…¶ä»–èŠ±è‰²åˆ†ç‰Œ
                         }
-                        else if (myCP.GetMasterCardsTotal() >= count && count == 1) //µ¥ÕÅÅÆ
+                        else if (myCP.GetMasterCardsTotal() >= count && count == 1) // å•å¼ ç‰Œ
                         {
-
-                            //int maxMaster = myCP.GetMaxMasterCards();
+                            // int maxMaster = myCP.GetMaxMasterCards();
                             int[] masterCards = myCP.GetSuitCards(suit);
                             for (int i = 0; i < masterCards.Length; i++)
                             {
-                                //Èç¹ûÎÒµÄÅÆÄÜ´ó¹ı×î´óµÄÄÇ¼ÒµÄÅÆ
+                                // å¦‚æœæˆ‘çš„ç‰Œèƒ½å¤§è¿‡æœ€å¤§çš„é‚£å®¶çš„ç‰Œ
                                 if (!CommonMethods.CompareTo(biggerMax, masterCards[i], suit, rank, firstSuit))
                                 {
                                     mainForm.whoIsBigger = whoseOrder;
@@ -2112,19 +1663,16 @@ namespace Kuaff.Tractor
                                     return;
                                 }
                             }
-
-                            SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList, true); //ÆäËü»¨É«·Ç·ÖÅÆ
-                            SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList, false); //ÆäËü»¨É«·Ç·ÖÅÆ
-                            SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, true); //ÆäËû»¨É«·ÖÅÆ
-                            SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, false); //ÆäËû»¨É«·ÖÅÆ
-
+                            SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList, true); // å…¶å®ƒèŠ±è‰²éåˆ†ç‰Œ
+                            SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList, false); // å…¶å®ƒèŠ±è‰²éåˆ†ç‰Œ
+                            SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, true); // å…¶ä»–èŠ±è‰²åˆ†ç‰Œ
+                            SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, false); // å…¶ä»–èŠ±è‰²åˆ†ç‰Œ
                         }
-                        else if (myCP.GetMasterCardsTotal() >= count &&  pairTotal == 1 && count == 2) //³öÒ»¸ö¶ÔÊ±
+                        else if (myCP.GetMasterCardsTotal() >= count &&  pairTotal == 1 && count == 2) // å‡ºä¸€ä¸ªå¯¹æ—¶
                         {
                             ArrayList masterPairs = myCP.GetMasterPairs();
-                            //Èç¹ûÎÒµÄÅÆÄÜ´ó¹ı×î´óµÄÄÇ¼ÒµÄÅÆ
+                            // å¦‚æœæˆ‘çš„ç‰Œèƒ½å¤§è¿‡æœ€å¤§çš„é‚£å®¶çš„ç‰Œ
                             
-
                             if (masterPairs.Count > 0)
                             {
                                 for (int i = 0; i < masterPairs.Count; i++)
@@ -2141,10 +1689,10 @@ namespace Kuaff.Tractor
                                 }
                             }
                         }
-                        else if (myCP.GetMasterCardsTotal() >= count &&  pairTotal == 0 && count > 1) //µ¥ÕÅË¦ÅÆ
+                        else if (myCP.GetMasterCardsTotal() >= count &&  pairTotal == 0 && count > 1) // å•å¼ ç”©ç‰Œ
                         {
                             int maxMaster = myCP.GetMaxMasterCards();
-                            //Èç¹ûÎÒµÄÅÆÄÜ´ó¹ı×î´óµÄÄÇ¼ÒµÄÅÆ
+                            // å¦‚æœæˆ‘çš„ç‰Œèƒ½å¤§è¿‡æœ€å¤§çš„é‚£å®¶çš„ç‰Œ
                             int[] masterCards = myCP.GetSuitCards(suit);
                             for (int i = 0; i < masterCards.Length; i++)
                             {
@@ -2152,63 +1700,49 @@ namespace Kuaff.Tractor
                                 {
                                     mainForm.whoIsBigger = whoseOrder;
                                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, masterCards[i]);
-
                                     SendMasterSuitOrScores(sendedCards, count, suit, myCP, myPokerList, true);
                                     SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, true);
                                     SendMasterSuitOrScores(sendedCards, count, suit, myCP, myPokerList, false);
                                     SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, false);
-
                                     return;
                                 }
                             }
-
                         }
                     }
                 }
             }
             
-            if (myTotal < count) //±¾»¨É«¸ù±¾¾Í²»¹»
-            {
-
-                for (int i = 0; i < myTotal; i++) //ÏÈ½«´Ë»¨É«
-                {
+            if (myTotal < count)  { // æœ¬èŠ±è‰²æ ¹æœ¬å°±ä¸å¤Ÿ
+                for (int i = 0; i < myTotal; i++) { // å…ˆå°†æ­¤èŠ±è‰²
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList,cards[i]);
                 }
-
-                if (mainForm.whoIsBigger == tmpUsers[1])
-                {
-                    SendOtherSuitOrScores(sendedCards, count, firstSuit, myCP, myPokerList, true); //ÆäËü»¨É«·Ç·ÖÅÆ
-                    SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, true); //ÆäËû»¨É«·ÖÅÆ
-                    SendMasterSuitOrScores(sendedCards, count, suit, myCP, myPokerList, true); //Ö÷·Ç·ÖÅÆ
-                    SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, true); //Ö÷·ÖÅÆ
-
-                    SendOtherSuitOrScores(sendedCards, count, firstSuit, myCP, myPokerList, false); //ÆäËü»¨É«·Ç·ÖÅÆ
-                    SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, false); //ÆäËû»¨É«·ÖÅÆ
-                    SendMasterSuitOrScores(sendedCards, count, suit, myCP, myPokerList, false); //Ö÷·Ç·ÖÅÆ
-                    SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, false); //Ö÷·ÖÅÆ
+                if (mainForm.whoIsBigger == tmpUsers[1]) {
+                    SendOtherSuitOrScores(sendedCards, count, firstSuit, myCP, myPokerList, true); // å…¶å®ƒèŠ±è‰²éåˆ†ç‰Œ
+                    SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, true); // å…¶ä»–èŠ±è‰²åˆ†ç‰Œ
+                    SendMasterSuitOrScores(sendedCards, count, suit, myCP, myPokerList, true); // ä¸»éåˆ†ç‰Œ
+                    SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, true); // ä¸»åˆ†ç‰Œ
+                    SendOtherSuitOrScores(sendedCards, count, firstSuit, myCP, myPokerList, false); // å…¶å®ƒèŠ±è‰²éåˆ†ç‰Œ
+                    SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, false); // å…¶ä»–èŠ±è‰²åˆ†ç‰Œ
+                    SendMasterSuitOrScores(sendedCards, count, suit, myCP, myPokerList, false); // ä¸»éåˆ†ç‰Œ
+                    SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, false); // ä¸»åˆ†ç‰Œ
                 }
-                else
-                {
-                    SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList, true); //ÆäËü»¨É«·Ç·ÖÅÆ
-                    SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, true); //ÆäËû»¨É«·ÖÅÆ
-                    SendMasterSuitNoScores(sendedCards, count, suit, myCP, myPokerList, true); //Ö÷·Ç·ÖÅÆ
-                    SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, true); //Ö÷·ÖÅÆ
-
-                    SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList, false); //ÆäËü»¨É«·Ç·ÖÅÆ
-                    SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, false); //ÆäËû»¨É«·ÖÅÆ
-                    SendMasterSuitNoScores(sendedCards, count, suit, myCP, myPokerList, false); //Ö÷·Ç·ÖÅÆ
-                    SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, false); //Ö÷·ÖÅÆ
+                else {
+                    SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList, true); // å…¶å®ƒèŠ±è‰²éåˆ†ç‰Œ
+                    SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, true); // å…¶ä»–èŠ±è‰²åˆ†ç‰Œ
+                    SendMasterSuitNoScores(sendedCards, count, suit, myCP, myPokerList, true); // ä¸»éåˆ†ç‰Œ
+                    SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, true); // ä¸»åˆ†ç‰Œ
+                    SendOtherSuitNoScores(sendedCards, count, firstSuit, myCP, myPokerList, false); // å…¶å®ƒèŠ±è‰²éåˆ†ç‰Œ
+                    SendOtherSuit(sendedCards, count, firstSuit, myCP, myPokerList, false); // å…¶ä»–èŠ±è‰²åˆ†ç‰Œ
+                    SendMasterSuitNoScores(sendedCards, count, suit, myCP, myPokerList, false); // ä¸»éåˆ†ç‰Œ
+                    SendMasterSuit(sendedCards, count, suit, myCP, myPokerList, false); // ä¸»åˆ†ç‰Œ
                 }
-
              
                 return;
             }
-           //ÒÔÏÂÊÇ´Ë»¨É«µÄÅÆ±ÈÊ×¼Ò³öµÄÅÆ¶à
-            else if (firstCP.HasTractors())  //Èç¹ûÊ×¼Ò³öÁËÍÏÀ­»ú
-            {
-                //Èç¹ûÎÒÓĞÍÏÀ­»ú£¬³ö×î´óµÄÍÏÀ­»ú£¬Ê£ÓàµÄÅÆÔÚÏÂÃæ³ö
-                if (mySuitCP.HasTractors())
-                {
+// ä»¥ä¸‹æ˜¯æ­¤èŠ±è‰²çš„ç‰Œæ¯”é¦–å®¶å‡ºçš„ç‰Œå¤š
+            else if (firstCP.HasTractors()) { // å¦‚æœé¦–å®¶å‡ºäº†æ‹–æ‹‰æœº
+                // å¦‚æœæˆ‘æœ‰æ‹–æ‹‰æœºï¼Œå‡ºæœ€å¤§çš„æ‹–æ‹‰æœºï¼Œå‰©ä½™çš„ç‰Œåœ¨ä¸‹é¢å‡º
+                if (mySuitCP.HasTractors()) {
                     int k = mySuitCP.GetTractor();
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, k);
                     int[] ks = mySuitCP.GetTractorOtherCards(k);
@@ -2216,8 +1750,6 @@ namespace Kuaff.Tractor
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, ks[i]);
                     }
-
-
                     CurrentPoker tmpCP = CommonMethods.parse(mainForm.currentSendCards[mainForm.whoIsBigger - 1], suit, rank);
                     int tmp = tmpCP.GetTractor();
                     if (!CommonMethods.CompareTo(tmp, k, suit, rank, firstSuit))
@@ -2226,143 +1758,105 @@ namespace Kuaff.Tractor
                     }
                     
                 }
-                else if (mySuitCP.GetPairs().Count > 0) //Èç¹ûÓĞ¶Ô
-                {
+                else if (mySuitCP.GetPairs().Count > 0) { // å¦‚æœæœ‰å¯¹
                     ArrayList list = mySuitCP.GetPairs();
-                    if (list.Count >= 2) //Èç¹ûÎÒÓĞ¶à¸ö¶Ô,ÄÇÖÁÉÙ³öÁ½¸ö¶Ô
-                    {
+                    if (list.Count >= 2) { // å¦‚æœæˆ‘æœ‰å¤šä¸ªå¯¹,é‚£è‡³å°‘å‡ºä¸¤ä¸ªå¯¹
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[0]);
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[0]);
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[1]);
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[1]);
                        
                     }
-                    else //·ñÔòÖ»ÄÜ³öÒ»¸ö¶Ô,ÆäÓà³öĞ¡ÅÆ
-                    {
+                    else { // å¦åˆ™åªèƒ½å‡ºä¸€ä¸ªå¯¹,å…¶ä½™å‡ºå°ç‰Œ
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[0]);
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[0]);
                     }
-
-
                 }
-
-
-                //¼ÈÈ»´ó²»¹ıÊ×¼Ò£¬³ö×îĞ¡µÄÅÆ
-                //¶øÇÒ£¬±¾»¨É«¾ø¶Ô¿ÉÒÔÂú×ã³öÅÆ
-                if (mainForm.whoIsBigger == tmpUsers[1])
-                {
-                    SendThisSuitOrScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, true); //´Ë»¨É«µÄ·Ç·ÖµÄÅÆ
-                    SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, true); //´Ë»¨É«µÄ·ÖÅÆ
-
-                    SendThisSuitOrScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false); //´Ë»¨É«µÄ·Ç·ÖµÄÅÆ
-                    SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, false); //´Ë»¨É«µÄ·ÖÅÆ
+// æ—¢ç„¶å¤§ä¸è¿‡é¦–å®¶ï¼Œå‡ºæœ€å°çš„ç‰Œ
+// è€Œä¸”ï¼Œæœ¬èŠ±è‰²ç»å¯¹å¯ä»¥æ»¡è¶³å‡ºç‰Œ
+                if (mainForm.whoIsBigger == tmpUsers[1]) {
+                    SendThisSuitOrScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, true); // æ­¤èŠ±è‰²çš„éåˆ†çš„ç‰Œ
+                    SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, true); // æ­¤èŠ±è‰²çš„åˆ†ç‰Œ
+                    SendThisSuitOrScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false); // æ­¤èŠ±è‰²çš„éåˆ†çš„ç‰Œ
+                    SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, false); // æ­¤èŠ±è‰²çš„åˆ†ç‰Œ
                 }
-                else
-                {
-                    SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, true); //´Ë»¨É«µÄ·Ç·ÖµÄÅÆ
-                    SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, true); //´Ë»¨É«µÄ·ÖÅÆ
-
-                    SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false); //´Ë»¨É«µÄ·Ç·ÖµÄÅÆ
-                    SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, false); //´Ë»¨É«µÄ·ÖÅÆ
+                else {
+                    SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, true); // æ­¤èŠ±è‰²çš„éåˆ†çš„ç‰Œ
+                    SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, true); // æ­¤èŠ±è‰²çš„åˆ†ç‰Œ
+                    SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false); // æ­¤èŠ±è‰²çš„éåˆ†çš„ç‰Œ
+                    SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, false); // æ­¤èŠ±è‰²çš„åˆ†ç‰Œ
                 }
-
-
                 return;
             }
-            else if (count == 1) //µ¥ÕÅÅÆ,¶øÇÒÆäÅ¶È·ÊµÓĞ´Ë»¨É«µÄÅÆ
-            {
-                int myMax = -1; //ÎÒµÄ´Ë»¨É«×î´óÅÆ
-                if (firstSuit == suit)
-                {
+            else if (count == 1) { // å•å¼ ç‰Œ,è€Œä¸”å…¶å“¦ç¡®å®æœ‰æ­¤èŠ±è‰²çš„ç‰Œ
+                int myMax = -1; // æˆ‘çš„æ­¤èŠ±è‰²æœ€å¤§ç‰Œ
+                if (firstSuit == suit) {
                     myMax = mySuitCP.GetMaxMasterCards();
                 }
-                else
-                {
+                else {
                     myMax = mySuitCP.GetMaxCards(firstSuit);
                 }
-
-
-                int max2 = CommonMethods.GetMaxCard(mainForm.currentSendCards[users[0] - 1], suit, rank); //µÚ¶ş¼Ò
-                int max3 = CommonMethods.GetMaxCard(mainForm.currentSendCards[users[1] - 1], suit, rank); //µÚÈı¼Ò
-
+                int max2 = CommonMethods.GetMaxCard(mainForm.currentSendCards[users[0] - 1], suit, rank); // ç¬¬äºŒå®¶
+                int max3 = CommonMethods.GetMaxCard(mainForm.currentSendCards[users[1] - 1], suit, rank); // ç¬¬ä¸‰å®¶
                
-                //¶Ô¼Ò(µÚ¶ş¼Ò)´ó
-                if ((!CommonMethods.CompareTo(firstMax, max2, suit, rank,firstSuit)) && (CommonMethods.CompareTo(max2,max3,suit,rank,firstSuit)))
-                {
+// å¯¹å®¶(ç¬¬äºŒå®¶)å¤§
+                if ((!CommonMethods.CompareTo(firstMax, max2, suit, rank,firstSuit)) && (CommonMethods.CompareTo(max2,max3,suit,rank,firstSuit))) {
                     SendThisSuitOrScores(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
                     SendThisSuitOrScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
-
                     if (!CommonMethods.CompareTo(max2,(int)sendedCards[0],suit,rank,firstSuit))
                     {
                         mainForm.whoIsBigger = whoseOrder;
                     }
                    
                     return;
-                } //ÎÒ´ó
-                else if ((!CommonMethods.CompareTo(firstMax, myMax, suit, rank, firstSuit)) && (!CommonMethods.CompareTo(max3, myMax, suit, rank, firstSuit)))
-                {
-                    if (myMax > -1) //ÕâÀïÓ¦¸ÃÓÀÔ¶Îªtrue
+                } // æˆ‘å¤§
+                else if ((!CommonMethods.CompareTo(firstMax, myMax, suit, rank, firstSuit)) && (!CommonMethods.CompareTo(max3, myMax, suit, rank, firstSuit))) {
+                    if (myMax > -1) // è¿™é‡Œåº”è¯¥æ°¸è¿œä¸ºtrue
                     {
                         CommonMethods.SendCards(sendedCards, myCP, myPokerList, myMax);
                         mainForm.whoIsBigger = whoseOrder;
-
                         return;
                     }
                 }
-
-                SendThisSuitNoScores(sendedCards, count, suit,firstSuit, myCP, myPokerList,true); //ÎÒÃÇ²»´ó£¬³öĞ¡·Ç·ÖÅÆ
-                SendThisSuit(sendedCards, count,suit, firstSuit, myCP, myPokerList,true); //³ö·ÖÅÆ
-
-                SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false); //ÎÒÃÇ²»´ó£¬³öĞ¡·Ç·ÖÅÆ
-                SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, false); //³ö·ÖÅÆ
-
-                if ((!CommonMethods.CompareTo(firstMax, (int)sendedCards[0], suit, rank, firstSuit)) && (!CommonMethods.CompareTo(max2, (int)sendedCards[0], suit, rank, firstSuit)) && (!CommonMethods.CompareTo(max3, myMax, suit, rank, firstSuit)))
-                {
+                SendThisSuitNoScores(sendedCards, count, suit,firstSuit, myCP, myPokerList,true); // æˆ‘ä»¬ä¸å¤§ï¼Œå‡ºå°éåˆ†ç‰Œ
+                SendThisSuit(sendedCards, count,suit, firstSuit, myCP, myPokerList,true); // å‡ºåˆ†ç‰Œ
+                SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false); // æˆ‘ä»¬ä¸å¤§ï¼Œå‡ºå°éåˆ†ç‰Œ
+                SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, false); // å‡ºåˆ†ç‰Œ
+                if ((!CommonMethods.CompareTo(firstMax, (int)sendedCards[0], suit, rank, firstSuit)) && (!CommonMethods.CompareTo(max2, (int)sendedCards[0], suit, rank, firstSuit)) && (!CommonMethods.CompareTo(max3, myMax, suit, rank, firstSuit))) {
                     mainForm.whoIsBigger = whoseOrder;
                 }
-
                 return;
             }
-            else if ((pairTotal == 1) && (count == 2)) //Èç¹ûÊÇÒ»¸ö¶Ô
-            {
-                ArrayList list = mySuitCP.GetPairs(); //ÎÒµÄ¶Ô
-                //Èç¹ûÎÒ¶Ô¼Ò´ó
-                bool b2 = secondCP.GetPairs().Count > 0; //Èç¹û¶Ô¼ÒÓĞ¶Ô
-                bool b3 = thirdCP.GetPairs().Count > 0; //Èç¹ûµÚÈı¼ÒÒ²³öÁË¶Ô
-
+            else if ((pairTotal == 1) && (count == 2)) { // å¦‚æœæ˜¯ä¸€ä¸ªå¯¹
+                ArrayList list = mySuitCP.GetPairs(); // æˆ‘çš„å¯¹
+// å¦‚æœæˆ‘å¯¹å®¶å¤§
+                bool b2 = secondCP.GetPairs().Count > 0; // å¦‚æœå¯¹å®¶æœ‰å¯¹
+                bool b3 = thirdCP.GetPairs().Count > 0; // å¦‚æœç¬¬ä¸‰å®¶ä¹Ÿå‡ºäº†å¯¹
                 int max2 = -1;
                 int max3 = -1;
-
-                if (b2)
-                {
+                if (b2) {
                     max2 = (int)secondCP.GetPairs()[0];
                 }
-                if (b3)
-                {
+                if (b3) {
                     max3 = (int)thirdCP.GetPairs()[0];
                 }
-
-                //Èç¹ûÎÒÓĞ¶Ô
-                if (list.Count > 0)
-                {
+// å¦‚æœæˆ‘æœ‰å¯¹
+                if (list.Count > 0) {
                     int myMax = (int)list[list.Count - 1];
                    
-                    if (b2 && b3) //2,3¶¼ÓĞ¶Ô
-                    {
-                        //¶Ô¼Ò´ó
+                    if (b2 && b3) { // 2,3éƒ½æœ‰å¯¹
+                        // å¯¹å®¶å¤§
                         if ((!CommonMethods.CompareTo(firstMax, max2, suit, rank, firstSuit)) && (CommonMethods.CompareTo(max2, max3, suit, rank, firstSuit)))
                         {
                             CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[0]);
                             CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[0]);
-
                             if (!CommonMethods.CompareTo(max2, (int)list[0], suit, rank, firstSuit))
                             {
                                 mainForm.whoIsBigger = whoseOrder;
                             }
-
                          
                             return;
-                        }//Èç¹ûÎÒ´ó
+                        } // å¦‚æœæˆ‘å¤§
                         else if ((!CommonMethods.CompareTo(firstMax, myMax, suit, rank, firstSuit)) && (!CommonMethods.CompareTo(max3, myMax, suit, rank, firstSuit)))
                         {
                             CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[list.Count - 1]);
@@ -2371,20 +1865,15 @@ namespace Kuaff.Tractor
                             
                             return;
                         }
-                        else //¶Ô·½´ó
-                        {
+                        else { // å¯¹æ–¹å¤§
                             CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[0]);
                             CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[0]);
-
                             return;
                         }
-
                        
-
                     }
-                    else if (b2 && (!b3)) //2ÓĞ¶Ô,3ÎŞ¶Ô
-                    {
-                        //¶Ô¼Ò´ó
+                    else if (b2 && (!b3)) { // 2æœ‰å¯¹,3æ— å¯¹
+                        // å¯¹å®¶å¤§
                         if ((!CommonMethods.CompareTo(firstMax, max2, suit, rank, firstSuit)))
                         {
                             CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[0]);
@@ -2393,16 +1882,13 @@ namespace Kuaff.Tractor
                             {
                                 mainForm.whoIsBigger = whoseOrder;
                             }
-
-
                         
                             return;
-                        } //ÎÒ´ó
+                        } // æˆ‘å¤§
                         else if ((!CommonMethods.CompareTo(firstMax, myMax, suit, rank, firstSuit)))
                         {
                             CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[list.Count - 1]);
                             CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[list.Count - 1]);
-
                             mainForm.whoIsBigger = whoseOrder;
                             return;
                         }
@@ -2410,19 +1896,16 @@ namespace Kuaff.Tractor
                         {
                             CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[0]);
                             CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[0]);
-
                             return;
                         }
                     }
-                    else if ((!b2) && b3) //2ÎŞ¶Ô£¬3ÓĞ¶Ô
-                    {
-                        //Èç¹ûÎÒ´ó
+                    else if ((!b2) && b3) { // 2æ— å¯¹ï¼Œ3æœ‰å¯¹
+                        // å¦‚æœæˆ‘å¤§
                         if ((!CommonMethods.CompareTo(firstMax, myMax, suit, rank, firstSuit)) && (!CommonMethods.CompareTo(max3, myMax, suit, rank, firstSuit)))
                         {
                             CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[list.Count - 1]);
                             CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[list.Count - 1]);
                             mainForm.whoIsBigger = whoseOrder;
-
                             return;
                         }
                         else
@@ -2433,15 +1916,13 @@ namespace Kuaff.Tractor
                             return;
                         }
                     }
-                    else if ((!b2) && (!b3)) //2,3½ÔÎŞ¶Ô
-                    {
+                    else if ((!b2) && (!b3)) { // 2,3çš†æ— å¯¹
                         if ((!CommonMethods.CompareTo(firstMax, myMax, suit, rank, firstSuit)))
                         {
                             CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[list.Count - 1]);
                             CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[list.Count - 1]);
                             mainForm.whoIsBigger = whoseOrder;
                             
-
                             return;
                         }
                         else
@@ -2452,21 +1933,17 @@ namespace Kuaff.Tractor
                             {
                                 mainForm.whoIsBigger = whoseOrder;
                             }
-
                             return;
                         }
                     }
                 }
-                else //Èç¹ûÎÒÎŞ¶Ô
-                {
-                    if (b2 && b3) //2,3½ÔÓĞ¶Ô
-                    {
-                        //¶Ô¼Ò´ó
+                else { // å¦‚æœæˆ‘æ— å¯¹
+                    if (b2 && b3) { // 2,3çš†æœ‰å¯¹
+                        // å¯¹å®¶å¤§
                         if ((!CommonMethods.CompareTo(firstMax, max2, suit, rank, firstSuit)) && (CommonMethods.CompareTo(max2, max3, suit, rank, firstSuit)))
                         {
                             SendThisSuitOrScores(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
                             SendThisSuitOrScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
-
                             return;
                         }
                         else
@@ -2475,14 +1952,13 @@ namespace Kuaff.Tractor
                             SendThisSuit(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
                             SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
                             SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
-
                             return;
                         }
                         
                     }
                     else if (b2 && (!b3))
                     {
-                        //¶Ô¼Ò´ó
+                        // å¯¹å®¶å¤§
                         if ((!CommonMethods.CompareTo(firstMax, max2, suit, rank, firstSuit)))
                         {
                             SendThisSuitOrScores(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
@@ -2495,7 +1971,6 @@ namespace Kuaff.Tractor
                             SendThisSuit(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
                             SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
                             SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
-
                             return;
                         }
                     }
@@ -2505,23 +1980,18 @@ namespace Kuaff.Tractor
                         SendThisSuit(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
                         SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
                         SendThisSuit(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
-
                         return;
                     }
                     
                 }
-
             }
-            else if (count == pairTotal * 2 && (count > 0)) //¶¼ÊÇ¶Ô,¿Ï¶¨Æä¶ÔÊÇ×î´óµÄ
-            {
+            else if (count == pairTotal * 2 && (count > 0)) { // éƒ½æ˜¯å¯¹,è‚¯å®šå…¶å¯¹æ˜¯æœ€å¤§çš„
                 ArrayList list = mySuitCP.GetPairs();
-                for (int i = 0; i < pairTotal && i < list.Count; i++)
-                {
+                for (int i = 0; i < pairTotal && i < list.Count; i++) {
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[i]);
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[i]);
                 }
-
-                //·ñÔò³ö×îĞ¡µÄÅÆ
+// å¦åˆ™å‡ºæœ€å°çš„ç‰Œ
                 SendThisSuitNoScores(sendedCards, count, suit,firstSuit, myCP, myPokerList,true);
                 SendThisSuit(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
                 SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
@@ -2529,16 +1999,13 @@ namespace Kuaff.Tractor
               
                 return;
             }
-            else //ÓĞ¶ÔºÍÓĞµ¥ÕÅÅÆ£¬ÊÇË¦ÅÆ
-            {
+            else { // æœ‰å¯¹å’Œæœ‰å•å¼ ç‰Œï¼Œæ˜¯ç”©ç‰Œ
                 ArrayList list = mySuitCP.GetPairs();
-                for (int i = 0; i < pairTotal && i < list.Count; i++)
-                {
+                for (int i = 0; i < pairTotal && i < list.Count; i++) {
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[i]);
                     CommonMethods.SendCards(sendedCards, myCP, myPokerList, (int)list[i]);
                 }
-
-                //·ñÔò³ö×îĞ¡µÄÅÆ£¬Ë³Ğò£¬´Ë»¨É«·Ç·ÖÅÆ£¬´Ë»¨É«·ÖÅÆ
+// å¦åˆ™å‡ºæœ€å°çš„ç‰Œï¼Œé¡ºåºï¼Œæ­¤èŠ±è‰²éåˆ†ç‰Œï¼Œæ­¤èŠ±è‰²åˆ†ç‰Œ
                 SendThisSuitNoScores(sendedCards, count, suit,firstSuit, myCP, myPokerList,true);
                 SendThisSuit(sendedCards, count,suit, firstSuit, myCP, myPokerList,true);
                 SendThisSuitNoScores(sendedCards, count, suit, firstSuit, myCP, myPokerList, false);
@@ -2546,9 +2013,6 @@ namespace Kuaff.Tractor
                
                 return;
             }
-           
-        }
-
-        
-    }
+         }
+     }
 }

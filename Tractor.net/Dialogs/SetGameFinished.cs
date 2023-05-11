@@ -8,47 +8,33 @@ using System.Windows.Forms;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+namespace Kuaff.Tractor {
 
-namespace Kuaff.Tractor
-{
-    internal partial class SetGameFinished : Form
-    {
+    internal partial class SetGameFinished : Form {
         MainForm mainForm;
 
-        public SetGameFinished(MainForm mainForm)
-        {
+        public SetGameFinished(MainForm mainForm) {
             InitializeComponent();
             this.mainForm = mainForm;
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            try
-            {
+        private void button1_Click(object sender, EventArgs e) {
+            try {
                 mainForm.gameConfig.WhenFinished = int.Parse(textBox2.Text);
             }
-            catch(Exception ex)
-            {
+            catch(Exception ex) {
             }
         }
-
-        private void SaveGameConfig()
-        {
+        private void SaveGameConfig() {
             Stream stream = null;
-            try
-            {
+            try {
                 IFormatter formatter = new BinaryFormatter();
                 stream = new FileStream("gameConfig", FileMode.Create, FileAccess.Write, FileShare.None);
                 formatter.Serialize(stream, mainForm.gameConfig);
             }
-            catch (Exception ex)
-            {
-
+            catch (Exception ex) {
             }
-            finally
-            {
-                if (stream != null)
-                {
+            finally {
+                if (stream != null) {
                     stream.Close();
                 }
             }

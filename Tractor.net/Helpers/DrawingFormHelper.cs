@@ -7,238 +7,170 @@ using System.Drawing.Imaging;
 using System.Text;
 using System.Windows.Forms;
 using System.Threading;
-
 using Kuaff.CardResouces;
-
-namespace Kuaff.Tractor
-{
-    /// <summary>
-    /// ÊµÏÖ´ó²¿·ÖµÄ»æ»­²Ù×÷
-    /// </summary>
-    class DrawingFormHelper
-    {
+namespace Kuaff.Tractor {
+    // å®ç°å¤§éƒ¨åˆ†çš„ç»˜ç”»æ“ä½œ
+    class DrawingFormHelper {
         MainForm mainForm;
-        internal DrawingFormHelper(MainForm mainForm)
-        {
+        internal DrawingFormHelper(MainForm mainForm) {
             this.mainForm = mainForm;
         }
-
       
-        #region ·¢ÅÆ¶¯»­
-
-        /// <summary>
-        /// ×¼±¸·¢ÅÆ.
-        /// Ê×ÏÈÔÚ³ÌĞòÖĞÑë»­ºÃ58-i*2ÕÅÅÆ(Êµ¼Ê25+8¾Í¿ÉÒÔÁË£¬ÎªÁËÏÔÊ¾ÅÆ¶à£¬ÕâÀïÓÃ50+8),
-        /// Ã¿·¢Ò»´ÎÅÆ£¬¼õÉÙÁ½ÕÅ¡£
-        /// 
-        /// È»ºó£¬Ã¿¸öÈËÊÖÖĞ·¢Ò»´ÎÅÆ£¬È»ºó´ÓÎÒ¿ªÊ¼£¬ÒÀ´Î»­µÃµ½ÅÆºóµÄ½çÃæ¡£
-        /// ÆäËûÈı¸öÈË»­ÍêÅÆºó£¬Ó¦¸Ãµ÷ÓÃËã·¨ÖĞµÄ·½·¨£¬ÅĞ¶ÏÊÇ·ñÓ¦¸ÃÁÁÖ÷¡£
-        /// </summary>
-        /// <param name="count">·¢ÅÆ´ÎÊı£¬Ò»¹²·¢25ÕÅÅÆ£¬Ã¿ÈË25ÕÅ£¬×îºó×¯¼ÒÊÕµ×</param>
-        internal void ReadyCards(int count)
-        {
-
-            //µÃµ½»º³åÇøÍ¼ÏñµÄGraphics
+#region å‘ç‰ŒåŠ¨ç”»
+        // å‡†å¤‡å‘ç‰Œ.
+        // é¦–å…ˆåœ¨ç¨‹åºä¸­å¤®ç”»å¥½58-i*2å¼ ç‰Œ(å®é™…25+8å°±å¯ä»¥äº†ï¼Œä¸ºäº†æ˜¾ç¤ºç‰Œå¤šï¼Œè¿™é‡Œç”¨50+8),
+        // æ¯å‘ä¸€æ¬¡ç‰Œï¼Œå‡å°‘ä¸¤å¼ ã€‚
+        // 
+        // ç„¶åï¼Œæ¯ä¸ªäººæ‰‹ä¸­å‘ä¸€æ¬¡ç‰Œï¼Œç„¶åä»æˆ‘å¼€å§‹ï¼Œä¾æ¬¡ç”»å¾—åˆ°ç‰Œåçš„ç•Œé¢ã€‚
+        // å…¶ä»–ä¸‰ä¸ªäººç”»å®Œç‰Œåï¼Œåº”è¯¥è°ƒç”¨ç®—æ³•ä¸­çš„æ–¹æ³•ï¼Œåˆ¤æ–­æ˜¯å¦åº”è¯¥äº®ä¸»ã€‚
+        // <param name="count">å‘ç‰Œæ¬¡æ•°ï¼Œä¸€å…±å‘25å¼ ç‰Œï¼Œæ¯äºº25å¼ ï¼Œæœ€ååº„å®¶æ”¶åº•</param>
+        internal void ReadyCards(int count) {
+            // å¾—åˆ°ç¼“å†²åŒºå›¾åƒçš„Graphics
             Graphics g = Graphics.FromImage(mainForm.bmp);
-            //»­ÅÆ¾ÖµÄÖĞÑë£¬Ï´ºÃµÄÅÆ£¬Êµ¼Ê»­58ÕÅ,Ã¿³öÒ»ÂÖ¼õÉÙÁ½ÕÅ
+            // ç”»ç‰Œå±€çš„ä¸­å¤®ï¼Œæ´—å¥½çš„ç‰Œï¼Œå®é™…ç”»58å¼ ,æ¯å‡ºä¸€è½®å‡å°‘ä¸¤å¼ 
             DrawCenterAllCards(g, 58 - count * 2);
-
-            //µ±Ç°Ã¿¸öÈËÊÖÖĞµÄÅÆ
+            // å½“å‰æ¯ä¸ªäººæ‰‹ä¸­çš„ç‰Œ
             mainForm.currentPokers[0].AddCard((int)mainForm.pokerList[0][count]);
             mainForm.currentPokers[1].AddCard((int)mainForm.pokerList[1][count]);
             mainForm.currentPokers[2].AddCard((int)mainForm.pokerList[2][count]);
             mainForm.currentPokers[3].AddCard((int)mainForm.pokerList[3][count]);
-
-            //»­×Ô¼ºµÄÎ»ÖÃ
+            // ç”»è‡ªå·±çš„ä½ç½®
             DrawAnimatedCard(getPokerImageByNumber((int)mainForm.pokerList[0][count]), 260, 280, 71, 96);
             DrawMyCards(g, mainForm.currentPokers[0], count);
-            //ÅĞ¶ÏÎÒÊÇ·ñ¿ÉÒÔÁÁÖ÷
-            if (mainForm.gameConfig.IsDebug)
-            {
+            // åˆ¤æ–­æˆ‘æ˜¯å¦å¯ä»¥äº®ä¸»
+            if (mainForm.gameConfig.IsDebug) {
                 DoRankOrNot(mainForm.currentPokers[0], 1);
             }
-            else
-            {
-
+            else {
                 MyRankOrNot(mainForm.currentPokers[0]);
             }
             mainForm.Refresh();
-
-            //»­¶Ô¼ÒµÄÎ»ÖÃ
+            // ç”»å¯¹å®¶çš„ä½ç½®
             DrawAnimatedCard(mainForm.gameConfig.BackImage, 400 - count * 13, 60, 71, 96);
             DrawMyImage(g, mainForm.gameConfig.BackImage, 437 - count * 13, 25, 71, 96);
             mainForm.Refresh();
-
-            //ÊÇ·ñÁÁÖ÷
+            // æ˜¯å¦äº®ä¸»
             DoRankOrNot(mainForm.currentPokers[1], 2);
-
-            //»­Î÷¼ÒµÄÎ»ÖÃ
+            // ç”»è¥¿å®¶çš„ä½ç½®
             DrawAnimatedCard(mainForm.gameConfig.BackImage, 50, 160 + count * 4, 71, 96);
             DrawMyImage(g, mainForm.gameConfig.BackImage, 6, 145 + count * 4, 71, 96);
             mainForm.Refresh();
-
-            //ÊÇ·ñÁÁÖ÷
+            // æ˜¯å¦äº®ä¸»
             DoRankOrNot(mainForm.currentPokers[2], 3);
-
-            //»­¶«¼ÒµÄÎ»ÖÃ
+            // ç”»ä¸œå®¶çš„ä½ç½®
             DrawAnimatedCard(mainForm.gameConfig.BackImage, 520, 220 - count * 4, 71, 96);
             DrawMyImage(g, mainForm.gameConfig.BackImage, 554, 241 - count * 4, 71, 96);
             mainForm.Refresh();
-
-
-            //»­ÁÁµÄÅÆ
+            // ç”»äº®çš„ç‰Œ
             DrawSuitCards(g);
-            //ÊÇ·ñÁÁÖ÷
+            // æ˜¯å¦äº®ä¸»
             DoRankOrNot(mainForm.currentPokers[3], 4);
-
             mainForm.Refresh();
-
             g.Dispose();
         }
-
-        private void DrawSuitCards(Graphics g)
-        {
-
-
-            if (mainForm.showSuits == 1)
-            {
-                if (mainForm.whoShowRank == 2)
-                {
+        private void DrawSuitCards(Graphics g) {
+            if (mainForm.showSuits == 1) {
+                if (mainForm.whoShowRank == 2) {
                     g.DrawImage(getPokerImageByNumber(mainForm.currentState.Suit * 13 - 13 + mainForm.currentRank), 437, 124, 71, 96);
                 }
-                else if (mainForm.whoShowRank == 3)
-                {
-
+                else if (mainForm.whoShowRank == 3) {
                     g.DrawImage(getPokerImageByNumber(mainForm.currentState.Suit * 13 - 13 + mainForm.currentRank), 80, 158, 71, 96);
                 }
-                else if (mainForm.whoShowRank == 4)
-                {
+                else if (mainForm.whoShowRank == 4) {
                     g.DrawImage(getPokerImageByNumber(mainForm.currentState.Suit * 13 - 13 + mainForm.currentRank), 480, 200, 71, 96);
                 }
             }
-            else if (mainForm.showSuits == 2)
-            {
-                if (mainForm.whoShowRank == 2)
-                {
+            else if (mainForm.showSuits == 2) {
+                if (mainForm.whoShowRank == 2) {
                     ClearSuitCards(g);
                     g.DrawImage(getPokerImageByNumber(mainForm.currentState.Suit * 13 - 13 + mainForm.currentRank), 423, 124, 71, 96);
                     g.DrawImage(getPokerImageByNumber(mainForm.currentState.Suit * 13 - 13 + mainForm.currentRank), 437, 124, 71, 96);
                 }
-                else if (mainForm.whoShowRank == 3)
-                {
+                else if (mainForm.whoShowRank == 3) {
                     ClearSuitCards(g);
                     g.DrawImage(getPokerImageByNumber(mainForm.currentState.Suit * 13 - 13 + mainForm.currentRank), 80, 158, 71, 96);
                     g.DrawImage(getPokerImageByNumber(mainForm.currentState.Suit * 13 - 13 + mainForm.currentRank), 80, 178, 71, 96);
-
                 }
-                else if (mainForm.whoShowRank == 4)
-                {
+                else if (mainForm.whoShowRank == 4) {
                     ClearSuitCards(g);
                     g.DrawImage(getPokerImageByNumber(mainForm.currentState.Suit * 13 - 13 + mainForm.currentRank), 480, 200, 71, 96);
                     g.DrawImage(getPokerImageByNumber(mainForm.currentState.Suit * 13 - 13 + mainForm.currentRank), 480, 220, 71, 96);
                 }
             }
         }
-        //Çå³ıÁÁµÄÅÆ
-        private void ClearSuitCards(Graphics g)
-        {
+        // æ¸…é™¤äº®çš„ç‰Œ
+        private void ClearSuitCards(Graphics g) {
             g.DrawImage(mainForm.image, new Rectangle(80, 158, 71, 96), new Rectangle(80, 158, 71, 96), GraphicsUnit.Pixel);
             g.DrawImage(mainForm.image, new Rectangle(480, 200, 71, 96), new Rectangle(480, 200, 71, 96), GraphicsUnit.Pixel);
             g.DrawImage(mainForm.image, new Rectangle(437, 124, 71, 96), new Rectangle(437, 124, 71, 96), GraphicsUnit.Pixel);
         }
-
-        #endregion // ·¢ÅÆ¶¯»­
-
-        #region »­ÖĞĞÄÎ»ÖÃµÄÅÆ
-        /// <summary>
-        /// ·¢ÅÆÊ±»­ÖĞÑëµÄÅÆ.
-        /// Ê×ÏÈ´Óµ×Í¼ÖĞÈ¡ÏàÓ¦µÄÎ»ÖÃ£¬ÖØ»­Õâ¿é±³¾°¡£
-        /// È»ºóÓÃÅÆµÄ±³Ãæ»­58-count*2ÕÅÅÆ¡£
-        /// 
-        /// </summary>
-        /// <param name="g">»º³åÇøÍ¼Æ¬µÄGraphics</param>
-        /// <param name="num">ÅÆµÄÊıÁ¿=58-·¢ÅÆ´ÎÊı*2</param>
-        internal void DrawCenterAllCards(Graphics g, int num)
-        {
+#endregion // å‘ç‰ŒåŠ¨ç”»
+#region ç”»ä¸­å¿ƒä½ç½®çš„ç‰Œ
+        // å‘ç‰Œæ—¶ç”»ä¸­å¤®çš„ç‰Œ.
+        // é¦–å…ˆä»åº•å›¾ä¸­å–ç›¸åº”çš„ä½ç½®ï¼Œé‡ç”»è¿™å—èƒŒæ™¯ã€‚
+        // ç„¶åç”¨ç‰Œçš„èƒŒé¢ç”»58-count*2å¼ ç‰Œã€‚
+        // 
+        // <param name="g">ç¼“å†²åŒºå›¾ç‰‡çš„Graphics</param>
+        // <param name="num">ç‰Œçš„æ•°é‡=58-å‘ç‰Œæ¬¡æ•°*2</param>
+        internal void DrawCenterAllCards(Graphics g, int num) {
             Rectangle rect = new Rectangle(200, 186, (num + 1) * 2 + 71, 96);
             g.DrawImage(mainForm.image, rect, rect, GraphicsUnit.Pixel);
-
-            for (int i = 0; i < num; i++)
-            {
+            for (int i = 0; i < num; i++) {
                 g.DrawImage(mainForm.gameConfig.BackImage, 200 + i * 2, 186, 71, 96);
             }
         }
-
-        /// <summary>
-        /// ·¢ÍêÒ»´ÎÅÆ£¬ĞèÒªÇåÀí³ÌĞòÖĞĞÄ
-        /// </summary>
-        internal void DrawCenterImage()
-        {
+        // å‘å®Œä¸€æ¬¡ç‰Œï¼Œéœ€è¦æ¸…ç†ç¨‹åºä¸­å¿ƒ
+        internal void DrawCenterImage() {
             Graphics g = Graphics.FromImage(mainForm.bmp);
             Rectangle rect = new Rectangle(77, 124, 476, 244);
             g.DrawImage(mainForm.image, rect, rect, GraphicsUnit.Pixel);
             g.Dispose();
         }
-
-        /// <summary>
-        /// »­Á÷¾ÖÍ¼Æ¬
-        /// </summary>
-        internal void DrawPassImage()
-        {
+        // ç”»æµå±€å›¾ç‰‡
+        internal void DrawPassImage() {
             Graphics g = Graphics.FromImage(mainForm.bmp);
             Rectangle rect = new Rectangle(110, 150, 400, 199);
             g.DrawImage(Properties.Resources.Pass, rect);
             g.Dispose();
             mainForm.Refresh();
         }
-        #endregion // »­ÖĞĞÄÎ»ÖÃµÄÅÆ
-
-        #region µ×ÅÆ´¦Àí
-        //ÊÕµ×ÅÆµÄ¶¯»­
-        /// <summary>
-        /// ·¢ÅÆ25´Îºó£¬×îºóÊ£Óà8ÕÅÅÆ.
-        /// ÕâÊ±ÒÑ¾­È·¶¨ÁË×¯¼Ò£¬½«8ÕÅÅÆ½»¸ø×¯¼Ò,
-        /// Í¬Ê±ÒÔ¶¯»­µÄ·½Ê½ÏÔÊ¾¡£
-        /// </summary>
-        internal void DrawCenter8Cards()
-        {
+#endregion // ç”»ä¸­å¿ƒä½ç½®çš„ç‰Œ
+#region åº•ç‰Œå¤„ç†
+        // æ”¶åº•ç‰Œçš„åŠ¨ç”»
+        // å‘ç‰Œ25æ¬¡åï¼Œæœ€åå‰©ä½™8å¼ ç‰Œ.
+        // è¿™æ—¶å·²ç»ç¡®å®šäº†åº„å®¶ï¼Œå°†8å¼ ç‰Œäº¤ç»™åº„å®¶,
+        // åŒæ—¶ä»¥åŠ¨ç”»çš„æ–¹å¼æ˜¾ç¤ºã€‚
+        internal void DrawCenter8Cards() {
             Graphics g = Graphics.FromImage(mainForm.bmp);
             Rectangle rect = new Rectangle(200, 186, 90, 96);
             Rectangle backRect = new Rectangle(77, 121, 477, 254);
-            //×îºó8ÕÅµÄÍ¼ÏñÈ¡³öÀ´
+            // æœ€å8å¼ çš„å›¾åƒå–å‡ºæ¥
             Bitmap backup = mainForm.bmp.Clone(rect, PixelFormat.DontCare);
-            //½«ÆäÎ»ÖÃÓÃ±³¾°ÌùÉÏ
-            //g.DrawImage(mainForm.image, rect, rect, GraphicsUnit.Pixel);
+            // å°†å…¶ä½ç½®ç”¨èƒŒæ™¯è´´ä¸Š
+            // g.DrawImage(mainForm.image, rect, rect, GraphicsUnit.Pixel);
             g.DrawImage(mainForm.image, backRect, backRect, GraphicsUnit.Pixel);
-
-            //½«µ×ÅÆ8ÕÅ½»¸ø×¯¼Ò£¨¶¯»­·½Ê½£©
-            if (mainForm.currentState.Master == 1)
-            {
+            // å°†åº•ç‰Œ8å¼ äº¤ç»™åº„å®¶ï¼ˆåŠ¨ç”»æ–¹å¼ï¼‰
+            if (mainForm.currentState.Master == 1) {
                 DrawAnimatedCard(backup, 300, 330, 90, 96);
                 Get8Cards(mainForm.pokerList[0], mainForm.pokerList[1], mainForm.pokerList[2], mainForm.pokerList[3]);
             }
-            else if (mainForm.currentState.Master == 2)
-            {
+            else if (mainForm.currentState.Master == 2) {
                 DrawAnimatedCard(backup, 200, 80, 90, 96);
                 Get8Cards(mainForm.pokerList[1], mainForm.pokerList[0], mainForm.pokerList[2], mainForm.pokerList[3]);
             }
-            else if (mainForm.currentState.Master == 3)
-            {
+            else if (mainForm.currentState.Master == 3) {
                 DrawAnimatedCard(backup, 70, 186, 90, 96);
                 Get8Cards(mainForm.pokerList[2], mainForm.pokerList[1], mainForm.pokerList[0], mainForm.pokerList[3]);
             }
-            else if (mainForm.currentState.Master == 4)
-            {
+            else if (mainForm.currentState.Master == 4) {
                 DrawAnimatedCard(backup, 400, 186, 90, 96);
                 Get8Cards(mainForm.pokerList[3], mainForm.pokerList[1], mainForm.pokerList[2], mainForm.pokerList[0]);
             }
             mainForm.Refresh();
-
             g.Dispose();
         }
-        //½«×îºó8ÕÅ½»¸ø×¯¼Ò
-        private void Get8Cards(ArrayList list0, ArrayList list1, ArrayList list2, ArrayList list3)
-        {
+        // å°†æœ€å8å¼ äº¤ç»™åº„å®¶
+        private void Get8Cards(ArrayList list0, ArrayList list1, ArrayList list2, ArrayList list3) {
             list0.Add(list1[25]);
             list0.Add(list1[26]);
             list0.Add(list2[25]);
@@ -252,344 +184,238 @@ namespace Kuaff.Tractor
             list3.RemoveAt(26);
             list3.RemoveAt(25);
         }
-
-        internal void DrawBottomCards(ArrayList bottom)
-        {
+        internal void DrawBottomCards(ArrayList bottom) {
             Graphics g = Graphics.FromImage(mainForm.bmp);
-
-            //»­µ×ÅÆ,´Ó169¿ªÊ¼»­
-            for (int i = 0; i < 8; i++)
-            {
-                if (i ==2)
-                {
+            // ç”»åº•ç‰Œ,ä»169å¼€å§‹ç”»
+            for (int i = 0; i < 8; i++) {
+                if (i ==2) {
                     g.DrawImage(getPokerImageByNumber((int)bottom[i]), 230 + i * 14, 146, 71, 96);
                 }
-                else
-                {
+                else {
                     g.DrawImage(getPokerImageByNumber((int)bottom[i]), 230 + i * 14, 186, 71, 96);
                 }
             }
            
             mainForm.Refresh();
-
             g.Dispose();
         }
-        #endregion // µ×ÅÆ´¦Àí
-
-
-        #region »æÖÆSidebarºÍtoolbar
-        /// <summary>
-        /// »æÖÆSidebar
-        /// </summary>
-        /// <param name="g"></param>
-        internal void DrawSidebar(Graphics g)
-        {
+#endregion // åº•ç‰Œå¤„ç†
+#region ç»˜åˆ¶Sidebarå’Œtoolbar
+        // ç»˜åˆ¶Sidebar
+        // <param name="g"></param>
+        internal void DrawSidebar(Graphics g) {
             DrawMyImage(g, Properties.Resources.Sidebar, 20, 30, 70, 89);
             DrawMyImage(g, Properties.Resources.Sidebar, 540, 30, 70, 89);
         }
-        /// <summary>
-        /// »­¶«Î÷ÄÏ±±
-        /// </summary>
-        /// <param name="g">»º³åÇøÍ¼ÏñµÄGraphics</param>
-        /// <param name="who">»­Ë­</param>
-        /// <param name="b">ÊÇ·ñ»­ÁÁÉ«</param>
-        internal void DrawMaster(Graphics g, int who, int start)
-        {
-            if (who < 1 || who > 4)
-            {
+        // ç”»ä¸œè¥¿å—åŒ—
+        // <param name="g">ç¼“å†²åŒºå›¾åƒçš„Graphics</param>
+        // <param name="who">ç”»è°</param>
+        // <param name="b">æ˜¯å¦ç”»äº®è‰²</param>
+        internal void DrawMaster(Graphics g, int who, int start) {
+            if (who < 1 || who > 4) {
                 return;
             }
-
             start = start * 80;
-
             int X = 0;
-
-            if (who == 1)
-            {
+            if (who == 1) {
                 start += 40;
                 X = 548;
             }
-            else if (who == 2)
-            {
+            else if (who == 2) {
                 start += 60;
                 X = 580;
             }
-            else if (who == 3)
-            {
+            else if (who == 3) {
                 start += 0;
                 X = 30;
             }
-            else if (who == 4)
-            {
+            else if (who == 4) {
                 start += 20;
                 X = 60;
             }
-
             Rectangle destRect = new Rectangle(X, 45, 20, 20);
             Rectangle srcRect = new Rectangle(start, 0, 20, 20);
-
             g.DrawImage(Properties.Resources.Master, destRect, srcRect, GraphicsUnit.Pixel);
-
         }
-
-        /// <summary>
-        /// »­ÆäËû°×É«
-        /// </summary>
-        /// <param name="g"></param>
-        /// <param name="who"></param>
-        /// <param name="start"></param>
-        internal void DrawOtherMaster(Graphics g, int who, int start)
-        {
+        // ç”»å…¶ä»–ç™½è‰²
+        // <param name="g"></param>
+        // <param name="who"></param>
+        // <param name="start"></param>
+        internal void DrawOtherMaster(Graphics g, int who, int start) {
             
-
-            if (who != 1)
-            {
+            if (who != 1) {
                 Rectangle destRect = new Rectangle(548, 45, 20, 20);
                 Rectangle srcRect = new Rectangle(40, 0, 20, 20);
                 g.DrawImage(Properties.Resources.Master, destRect, srcRect, GraphicsUnit.Pixel);
             }
-            if (who != 2)
-            {
+            if (who != 2) {
                 Rectangle destRect = new Rectangle(580, 45, 20, 20);
                 Rectangle srcRect = new Rectangle(60, 0, 20, 20);
                 g.DrawImage(Properties.Resources.Master, destRect, srcRect, GraphicsUnit.Pixel);
             }
-            if (who != 3)
-            {
+            if (who != 3) {
                 Rectangle destRect = new Rectangle(31, 45, 20, 20);
                 Rectangle srcRect = new Rectangle(0, 0, 20, 20);
                 g.DrawImage(Properties.Resources.Master, destRect, srcRect, GraphicsUnit.Pixel);
             }
-            if (who != 4)
-            {
+            if (who != 4) {
                 Rectangle destRect = new Rectangle(61, 45, 20, 20);
                 Rectangle srcRect = new Rectangle(20, 0, 20, 20);
                 g.DrawImage(Properties.Resources.Master, destRect, srcRect, GraphicsUnit.Pixel);
             }
-
         }
-
-
-        /// <summary>
-        /// »æÖÆRank
-        /// </summary>
-        /// <param name="g">»º³åÇøÍ¼ÏñµÄGraphics</param>
-        /// <param name="me">»­ÎÒ»¹ÊÇ»­¶Ô·½</param>
-        /// <param name="b">Á½É«»¹ÊÇ°µÉ«</param>
-        internal void DrawRank(Graphics g, int number, bool me, bool b)
-        {
+        // ç»˜åˆ¶Rank
+        // <param name="g">ç¼“å†²åŒºå›¾åƒçš„Graphics</param>
+        // <param name="me">ç”»æˆ‘è¿˜æ˜¯ç”»å¯¹æ–¹</param>
+        // <param name="b">ä¸¤è‰²è¿˜æ˜¯æš—è‰²</param>
+        internal void DrawRank(Graphics g, int number, bool me, bool b) {
             int X = 0;
             int X2 = 0;
-            if (me)
-            {
+            if (me) {
                 X = 566;
                 X2 = 46;
             }
-            else
-            {
+            else {
                 X = 46;
                 X2 = 566;
             }
-
             Rectangle destRect = new Rectangle(X, 68, 20, 20);
             Rectangle destRect2 = new Rectangle(X2, 68, 20, 20);
 
-
-
-            //È»ºó½«Êı×ÖÌîĞ´ÉÏ
-            if (!b)
-            {
+            // ç„¶åå°†æ•°å­—å¡«å†™ä¸Š
+            if (!b) {
                 g.DrawImage(Properties.Resources.Sidebar, destRect, new Rectangle(26, 38, 20, 20), GraphicsUnit.Pixel);
-                if (me)
-                {
+                if (me) {
                     g.DrawImage(Properties.Resources.CardNumber, destRect, getCardNumberImage(mainForm.currentState.OurCurrentRank, b), GraphicsUnit.Pixel);
                 }
-                else
-                {
+                else {
                     g.DrawImage(Properties.Resources.CardNumber, destRect, getCardNumberImage(mainForm.currentState.OpposedCurrentRank, b), GraphicsUnit.Pixel);
                 }
-
             }
-            else
-            {
+            else {
                 g.DrawImage(Properties.Resources.Sidebar, destRect, new Rectangle(26, 38, 20, 20), GraphicsUnit.Pixel);
                 g.DrawImage(Properties.Resources.Sidebar, destRect2, new Rectangle(26, 38, 20, 20), GraphicsUnit.Pixel);
-
-                if (me)
-                {
+                if (me) {
                     g.DrawImage(Properties.Resources.CardNumber, destRect, getCardNumberImage(mainForm.currentState.OurCurrentRank, b), GraphicsUnit.Pixel);
                     g.DrawImage(Properties.Resources.CardNumber, destRect2, getCardNumberImage(mainForm.currentState.OpposedCurrentRank, !b), GraphicsUnit.Pixel);
                 }
-                else
-                {
+                else {
                     g.DrawImage(Properties.Resources.CardNumber, destRect, getCardNumberImage(mainForm.currentState.OpposedCurrentRank, b), GraphicsUnit.Pixel);
                     g.DrawImage(Properties.Resources.CardNumber, destRect2, getCardNumberImage(mainForm.currentState.OurCurrentRank, !b), GraphicsUnit.Pixel);
                 }
             }
-
         }
-
-        private Rectangle getCardNumberImage(int number, bool b)
-        {
+        private Rectangle getCardNumberImage(int number, bool b) {
             Rectangle result = new Rectangle(0, 0, 0, 0);
-
-            if (number >= 0 && number <= 12)
-            {
-                if (b)
-                {
+            if (number >= 0 && number <= 12) {
+                if (b) {
                     number += 14;
                 }
                 result = new Rectangle(number * 20, 0, 20, 20);
             }
-
-
-            if ((number == 53) && (b))
-            {
+            if ((number == 53) && (b)) {
                 result = new Rectangle(540, 0, 20, 20);
             }
-            if ((number == 53) && (!b))
-            {
+            if ((number == 53) && (!b)) {
                 result = new Rectangle(260, 0, 20, 20);
             }
-
             return result;
         }
-
-
-        /// <summary>
-        /// »­»¨É«
-        /// </summary>
-        /// <param name="g"></param>
-        /// <param name="suit">»¨É«</param>
-        /// <param name="me">»­ÎÒ·½»¹ÊÇ¶Ô·½</param>
-        /// <param name="b">ÊÇ·ñ»­ÁÁÉ«</param>
-        internal void DrawSuit(Graphics g, int suit, bool me, bool b)
-        {
+        // ç”»èŠ±è‰²
+        // <param name="g"></param>
+        // <param name="suit">èŠ±è‰²</param>
+        // <param name="me">ç”»æˆ‘æ–¹è¿˜æ˜¯å¯¹æ–¹</param>
+        // <param name="b">æ˜¯å¦ç”»äº®è‰²</param>
+        internal void DrawSuit(Graphics g, int suit, bool me, bool b) {
             int X = 0;
             int X2 = 0;
-            if (me)
-            {
+            if (me) {
                 X = 563;
                 X2 = 43;
             }
-            else
-            {
+            else {
                 X = 43;
                 X2 = 563;
             }
-
             Rectangle destRect = new Rectangle(X, 88, 25, 25);
-
             Rectangle redrawRect = new Rectangle(X2, 88, 25, 25);
-
-            //Èç¹û»­°µÉ«
-            if (!b)
-            {
+            // å¦‚æœç”»æš—è‰²
+            if (!b) {
                 Rectangle srcRect = new Rectangle(250, 0, 25, 25);
                 g.DrawImage(Properties.Resources.Suit, destRect, srcRect, GraphicsUnit.Pixel);
                 return;
             }
-
-            if (suit == 1)
-            {
+            if (suit == 1) {
                 Rectangle srcRect = new Rectangle(0, 0, 25, 25);
                 g.DrawImage(Properties.Resources.Sidebar, destRect, new Rectangle(23, 58, 25, 25), GraphicsUnit.Pixel);
                 g.DrawImage(Properties.Resources.Suit, destRect, srcRect, GraphicsUnit.Pixel);
                 g.DrawImage(Properties.Resources.Sidebar, redrawRect, new Rectangle(23, 58, 25, 25), GraphicsUnit.Pixel);
                 DrawSuit(g, 0, !me, false);
             }
-            else if (suit == 2)
-            {
+            else if (suit == 2) {
                 Rectangle srcRect = new Rectangle(25, 0, 25, 25);
                 g.DrawImage(Properties.Resources.Sidebar, destRect, new Rectangle(23, 58, 25, 25), GraphicsUnit.Pixel);
                 g.DrawImage(Properties.Resources.Suit, destRect, srcRect, GraphicsUnit.Pixel);
                 g.DrawImage(Properties.Resources.Sidebar, redrawRect, new Rectangle(23, 58, 25, 25), GraphicsUnit.Pixel);
                 DrawSuit(g, 0, !me, false);
             }
-            else if (suit == 3) //·½¿é
-            {
+            else if (suit == 3) { // æ–¹å—
                 Rectangle srcRect = new Rectangle(50, 0, 25, 25);
                 g.DrawImage(Properties.Resources.Sidebar, destRect, new Rectangle(23, 58, 25, 25), GraphicsUnit.Pixel);
                 g.DrawImage(Properties.Resources.Suit, destRect, srcRect, GraphicsUnit.Pixel);
                 g.DrawImage(Properties.Resources.Sidebar, redrawRect, new Rectangle(23, 58, 25, 25), GraphicsUnit.Pixel);
                 DrawSuit(g, 0, !me, false);
             }
-            else if (suit == 4)//Ã·»¨club
-            {
+            else if (suit == 4) { // æ¢…èŠ±club 
                 Rectangle srcRect = new Rectangle(75, 0, 25, 25);
                 g.DrawImage(Properties.Resources.Sidebar, destRect, new Rectangle(23, 58, 25, 25), GraphicsUnit.Pixel);
                 g.DrawImage(Properties.Resources.Suit, destRect, srcRect, GraphicsUnit.Pixel);
                 g.DrawImage(Properties.Resources.Sidebar, redrawRect, new Rectangle(23, 58, 25, 25), GraphicsUnit.Pixel);
                 DrawSuit(g, 0, !me, false);
             }
-            else if (suit == 5)
-            {
+            else if (suit == 5) {
                 Rectangle srcRect = new Rectangle(100, 0, 25, 25);
                 g.DrawImage(Properties.Resources.Sidebar, destRect, new Rectangle(23, 58, 25, 25), GraphicsUnit.Pixel);
                 g.DrawImage(Properties.Resources.Suit, destRect, srcRect, GraphicsUnit.Pixel);
                 g.DrawImage(Properties.Resources.Sidebar, redrawRect, new Rectangle(23, 58, 25, 25), GraphicsUnit.Pixel);
                 DrawSuit(g, 0, !me, false);
             }
-
         }
-
-        /// <summary>
-        /// »­¹¤¾ßÀ¸
-        /// </summary>
-        internal void DrawToolbar()
-        {
+// ç”»å·¥å…·æ 
+        internal void DrawToolbar() {
             Graphics g = Graphics.FromImage(mainForm.bmp);
             g.DrawImage(Properties.Resources.Toolbar, new Rectangle(415, 325, 129, 29), new Rectangle(0, 0, 129, 29), GraphicsUnit.Pixel);
-            //»­ÎåÖÖ°µ»¨É«
+            // ç”»äº”ç§æš—èŠ±è‰²
             g.DrawImage(Properties.Resources.Suit, new Rectangle(417, 327, 125, 25), new Rectangle(125, 0, 125, 25), GraphicsUnit.Pixel);
             g.Dispose();
         }
-
-        /// <summary>
-        /// ²ÁÈ¥¹¤¾ßÀ¸
-        /// </summary>
-        internal void RemoveToolbar()
-        {
+// æ“¦å»å·¥å…·æ 
+        internal void RemoveToolbar() {
             Graphics g = Graphics.FromImage(mainForm.bmp);
             g.DrawImage(mainForm.image, new Rectangle(415, 325, 129, 29), new Rectangle(415, 325, 129, 29), GraphicsUnit.Pixel);
             g.Dispose();
         }
-
-
-        #endregion // »æÖÆSidebarºÍtoolbar
-
-
-        #region ÅĞ¶ÏÊÇ·ñÁÁÖ÷
-        //ÊÇ·ñÓ¦¸ÃÁÁÖ÷,µ÷ÓÃËã·¨
-        private void DoRankOrNot(CurrentPoker currentPoker, int user)
-        {
-            //Èç¹û´òÎŞÖ÷£¬ÎŞĞèÔÙÅĞ¶Ï
+#endregion // ç»˜åˆ¶Sidebarå’Œtoolbar
+#region åˆ¤æ–­æ˜¯å¦äº®ä¸»
+// æ˜¯å¦åº”è¯¥äº®ä¸»,è°ƒç”¨ç®—æ³•
+        private void DoRankOrNot(CurrentPoker currentPoker, int user) {
+            // å¦‚æœæ‰“æ— ä¸»ï¼Œæ— éœ€å†åˆ¤æ–­
             if (currentPoker.Rank == 53)
                 return;
-
-
-            //Èç¹û»¹Î´ÉèÖ÷£¬ÔòÉèÖ÷
-            if (mainForm.currentState.Suit == 0)
-            {
+            // å¦‚æœè¿˜æœªè®¾ä¸»ï¼Œåˆ™è®¾ä¸»
+            if (mainForm.currentState.Suit == 0) {
                 int suit = Algorithm.ShouldSetRank(mainForm, user);
-
-                if (suit > 0)
-                {
+                if (suit > 0) {
                     mainForm.showSuits = 1;
                     mainForm.whoShowRank = user;
-
                     mainForm.currentState.Suit = suit;
-
                     if ((mainForm.currentRank == 0) && mainForm.isNew)
                     {
-                        mainForm.currentState.Master = user; //
+                        mainForm.currentState.Master = user; // 
                     }
-
-                    //¼ÈÈ»ÒÑ¾­È·¶¨ÁËË­ÁÁµÄ£¬Ë­ÊÇÖ÷£¬´ò¼¸£¬ÄÇÃ´¾Í»­°É
-
+                    // æ—¢ç„¶å·²ç»ç¡®å®šäº†è°äº®çš„ï¼Œè°æ˜¯ä¸»ï¼Œæ‰“å‡ ï¼Œé‚£ä¹ˆå°±ç”»å§
                     Graphics g = Graphics.FromImage(mainForm.bmp);
-
-                    //ÁÁÖ÷µÄÊ±ºòÍ¬Ê±»­»¨É«,ÁÁÉ«ÏÔÊ¾ÔÚ×¯¼ÒÏÂÃæ
+                    // äº®ä¸»çš„æ—¶å€™åŒæ—¶ç”»èŠ±è‰²,äº®è‰²æ˜¾ç¤ºåœ¨åº„å®¶ä¸‹é¢
                     if ((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2))
                     {
                         DrawSuit(g, suit, true, true);
@@ -600,60 +426,39 @@ namespace Kuaff.Tractor
                         DrawSuit(g, suit, false, true);
                         DrawRank(g, mainForm.currentState.OpposedCurrentRank, false, true);
                     }
-
-
-                    //»­Ë­ÁÁµÄÖ÷,ÂÌÉ«ÏÔÊ¾
-                    //DrawMaster(g, user, 1);
-                    //»­×¯¼Ò£¬»­ºìÉ«
+                    // ç”»è°äº®çš„ä¸»,ç»¿è‰²æ˜¾ç¤º
+                    // DrawMaster(g, user, 1);
+                    // ç”»åº„å®¶ï¼Œç”»çº¢è‰²
                     DrawMaster(g, mainForm.currentState.Master, 1);
                     DrawOtherMaster(g, mainForm.currentState.Master, 1);
-
                     g.Dispose();
-
-
                 }
             }
-            else //ÊÇ·ñ¿ÉÒÔ·´
-            {
+            else { // æ˜¯å¦å¯ä»¥å
                 int suit = Algorithm.ShouldSetRankAgain(mainForm, currentPoker);
-
                 
-
-                if (suit > 0)
-                {
-
-                    //ÊÇ·ñ¿ÉÒÔ¼Ó¹Ì
-                    if ((suit == mainForm.currentState.Suit) && (mainForm.whoShowRank == user) && (!mainForm.gameConfig.CanMyStrengthen))  //Èç¹û²»ÔÊĞí¼Ó¹Ì
+                if (suit > 0) { // æ˜¯å¦å¯ä»¥åŠ å›º
+                    if ((suit == mainForm.currentState.Suit) && (mainForm.whoShowRank == user) && (!mainForm.gameConfig.CanMyStrengthen))  // å¦‚æœä¸å…è®¸åŠ å›º
                     {
                         return;
                     }
-
-                    //·Ç¼Ó¹ÌÊ±,¿¼ÂÇ×Ô·´
-                    if ((suit != mainForm.currentState.Suit) && (mainForm.whoShowRank == user) && (!mainForm.gameConfig.CanMyRankAgain))  //Èç¹û²»ÔÊĞí×Ô·´
+                    // éåŠ å›ºæ—¶,è€ƒè™‘è‡ªå
+                    if ((suit != mainForm.currentState.Suit) && (mainForm.whoShowRank == user) && (!mainForm.gameConfig.CanMyRankAgain))  // å¦‚æœä¸å…è®¸è‡ªå
                     {
                         return;
                     }
-
-
                     int oldWhoShowRank = mainForm.whoShowRank;
                     int oldMaster = mainForm.currentState.Master;
-
                     mainForm.showSuits = 2;
                     mainForm.whoShowRank = user;
-
-
                     mainForm.currentState.Suit = suit;
-
                     if ((mainForm.currentRank == 0) && mainForm.isNew)
                     {
                         mainForm.currentState.Master = user;
                     }
 
-
-
                     Graphics g = Graphics.FromImage(mainForm.bmp);
-
-                    //ÁÁÖ÷µÄÊ±ºòÍ¬Ê±»­»¨É«,ÁÁÉ«ÏÔÊ¾ÔÚ×¯¼ÒÏÂÃæ
+                    // äº®ä¸»çš„æ—¶å€™åŒæ—¶ç”»èŠ±è‰²,äº®è‰²æ˜¾ç¤ºåœ¨åº„å®¶ä¸‹é¢
                     if ((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2))
                     {
                         DrawSuit(g, suit, true, true);
@@ -664,103 +469,68 @@ namespace Kuaff.Tractor
                         DrawSuit(g, suit, false, true);
                         DrawRank(g, mainForm.currentState.OpposedCurrentRank, false, true);
                     }
-
-
-                    //ÇåÀíÔ­À´ÁÁµÄÅÆ
+                    // æ¸…ç†åŸæ¥äº®çš„ç‰Œ
                     DrawOtherMaster(g, mainForm.currentState.Master, 1);
-
-                    //»­Ë­ÁÁµÄÖ÷,ÂÌÉ«ÏÔÊ¾
-                    //DrawMaster(g, user, 1);
-                    //»­×¯¼Ò£¬»­ºìÉ«
+                    // ç”»è°äº®çš„ä¸»,ç»¿è‰²æ˜¾ç¤º
+                    // DrawMaster(g, user, 1);
+                    // ç”»åº„å®¶ï¼Œç”»çº¢è‰²
                     DrawMaster(g, mainForm.currentState.Master, 1);
-
                     g.Dispose();
-
-
 
                 }
             }
-
         }
-
-        //ÅĞ¶ÏÎÒÊÇ·ñÁÁÖ÷
-        private void MyRankOrNot(CurrentPoker currentPoker)
-        {
-            //Èç¹û´òÎŞÖ÷£¬ÎŞĞèÔÙÅĞ¶Ï
+// åˆ¤æ–­æˆ‘æ˜¯å¦äº®ä¸»
+        private void MyRankOrNot(CurrentPoker currentPoker) {
+            // å¦‚æœæ‰“æ— ä¸»ï¼Œæ— éœ€å†åˆ¤æ–­
             if (currentPoker.Rank == 53)
                 return;
             bool[] suits = Algorithm.CanSetRank(mainForm, currentPoker);
-
             ReDrawToolbar(suits);
-
-
         }
-
-        //»­ÎÒµÄ¹¤¾ßÀ¸
-        internal void ReDrawToolbar(bool[] suits)
-        {
+// ç”»æˆ‘çš„å·¥å…·æ 
+        internal void ReDrawToolbar(bool[] suits) {
             Graphics g = Graphics.FromImage(mainForm.bmp);
             g.DrawImage(Properties.Resources.Toolbar, new Rectangle(415, 325, 129, 29), new Rectangle(0, 0, 129, 29), GraphicsUnit.Pixel);
-            //»­ÎåÖÖ°µ»¨É«
-            for (int i = 0; i < 5; i++)
-            {
-                if (suits[i])
-                {
+            // ç”»äº”ç§æš—èŠ±è‰²
+            for (int i = 0; i < 5; i++) {
+                if (suits[i]) {
                     g.DrawImage(Properties.Resources.Suit, new Rectangle(417 + i * 25, 327, 25, 25), new Rectangle(i * 25, 0, 25, 25), GraphicsUnit.Pixel);
                 }
-                else
-                {
+                else {
                     g.DrawImage(Properties.Resources.Suit, new Rectangle(417 + i * 25, 327, 25, 25), new Rectangle(125 + i * 25, 0, 25, 25), GraphicsUnit.Pixel);
                 }
             }
             g.Dispose();
         }
-
-
-        /// <summary>
-        /// ÅĞ¶Ï×îºóÊÇ·ñÓĞÈËÁÁÖ÷.
-        /// ¸ù¾İËã·¨£¬Èç¹ûÎŞÈËÁÁÖ÷£¬Ôò±¾¾ÖÁ÷¾Ö£¬ÖØĞÂ·¢ÅÆ
-        /// </summary>
-        /// <returns></returns>
-        internal bool DoRankNot()
-        {
-
-            if (mainForm.currentState.Suit == 0)
-            {
+// åˆ¤æ–­æœ€åæ˜¯å¦æœ‰äººäº®ä¸».
+// æ ¹æ®ç®—æ³•ï¼Œå¦‚æœæ— äººäº®ä¸»ï¼Œåˆ™æœ¬å±€æµå±€ï¼Œé‡æ–°å‘ç‰Œ
+        internal bool DoRankNot() {
+            if (mainForm.currentState.Suit == 0) {
                 return true;
             }
-            else
-            {
+            else {
                 return false;
             }
         }
-
-        /// <summary>
-        /// ÅĞ¶ÏÎÒÊÇ·ñ×öÁËÁÁÖ÷¶¯×÷.
-        /// ÔÚ·¢ÅÆÊ±¼ì²âÊó±êÊÂ¼ş£¬Èç¹ûÎÒ½øĞĞÁËµã»÷£º
-        /// Èç¹ûÎÒÔÚÁÁÖ÷À¸ÉÏ½øĞĞÁËµã»÷£¬
-        /// Èç¹ûÎÒ¿ÉÒÔÁÁÖ÷£¬Ôò½øĞĞÁÁÖ÷
-        /// </summary>
-        /// <param name="e"></param>
-        internal void IsClickedRanked(MouseEventArgs e)
-        {
+// åˆ¤æ–­æˆ‘æ˜¯å¦åšäº†äº®ä¸»åŠ¨ä½œ.
+// åœ¨å‘ç‰Œæ—¶æ£€æµ‹é¼ æ ‡äº‹ä»¶ï¼Œå¦‚æœæˆ‘è¿›è¡Œäº†ç‚¹å‡»ï¼š
+// å¦‚æœæˆ‘åœ¨äº®ä¸»æ ä¸Šè¿›è¡Œäº†ç‚¹å‡»ï¼Œ
+// å¦‚æœæˆ‘å¯ä»¥äº®ä¸»ï¼Œåˆ™è¿›è¡Œäº®ä¸»
+// <param name="e"></param>
+        internal void IsClickedRanked(MouseEventArgs e) {
             bool[] suits = Algorithm.CanSetRank(mainForm, mainForm.currentPokers[0]);
-
-            if (suits[0]) //Èç¹ûºìÌÒ
-            {
+            if (suits[0]) { // å¦‚æœçº¢æ¡ƒ
                 Region region = new Region(new Rectangle(417, 327, 25, 25));
-                if (region.IsVisible(e.X, e.Y))
-                {
+                if (region.IsVisible(e.X, e.Y)) {
                     mainForm.showSuits++;
                     mainForm.whoShowRank = 1;
-
                     mainForm.currentState.Suit = 1;
                     if ((mainForm.currentRank == 0) && mainForm.isNew)
                     {
                         mainForm.currentState.Master = 1;
                     }
                     Graphics g = Graphics.FromImage(mainForm.bmp);
-
                     if ((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2))
                     {
                         DrawSuit(g, 1, true, true);
@@ -771,20 +541,16 @@ namespace Kuaff.Tractor
                         DrawSuit(g, 1, false, true);
                         DrawRank(g, mainForm.currentState.OpposedCurrentRank, false, true);
                     }
-
                     
                     DrawMaster(g, mainForm.currentState.Master, 1);
                     DrawOtherMaster(g, mainForm.currentState.Master, 1);
-
                     ClearSuitCards(g);
                     g.Dispose();
                 }
             }
-            if (suits[1]) //Èç¹ûºÚÌÒ
-            {
+            if (suits[1]) { // å¦‚æœé»‘æ¡ƒ
                 Region region = new Region(new Rectangle(443, 327, 25, 25));
-                if (region.IsVisible(e.X, e.Y))
-                {
+                if (region.IsVisible(e.X, e.Y)) {
                     mainForm.showSuits++;
                     mainForm.whoShowRank = 1;
                     Graphics g = Graphics.FromImage(mainForm.bmp);
@@ -794,8 +560,6 @@ namespace Kuaff.Tractor
                         mainForm.currentState.Master = 1;
                     
                     }
-
-
                     if ((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2))
                     {
                         DrawSuit(g, 2, true, true);
@@ -808,17 +572,13 @@ namespace Kuaff.Tractor
                     }
                     DrawMaster(g, mainForm.currentState.Master, 1);
                     DrawOtherMaster(g, mainForm.currentState.Master, 1);
-
-
                     ClearSuitCards(g);
                     g.Dispose();
                 }
             }
-            if (suits[2]) //Èç¹û·½¿é
-            {
+            if (suits[2]) { // å¦‚æœæ–¹å—
                 Region region = new Region(new Rectangle(468, 327, 25, 25));
-                if (region.IsVisible(e.X, e.Y))
-                {
+                if (region.IsVisible(e.X, e.Y)) {
                     mainForm.showSuits++;
                     mainForm.whoShowRank = 1;
                     Graphics g = Graphics.FromImage(mainForm.bmp);
@@ -828,8 +588,6 @@ namespace Kuaff.Tractor
                         mainForm.currentState.Master = 1;
                         
                     }
-
-
                     if ((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2))
                     {
                         DrawSuit(g, 3, true, true);
@@ -842,18 +600,14 @@ namespace Kuaff.Tractor
                     }
                     DrawMaster(g, mainForm.currentState.Master, 1);
                     DrawOtherMaster(g, mainForm.currentState.Master, 1);
-
-
                     
                     ClearSuitCards(g);
                     g.Dispose();
                 }
             }
-            if (suits[3]) //Èç¹ûÃ·»¨
-            {
+            if (suits[3]) { // å¦‚æœæ¢…èŠ±
                 Region region = new Region(new Rectangle(493, 327, 25, 25));
-                if (region.IsVisible(e.X, e.Y))
-                {
+                if (region.IsVisible(e.X, e.Y)) {
                     mainForm.showSuits++;
                     mainForm.whoShowRank = 1;
                     Graphics g = Graphics.FromImage(mainForm.bmp);
@@ -863,8 +617,6 @@ namespace Kuaff.Tractor
                         mainForm.currentState.Master = 1;
                         
                     }
-
-
                     if ((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2))
                     {
                         DrawSuit(g, 4, true, true);
@@ -877,17 +629,14 @@ namespace Kuaff.Tractor
                     }
                     DrawMaster(g, mainForm.currentState.Master, 1);
                     DrawOtherMaster(g, mainForm.currentState.Master, 1);
-
                     
                     ClearSuitCards(g);
                     g.Dispose();
                 }
             }
-            if (suits[4]) //Èç¹ûÍõ
-            {
+            if (suits[4]) { // å¦‚æœç‹
                 Region region = new Region(new Rectangle(518, 327, 25, 25));
-                if (region.IsVisible(e.X, e.Y))
-                {
+                if (region.IsVisible(e.X, e.Y)) {
                     mainForm.showSuits = 3;
                     mainForm.whoShowRank = 1;
                     Graphics g = Graphics.FromImage(mainForm.bmp);
@@ -897,8 +646,6 @@ namespace Kuaff.Tractor
                         mainForm.currentState.Master = 1;
                         
                     }
-
-
 
                     if ((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2))
                     {
@@ -910,110 +657,76 @@ namespace Kuaff.Tractor
                         DrawSuit(g, 5, false, true);
                         DrawRank(g, mainForm.currentState.OpposedCurrentRank, false, true);
                     }
-
                     DrawMaster(g, mainForm.currentState.Master, 1);
                     DrawOtherMaster(g, mainForm.currentState.Master, 1);
-
-
                     ClearSuitCards(g);
                     g.Dispose();
                 }
             }
         }
-        #endregion // ÅĞ¶ÏÊÇ·ñÁÁÖ÷
-
-
-        #region ÔÚ¸÷ÖÖÇé¿öÏÂ»­×Ô¼ºµÄÅÆ
-
-        /// <summary>
-        /// ·¢ÅÆÆÚ¼ä½øĞĞ»æÖÆÎÒµÄÇøÓò.
-        /// °´ÕÕ»¨É«ºÍÖ÷ÅÆ½øĞĞÇø·Ö¡£
-        /// </summary>
-        /// <param name="g">»º³åÇøÍ¼Æ¬µÄGraphics</param>
-        /// <param name="currentPoker">ÎÒµ±Ç°µÃµ½µÄÅÆ</param>
-        /// <param name="index">ÊÖÖĞÅÆµÄÊıÁ¿</param>
-        internal void DrawMyCards(Graphics g, CurrentPoker currentPoker, int index)
-        {
+#endregion // åˆ¤æ–­æ˜¯å¦äº®ä¸»
+#region åœ¨å„ç§æƒ…å†µä¸‹ç”»è‡ªå·±çš„ç‰Œ
+// å‘ç‰ŒæœŸé—´è¿›è¡Œç»˜åˆ¶æˆ‘çš„åŒºåŸŸ.
+// æŒ‰ç…§èŠ±è‰²å’Œä¸»ç‰Œè¿›è¡ŒåŒºåˆ†ã€‚
+// <param name="g">ç¼“å†²åŒºå›¾ç‰‡çš„Graphics</param>
+// <param name="currentPoker">æˆ‘å½“å‰å¾—åˆ°çš„ç‰Œ</param>
+// <param name="index">æ‰‹ä¸­ç‰Œçš„æ•°é‡</param>
+        internal void DrawMyCards(Graphics g, CurrentPoker currentPoker, int index) {
             int j = 0;
-
-            //ÇåÏÂÃæµÄÆÁÄ»
+            // æ¸…ä¸‹é¢çš„å±å¹•
             Rectangle rect = new Rectangle(30, 360, 560, 96);
             g.DrawImage(mainForm.image, rect, rect, GraphicsUnit.Pixel);
-
-            //È·¶¨»æ»­ÆğÊ¼Î»ÖÃ
+            // ç¡®å®šç»˜ç”»èµ·å§‹ä½ç½®
             int start = (int)((2780 - index * 75) / 10);
-
-            //ºìÌÒ
+            // çº¢æ¡ƒ
             j = DrawMyHearts(g, currentPoker, j, start);
-            //»¨É«Ö®¼ä¼Ó¿ÕÏ¶
+            // èŠ±è‰²ä¹‹é—´åŠ ç©ºéš™
             j++;
-
-
-            //ºÚÌÒ
+            // é»‘æ¡ƒ
             j = DrawMyPeachs(g, currentPoker, j, start);
-            //»¨É«Ö®¼ä¼Ó¿ÕÏ¶
+            // èŠ±è‰²ä¹‹é—´åŠ ç©ºéš™
             j++;
-
-
-            //·½¿é
+            // æ–¹å—
             j = DrawMyDiamonds(g, currentPoker, j, start);
-            //»¨É«Ö®¼ä¼Ó¿ÕÏ¶
+            // èŠ±è‰²ä¹‹é—´åŠ ç©ºéš™
             j++;
-
-
-            //Ã·»¨
+            // æ¢…èŠ±
             j = DrawMyClubs(g, currentPoker, j, start);
-            //»¨É«Ö®¼ä¼Ó¿ÕÏ¶
+            // èŠ±è‰²ä¹‹é—´åŠ ç©ºéš™
             j++;
-
-            //Rank(Ôİ²»·ÖÖ÷¡¢¸±Rank)
+            // Rank(æš‚ä¸åˆ†ä¸»ã€å‰¯Rank)
             j = DrawHeartsRank(g, currentPoker, j, start);
             j = DrawPeachsRank(g, currentPoker, j, start);
             j = DrawClubsRank(g, currentPoker, j, start);
             j = DrawDiamondsRank(g, currentPoker, j, start);
-
-            //Ğ¡Íõ
+            // å°ç‹
             j = DrawSmallJack(g, currentPoker, j, start);
-            //´óÍõ
+            // å¤§ç‹
             j = DrawBigJack(g, currentPoker, j, start);
-
-
         }
-
-        //»­×Ô¼ºÅÅĞòºÃµÄÅÆ,Ò»°ãÔÚÃşÍêÅÆºóµ÷ÓÃ,ºÍ³öÒ»´ÎÅÆºóµ÷ÓÃ
-        /// <summary>
-        /// ÔÚ³ÌĞòµ×²¿»æÖÆÒÑ¾­ÅÅĞòºÃµÄÅÆ.
-        /// Á½ÖÖÇé¿öÏÂ»áÊ¹ÓÃÕâ¸ö·½·¨£º
-        /// 1.ÊÕÍêµ××¼±¸³öÅÆÊ±
-        /// 2.³öÍêÒ»´ÎÅÆ,ĞèÒªÖØ»­µ×²¿
-        /// </summary>
-        /// <param name="currentPoker"></param>
-        internal void DrawMySortedCards(CurrentPoker currentPoker, int index)
-        {
-
-            //½«ÁÙÊ±±äÁ¿Çå¿Õ
-            //ÕâÈı¸öÁÙÊ±±äÁ¿¼ÇÂ¼ÎÒÊÖÖĞµÄÅÆµÄÎ»ÖÃ¡¢´óĞ¡ºÍÊÇ·ñ±»µã³ö
+// ç”»è‡ªå·±æ’åºå¥½çš„ç‰Œ,ä¸€èˆ¬åœ¨æ‘¸å®Œç‰Œåè°ƒç”¨,å’Œå‡ºä¸€æ¬¡ç‰Œåè°ƒç”¨
+// åœ¨ç¨‹åºåº•éƒ¨ç»˜åˆ¶å·²ç»æ’åºå¥½çš„ç‰Œ.
+// ä¸¤ç§æƒ…å†µä¸‹ä¼šä½¿ç”¨è¿™ä¸ªæ–¹æ³•ï¼š
+// 1.æ”¶å®Œåº•å‡†å¤‡å‡ºç‰Œæ—¶
+// 2.å‡ºå®Œä¸€æ¬¡ç‰Œ,éœ€è¦é‡ç”»åº•éƒ¨
+// <param name="currentPoker"></param>
+        internal void DrawMySortedCards(CurrentPoker currentPoker, int index) {
+            // å°†ä¸´æ—¶å˜é‡æ¸…ç©º
+            // è¿™ä¸‰ä¸ªä¸´æ—¶å˜é‡è®°å½•æˆ‘æ‰‹ä¸­çš„ç‰Œçš„ä½ç½®ã€å¤§å°å’Œæ˜¯å¦è¢«ç‚¹å‡º
             mainForm.myCardsLocation = new ArrayList();
             mainForm.myCardsNumber = new ArrayList();
             mainForm.myCardIsReady = new ArrayList();
-
-
             Graphics g = Graphics.FromImage(mainForm.bmp);
-
-            //ÇåÏÂÃæµÄÆÁÄ»
+            // æ¸…ä¸‹é¢çš„å±å¹•
             Rectangle rect = new Rectangle(30, 355, 600, 116);
             g.DrawImage(mainForm.image, rect, rect, GraphicsUnit.Pixel);
-
-            //¼ÆËã³õÊ¼Î»ÖÃ
+            // è®¡ç®—åˆå§‹ä½ç½®
             int start = (int)((2780 - index * 75) / 10);
-
-
-            //¼ÇÂ¼Ã¿ÕÅÅÆµÄXÖµ
+            // è®°å½•æ¯å¼ ç‰Œçš„Xå€¼
             int j = 0;
-            //ÁÙÊ±±äÁ¿£¬ÓÃÀ´¸¨ÖúÅĞ¶ÏÊÇ·ñÄ³»¨É«È±Ê§
+            // ä¸´æ—¶å˜é‡ï¼Œç”¨æ¥è¾…åŠ©åˆ¤æ–­æ˜¯å¦æŸèŠ±è‰²ç¼ºå¤±
             int k = 0;
-            if (mainForm.currentState.Suit == 1)//ºìÌÒ
-            {
+            if (mainForm.currentState.Suit == 1) { // çº¢æ¡ƒ
                 j = DrawMyPeachs(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyDiamonds(g, currentPoker, j, start) + 1;
@@ -1021,15 +734,12 @@ namespace Kuaff.Tractor
                 j = DrawMyClubs(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyHearts(g, currentPoker, j, start);
-
                 j = DrawPeachsRank(g, currentPoker, j, start);
                 j = DrawDiamondsRank(g, currentPoker, j, start);
                 j = DrawClubsRank(g, currentPoker, j, start);
                 j = DrawHeartsRank(g, currentPoker, j, start);
             }
-            else if (mainForm.currentState.Suit == 2) //ºÚÌÒ
-            {
-
+            else if (mainForm.currentState.Suit == 2) { // é»‘æ¡ƒ
                 j = DrawMyDiamonds(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyClubs(g, currentPoker, j, start) + 1;
@@ -1037,16 +747,12 @@ namespace Kuaff.Tractor
                 j = DrawMyHearts(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyPeachs(g, currentPoker, j, start);
-
-
                 j = DrawDiamondsRank(g, currentPoker, j, start);
                 j = DrawClubsRank(g, currentPoker, j, start);
                 j = DrawHeartsRank(g, currentPoker, j, start);
                 j = DrawPeachsRank(g, currentPoker, j, start);
             }
-            else if (mainForm.currentState.Suit == 3)  //·½Æ¬
-            {
-
+            else if (mainForm.currentState.Suit == 3) {  // æ–¹ç‰‡
                 j = DrawMyClubs(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyHearts(g, currentPoker, j, start) + 1;
@@ -1054,16 +760,12 @@ namespace Kuaff.Tractor
                 j = DrawMyPeachs(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyDiamonds(g, currentPoker, j, start);
-
-
                 j = DrawClubsRank(g, currentPoker, j, start);
                 j = DrawHeartsRank(g, currentPoker, j, start);
                 j = DrawPeachsRank(g, currentPoker, j, start);
-                j = DrawDiamondsRank(g, currentPoker, j, start);//·½¿é
+                j = DrawDiamondsRank(g, currentPoker, j, start);// æ–¹å—
             }
-            else if (mainForm.currentState.Suit == 4)
-            {
-
+            else if (mainForm.currentState.Suit == 4) {
                 j = DrawMyHearts(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyPeachs(g, currentPoker, j, start) + 1;
@@ -1071,15 +773,12 @@ namespace Kuaff.Tractor
                 j = DrawMyDiamonds(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyClubs(g, currentPoker, j, start);
-
-
                 j = DrawHeartsRank(g, currentPoker, j, start);
                 j = DrawPeachsRank(g, currentPoker, j, start);
                 j = DrawDiamondsRank(g, currentPoker, j, start);
-                j = DrawClubsRank(g, currentPoker, j, start);//Ã·»¨
+                j = DrawClubsRank(g, currentPoker, j, start);// æ¢…èŠ±
             }
-            else if (mainForm.currentState.Suit == 5)
-            {
+            else if (mainForm.currentState.Suit == 5) {
                 j = DrawMyHearts(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyPeachs(g, currentPoker, j, start) + 1;
@@ -1088,61 +787,42 @@ namespace Kuaff.Tractor
                 IsSuitLost(ref j, ref k);
                 j = DrawMyClubs(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
-
                 j = DrawHeartsRank(g, currentPoker, j, start);
                 j = DrawPeachsRank(g, currentPoker, j, start);
                 j = DrawDiamondsRank(g, currentPoker, j, start);
                 j = DrawClubsRank(g, currentPoker, j, start);
             }
-
-            //Ğ¡Íõ
+// å°ç‹
             j = DrawSmallJack(g, currentPoker, j, start);
-
-            //´óÍõ
+// å¤§ç‹
             j = DrawBigJack(g, currentPoker, j, start);
-
             g.Dispose();
         }
-
-        private static void IsSuitLost(ref int j, ref int k)
-        {
-            if ((j - k) <= 1)
-            {
+        private static void IsSuitLost(ref int j, ref int k) {
+            if ((j - k) <= 1) {
                 j--;
             }
             k = j;
         }
-
-        /// <summary>
-        /// ÖØ»­ÎÒÊÖÖĞµÄÅÆ.
-        /// ÔÚÊó±ê½øĞĞÁËµ¥»÷»òÕßÓÒ»÷Ö®ºó½øĞĞ»æÖÆ¡£
-        /// </summary>
-        /// <param name="currentPoker">µ±Ç°ÎÒÊÖÖĞµÄÅÆ</param>
-        /// <param name="index">ÅÆµÄÊıÁ¿</param>
-        internal void DrawMyPlayingCards(CurrentPoker currentPoker)
-        {
+// é‡ç”»æˆ‘æ‰‹ä¸­çš„ç‰Œ.
+// åœ¨é¼ æ ‡è¿›è¡Œäº†å•å‡»æˆ–è€…å³å‡»ä¹‹åè¿›è¡Œç»˜åˆ¶ã€‚
+// <param name="currentPoker">å½“å‰æˆ‘æ‰‹ä¸­çš„ç‰Œ</param>
+// <param name="index">ç‰Œçš„æ•°é‡</param>
+        internal void DrawMyPlayingCards(CurrentPoker currentPoker) {
             int index = currentPoker.Count;
-
-
             mainForm.cardsOrderNumber = 0;
-
             Graphics g = Graphics.FromImage(mainForm.bmp);
-
-            //ÇåÏÂÃæµÄÆÁÄ»
+            // æ¸…ä¸‹é¢çš„å±å¹•
             Rectangle rect = new Rectangle(30, 355, 600, 116);
             g.DrawImage(mainForm.image, rect, rect, GraphicsUnit.Pixel);
             DrawScoreImage(mainForm.Scores);
-
             int start = (int)((2780 - index * 75) / 10);
-
-            //Rank(·ÖÖ÷¡¢¸±Rank)
-            //¼ÇÂ¼Ã¿ÕÅÅÆµÄXÖµ
+            // Rank(åˆ†ä¸»ã€å‰¯Rank)
+            // è®°å½•æ¯å¼ ç‰Œçš„Xå€¼
             int j = 0;
-            //ÁÙÊ±±äÁ¿£¬ÓÃÀ´¸¨ÖúÅĞ¶ÏÊÇ·ñÄ³»¨É«È±Ê§
+            // ä¸´æ—¶å˜é‡ï¼Œç”¨æ¥è¾…åŠ©åˆ¤æ–­æ˜¯å¦æŸèŠ±è‰²ç¼ºå¤±
             int k = 0;
-
-            if (mainForm.currentState.Suit == 1)
-            {
+            if (mainForm.currentState.Suit == 1) {
                 j = DrawMyPeachs2(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyDiamonds2(g, currentPoker, j, start) + 1;
@@ -1150,15 +830,12 @@ namespace Kuaff.Tractor
                 j = DrawMyClubs2(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyHearts2(g, currentPoker, j, start);
-
                 j = DrawPeachsRank2(g, currentPoker, j, start);
                 j = DrawDiamondsRank2(g, currentPoker, j, start);
                 j = DrawClubsRank2(g, currentPoker, j, start);
-                j = DrawHeartsRank2(g, currentPoker, j, start);//ºìÌÒ
+                j = DrawHeartsRank2(g, currentPoker, j, start);// çº¢æ¡ƒ
             }
-            else if (mainForm.currentState.Suit == 2)
-            {
-
+            else if (mainForm.currentState.Suit == 2) {
                 j = DrawMyDiamonds2(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyClubs2(g, currentPoker, j, start) + 1;
@@ -1166,15 +843,12 @@ namespace Kuaff.Tractor
                 j = DrawMyHearts2(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyPeachs2(g, currentPoker, j, start);
-
                 j = DrawDiamondsRank2(g, currentPoker, j, start);
                 j = DrawClubsRank2(g, currentPoker, j, start);
                 j = DrawHeartsRank2(g, currentPoker, j, start);
-                j = DrawPeachsRank2(g, currentPoker, j, start);//ºÚÌÒ
+                j = DrawPeachsRank2(g, currentPoker, j, start);// é»‘æ¡ƒ
             }
-            else if (mainForm.currentState.Suit == 3)
-            {
-
+            else if (mainForm.currentState.Suit == 3) {
                 j = DrawMyClubs2(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyHearts2(g, currentPoker, j, start) + 1;
@@ -1182,15 +856,12 @@ namespace Kuaff.Tractor
                 j = DrawMyPeachs2(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyDiamonds2(g, currentPoker, j, start);
-
                 j = DrawClubsRank2(g, currentPoker, j, start);
                 j = DrawHeartsRank2(g, currentPoker, j, start);
                 j = DrawPeachsRank2(g, currentPoker, j, start);
-                j = DrawDiamondsRank2(g, currentPoker, j, start);//·½¿é
+                j = DrawDiamondsRank2(g, currentPoker, j, start);// æ–¹å—
             }
-            else if (mainForm.currentState.Suit == 4)
-            {
-
+            else if (mainForm.currentState.Suit == 4) {
                 j = DrawMyHearts2(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyPeachs2(g, currentPoker, j, start) + 1;
@@ -1198,14 +869,12 @@ namespace Kuaff.Tractor
                 j = DrawMyDiamonds2(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyClubs2(g, currentPoker, j, start);
-
                 j = DrawHeartsRank2(g, currentPoker, j, start);
                 j = DrawPeachsRank2(g, currentPoker, j, start);
                 j = DrawDiamondsRank2(g, currentPoker, j, start);
-                j = DrawClubsRank2(g, currentPoker, j, start);//Ã·»¨
+                j = DrawClubsRank2(g, currentPoker, j, start);// æ¢…èŠ±
             }
-            else if (mainForm.currentState.Suit == 5)
-            {
+            else if (mainForm.currentState.Suit == 5) {
                 j = DrawMyHearts2(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyPeachs2(g, currentPoker, j, start) + 1;
@@ -1214,738 +883,504 @@ namespace Kuaff.Tractor
                 IsSuitLost(ref j, ref k);
                 j = DrawMyClubs2(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
-
                 j = DrawHeartsRank2(g, currentPoker, j, start);
                 j = DrawPeachsRank2(g, currentPoker, j, start);
                 j = DrawDiamondsRank2(g, currentPoker, j, start);
                 j = DrawClubsRank2(g, currentPoker, j, start);
             }
-
-            //Ğ¡Íõ
+            // å°ç‹
             j = DrawSmallJack2(g, currentPoker, j, start);
-
-            //´óÍõ
+            // å¤§ç‹
             j = DrawBigJack2(g, currentPoker, j, start);
-
-
-            //ÅĞ¶Ïµ±Ç°µÄ³öµÄÅÆÊÇ·ñÓĞĞ§,Èç¹ûÓĞĞ§£¬»­Ğ¡Öí
+            // åˆ¤æ–­å½“å‰çš„å‡ºçš„ç‰Œæ˜¯å¦æœ‰æ•ˆ,å¦‚æœæœ‰æ•ˆï¼Œç”»å°çŒª
             Rectangle pigRect = new Rectangle(296, 300, 53, 46);
-            if (TractorRules.IsInvalid(mainForm, mainForm.currentSendCards, 1) && (mainForm.currentState.CurrentCardCommands == CardCommands.WaitingForMySending))
-            {
+            if (TractorRules.IsInvalid(mainForm, mainForm.currentSendCards, 1) && (mainForm.currentState.CurrentCardCommands == CardCommands.WaitingForMySending)) {
                 g.DrawImage(Properties.Resources.Ready, pigRect);
             }
-            else
-            {
+            else {
                 g.DrawImage(mainForm.image, pigRect, pigRect, GraphicsUnit.Pixel);
             }
-
-
             My8CardsIsReady(g);
-
             g.Dispose();
         }
-
-        private void My8CardsIsReady(Graphics g)
-        {
-            //Èç¹ûµÈÎÒ¿ÛÅÆ
-            if ((mainForm.currentState.CurrentCardCommands == CardCommands.WaitingForSending8Cards))
-            {
+        private void My8CardsIsReady(Graphics g) {
+            // å¦‚æœç­‰æˆ‘æ‰£ç‰Œ
+            if ((mainForm.currentState.CurrentCardCommands == CardCommands.WaitingForSending8Cards)) {
                 int total = 0;
-                for (int i = 0; i < mainForm.myCardIsReady.Count; i++)
-                {
+                for (int i = 0; i < mainForm.myCardIsReady.Count; i++) {
                     if ((bool)mainForm.myCardIsReady[i])
                     {
                         total++;
                     }
                 }
                 Rectangle pigRect = new Rectangle(296, 300, 53, 46);
-                if (total == 8)
-                {
+                if (total == 8) {
                     g.DrawImage(Properties.Resources.Ready, pigRect);
                 }
-                else
-                {
+                else {
                     g.DrawImage(mainForm.image, pigRect, pigRect, GraphicsUnit.Pixel);
-
                 }
             }
         }
-
-
-        /// <summary>
-        /// ÔÚÆÁÄ»ÖĞÑë»æÖÆÎÒ³öµÄÅÆ
-        /// </summary>
-        /// <param name="readys">ÎÒ³öµÄÅÆµÄÁĞ±í</param>
-        internal void DrawMySendedCardsAction(ArrayList readys)
-        {
+// åœ¨å±å¹•ä¸­å¤®ç»˜åˆ¶æˆ‘å‡ºçš„ç‰Œ
+// <param name="readys">æˆ‘å‡ºçš„ç‰Œçš„åˆ—è¡¨</param>
+        internal void DrawMySendedCardsAction(ArrayList readys) {
             int start = 285 - readys.Count * 7;
             Graphics g = Graphics.FromImage(mainForm.bmp);
-            for (int i = 0; i < readys.Count; i++)
-            {
+            for (int i = 0; i < readys.Count; i++) {
                 DrawMyImage(g, getPokerImageByNumber((int)readys[i]), start, 244, 71, 96);
                 start += 14;
             }
             g.Dispose();
-
-
         }
-
-        /// <summary>
-        /// »­¶Ô¼ÒµÄÅÆ
-        /// </summary>
-        /// <param name="readys"></param>
-        private void DrawFrieldUserSendedCardsAction(ArrayList readys)
-        {
+// ç”»å¯¹å®¶çš„ç‰Œ
+// <param name="readys"></param>
+        private void DrawFrieldUserSendedCardsAction(ArrayList readys) {
             int start = 285 - readys.Count * 7;
             Graphics g = Graphics.FromImage(mainForm.bmp);
-            for (int i = 0; i < readys.Count; i++)
-            {
+            for (int i = 0; i < readys.Count; i++) {
                 DrawMyImage(g, getPokerImageByNumber((int)readys[i]), start, 130, 71, 96);
                 start += 14;
             }
             RedrawFrieldUserCardsAction(g, mainForm.currentPokers[1]);
-
-
             g.Dispose();
         }
-        private void RedrawFrieldUserCardsAction(Graphics g, CurrentPoker cp)
-        {
+        private void RedrawFrieldUserCardsAction(Graphics g, CurrentPoker cp) {
             Rectangle rect = new Rectangle(105, 25, 420, 96);
             g.DrawImage(mainForm.image, rect, rect, GraphicsUnit.Pixel);
             int start = (int)((2500 + cp.Count * 75) / 10);
-            for (int i = 0; i < cp.Count; i++) //×î¶à»­25ÕÅÅÆ
-            {
+            for (int i = 0; i < cp.Count; i++) { // æœ€å¤šç”»25å¼ ç‰Œ
                 DrawMyImage(g, mainForm.gameConfig.BackImage, start, 25, 71, 96);
                 start -= 13;
             }
         }
-
-
-        /// <summary>
-        /// »­ÉÏ¼ÒÓ¦¸Ã³öµÄÅÆ
-        /// </summary>
-        /// <param name="readys"></param>
-        private void DrawPreviousUserSendedCardsAction(ArrayList readys)
-        {
+// ç”»ä¸Šå®¶åº”è¯¥å‡ºçš„ç‰Œ
+// <param name="readys"></param>
+        private void DrawPreviousUserSendedCardsAction(ArrayList readys) {
             int start = 245 - readys.Count * 13;
             Graphics g = Graphics.FromImage(mainForm.bmp);
-            for (int i = 0; i < readys.Count; i++)
-            {
+            for (int i = 0; i < readys.Count; i++) {
                 DrawMyImage(g, getPokerImageByNumber((int)readys[i]), start + i * 13, 192, 71, 96);
             }
-
             RedrawPreviousUserCardsAction(g, mainForm.currentPokers[2]);
-
             g.Dispose();
         }
-        private void RedrawPreviousUserCardsAction(Graphics g, CurrentPoker cp)
-        {
+        private void RedrawPreviousUserCardsAction(Graphics g, CurrentPoker cp) {
             Rectangle rect = new Rectangle(6, 140, 71, 202);
             g.DrawImage(mainForm.image, rect, rect, GraphicsUnit.Pixel);
-
             int start = 195 - cp.Count * 2;
-            for (int i = 0; i < cp.Count; i++)  //×î¶à»­25ÕÅ,ÒòÎª¶àÁË²»ºÃ»­ÁË£¬¼´Ê¹ÊÕµ×
-            {
+            for (int i = 0; i < cp.Count; i++) {  // æœ€å¤šç”»25å¼ ,å› ä¸ºå¤šäº†ä¸å¥½ç”»äº†ï¼Œå³ä½¿æ”¶åº•
                 DrawMyImage(g, mainForm.gameConfig.BackImage, 6, start, 71, 96);
                 start += 4;
             }
         }
-
-
-        /// <summary>
-        /// »­ÏÂ¼ÒÓ¦¸Ã³öµÄÅÆ
-        /// </summary>
-        /// <param name="readys"></param>
-        private void DrawNextUserSendedCardsAction(ArrayList readys)
-        {
+// ç”»ä¸‹å®¶åº”è¯¥å‡ºçš„ç‰Œ
+// <param name="readys"></param>
+        private void DrawNextUserSendedCardsAction(ArrayList readys) {
             Graphics g = Graphics.FromImage(mainForm.bmp);
-            for (int i = 0; i < readys.Count; i++)
-            {
+            for (int i = 0; i < readys.Count; i++) {
                 DrawMyImage(g, getPokerImageByNumber((int)readys[i]), 326 + i * 13, 192, 71, 96);
             }
-
             RedrawNextUserCardsAction(g, mainForm.currentPokers[3]);
-
-
             g.Dispose();
         }
-        private void RedrawNextUserCardsAction(Graphics g, CurrentPoker cp)
-        {
+        private void RedrawNextUserCardsAction(Graphics g, CurrentPoker cp) {
             Rectangle rect = new Rectangle(554, 136, 71, 210);
             g.DrawImage(mainForm.image, rect, rect, GraphicsUnit.Pixel);
-            //554, 241 - count * 4, 71, 96
+            // 554, 241 - count * 4, 71, 96
             int start = 191 + cp.Count * 2;
-            for (int i = 0; i < cp.Count; i++)
-            {
+            for (int i = 0; i < cp.Count; i++) {
                 DrawMyImage(g, mainForm.gameConfig.BackImage, 554, start, 71, 96);
                 start -= 4;
             }
         }
-
-
-        #endregion // ÔÚ¸÷ÖÖÇé¿öÏÂ»­×Ô¼ºµÄÅÆ
-
-
-        #region »­×Ô¼ºµÄÅÆÃæ(ËÄÖÖ»¨É«¡¢ËÄÖÖ»¨É«Rank¡¢´óĞ¡Íõ)
-        private int DrawBigJack(Graphics g, CurrentPoker currentPoker, int j, int start)
-        {
+#endregion // åœ¨å„ç§æƒ…å†µä¸‹ç”»è‡ªå·±çš„ç‰Œ
+#region ç”»è‡ªå·±çš„ç‰Œé¢(å››ç§èŠ±è‰²ã€å››ç§èŠ±è‰²Rankã€å¤§å°ç‹)
+        private int DrawBigJack(Graphics g, CurrentPoker currentPoker, int j, int start) {
             j = DrawMyOneOrTwoCards(g, currentPoker.BigJack, 53, j, start);
             return j;
         }
-
-
-        private int DrawSmallJack(Graphics g, CurrentPoker currentPoker, int j, int start)
-        {
+        private int DrawSmallJack(Graphics g, CurrentPoker currentPoker, int j, int start) {
             j = DrawMyOneOrTwoCards(g, currentPoker.SmallJack, 52, j, start);
             return j;
         }
-
-        private int DrawDiamondsRank(Graphics g, CurrentPoker currentPoker, int j, int start)
-        {
+        private int DrawDiamondsRank(Graphics g, CurrentPoker currentPoker, int j, int start) {
             j = DrawMyOneOrTwoCards(g, currentPoker.DiamondsRankTotal, mainForm.currentRank + 26, j, start);
             return j;
         }
-
-        private int DrawClubsRank(Graphics g, CurrentPoker currentPoker, int j, int start)
-        {
+        private int DrawClubsRank(Graphics g, CurrentPoker currentPoker, int j, int start) {
             j = DrawMyOneOrTwoCards(g, currentPoker.ClubsRankTotal, mainForm.currentRank + 39, j, start);
             return j;
         }
-
-        private int DrawPeachsRank(Graphics g, CurrentPoker currentPoker, int j, int start)
-        {
+        private int DrawPeachsRank(Graphics g, CurrentPoker currentPoker, int j, int start) {
             j = DrawMyOneOrTwoCards(g, currentPoker.PeachsRankTotal, mainForm.currentRank + 13, j, start);
             return j;
         }
-
-        private int DrawHeartsRank(Graphics g, CurrentPoker currentPoker, int j, int start)
-        {
+        private int DrawHeartsRank(Graphics g, CurrentPoker currentPoker, int j, int start) {
             j = DrawMyOneOrTwoCards(g, currentPoker.HeartsRankTotal, mainForm.currentRank, j, start);
             return j;
         }
-
-        private int DrawMyClubs(Graphics g, CurrentPoker currentPoker, int j, int start)
-        {
-            for (int i = 0; i < 13; i++)
-            {
+        private int DrawMyClubs(Graphics g, CurrentPoker currentPoker, int j, int start) {
+            for (int i = 0; i < 13; i++) {
                 j = DrawMyOneOrTwoCards(g, currentPoker.ClubsNoRank[i], i + 39, j, start);
             }
             return j;
         }
-
-        private int DrawMyDiamonds(Graphics g, CurrentPoker currentPoker, int j, int start)
-        {
-            for (int i = 0; i < 13; i++)
-            {
+        private int DrawMyDiamonds(Graphics g, CurrentPoker currentPoker, int j, int start) {
+            for (int i = 0; i < 13; i++) {
                 j = DrawMyOneOrTwoCards(g, currentPoker.DiamondsNoRank[i], i + 26, j, start);
             }
             return j;
         }
-
-        private int DrawMyPeachs(Graphics g, CurrentPoker currentPoker, int j, int start)
-        {
-            for (int i = 0; i < 13; i++)
-            {
+        private int DrawMyPeachs(Graphics g, CurrentPoker currentPoker, int j, int start) {
+            for (int i = 0; i < 13; i++) {
                 j = DrawMyOneOrTwoCards(g, currentPoker.PeachsNoRank[i], i + 13, j, start);
-
             }
             return j;
         }
-
-        private int DrawMyHearts(Graphics g, CurrentPoker currentPoker, int j, int start)
-        {
-            for (int i = 0; i < 13; i++)
-            {
+        private int DrawMyHearts(Graphics g, CurrentPoker currentPoker, int j, int start) {
+            for (int i = 0; i < 13; i++) {
                 j = DrawMyOneOrTwoCards(g, currentPoker.HeartsNoRank[i], i, j, start);
             }
             return j;
         }
-
-        //¸¨Öú·½·¨
-        private int DrawMyOneOrTwoCards(Graphics g, int count, int number, int j, int start)
-        {
-            //Èç¹ûÊÇÎÒÁÁµÄÖ÷£¬ÎÒĞèÒª½«ÁÁµÄÖ÷ÍùÉÏÌáÒ»ÏÂ
+// è¾…åŠ©æ–¹æ³•
+        private int DrawMyOneOrTwoCards(Graphics g, int count, int number, int j, int start) {
+            // å¦‚æœæ˜¯æˆ‘äº®çš„ä¸»ï¼Œæˆ‘éœ€è¦å°†äº®çš„ä¸»å¾€ä¸Šæä¸€ä¸‹
             bool b = (number == 52) || (number == 53);
             b = b & (mainForm.currentState.Suit == 5);
-            if (number == (mainForm.currentState.Suit-1)*13 + mainForm.currentRank)
-            {
+            if (number == (mainForm.currentState.Suit-1)*13 + mainForm.currentRank) {
                 b = true;
             }
-
             b = b && (mainForm.currentState.CurrentCardCommands == CardCommands.ReadyCards);
-
-            if (count == 1)
-            {
+            if (count == 1) {
                 SetCardsInformation(start + j * 13, number, false);
-                if (mainForm.whoShowRank == 1 && b)
-                {
+                if (mainForm.whoShowRank == 1 && b) {
                     if (number == 52 || number == 53)
                     {
-                        g.DrawImage(getPokerImageByNumber(number), start + j * 13, 375, 71, 96); //µ¥¸öµÄÍõ²»±»ÌáÉÏ
+                        g.DrawImage(getPokerImageByNumber(number), start + j * 13, 375, 71, 96); // å•ä¸ªçš„ç‹ä¸è¢«æä¸Š
                     }
                     else
                     {
                         g.DrawImage(getPokerImageByNumber(number), start + j * 13, 360, 71, 96);
                     }
                 }
-                else
-                {
+                else {
                     g.DrawImage(getPokerImageByNumber(number), start + j * 13, 375, 71, 96);
                 }
-
                 j++;
             }
-            else if (count == 2)
-            {
+            else if (count == 2) {
                 SetCardsInformation(start + j * 13, number, false);
-
-                if (mainForm.whoShowRank == 1 && b && mainForm.showSuits >= 1)
-                {
+                if (mainForm.whoShowRank == 1 && b && mainForm.showSuits >= 1) {
                     g.DrawImage(getPokerImageByNumber(number), start + j * 13, 360, 71, 96);
                 }
-                else
-                {
+                else {
                     g.DrawImage(getPokerImageByNumber(number), start + j * 13, 375, 71, 96);
                 }
                 
                 j++;
                 SetCardsInformation(start + j * 13, number, false);
-                if (mainForm.whoShowRank == 1 && b && mainForm.showSuits >= 2)
-                {
+                if (mainForm.whoShowRank == 1 && b && mainForm.showSuits >= 2) {
                     g.DrawImage(getPokerImageByNumber(number), start + j * 13, 360, 71, 96);
                 }
-                else
-                {
+                else {
                     g.DrawImage(getPokerImageByNumber(number), start + j * 13, 375, 71, 96);
                 }
-
                 j++;
             }
             return j;
         }
-
-
-        #endregion // »­×Ô¼ºµÄÅÆÃæ
-
-        #region »­×Ô¼ºÅÆÃæµÄ·½·¨
-        private int DrawBigJack2(Graphics g, CurrentPoker currentPoker, int j, int start)
-        {
-            if (currentPoker.BigJack == 1)
-            {
+#endregion // ç”»è‡ªå·±çš„ç‰Œé¢
+#region ç”»è‡ªå·±ç‰Œé¢çš„æ–¹æ³•
+        private int DrawBigJack2(Graphics g, CurrentPoker currentPoker, int j, int start) {
+            if (currentPoker.BigJack == 1) {
                 j = DrawMyOneOrTwoCards2(g, j, 53, start + j * 13, 355, 71, 96) + 1;
             }
-            else if (currentPoker.BigJack == 2)
-            {
+            else if (currentPoker.BigJack == 2) {
                 j = DrawMyOneOrTwoCards2(g, j, 53, start + j * 13, 355, 71, 96) + 1;
                 j = DrawMyOneOrTwoCards2(g, j, 53, start + j * 13, 355, 71, 96) + 1;
             }
             return j;
         }
-
-        private int DrawSmallJack2(Graphics g, CurrentPoker currentPoker, int j, int start)
-        {
-            if (currentPoker.SmallJack == 1)
-            {
+        private int DrawSmallJack2(Graphics g, CurrentPoker currentPoker, int j, int start) {
+            if (currentPoker.SmallJack == 1) {
                 j = DrawMyOneOrTwoCards2(g, j, 52, start + j * 13, 355, 71, 96) + 1;
             }
-            else if (currentPoker.SmallJack == 2)
-            {
+            else if (currentPoker.SmallJack == 2) {
                 j = DrawMyOneOrTwoCards2(g, j, 52, start + j * 13, 355, 71, 96) + 1;
                 j = DrawMyOneOrTwoCards2(g, j, 52, start + j * 13, 355, 71, 96) + 1;
             }
             return j;
         }
-
-        private int DrawDiamondsRank2(Graphics g, CurrentPoker currentPoker, int j, int start)
-        {
-            if (currentPoker.DiamondsRankTotal == 1)
-            {
+        private int DrawDiamondsRank2(Graphics g, CurrentPoker currentPoker, int j, int start) {
+            if (currentPoker.DiamondsRankTotal == 1) {
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank + 26, start + j * 13, 355, 71, 96) + 1;
             }
-            else if (currentPoker.DiamondsRankTotal == 2)
-            {
+            else if (currentPoker.DiamondsRankTotal == 2) {
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank + 26, start + j * 13, 355, 71, 96) + 1;
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank + 26, start + j * 13, 355, 71, 96) + 1;
             }
             return j;
         }
-
-        private int DrawClubsRank2(Graphics g, CurrentPoker currentPoker, int j, int start)
-        {
-            if (currentPoker.ClubsRankTotal == 1)
-            {
+        private int DrawClubsRank2(Graphics g, CurrentPoker currentPoker, int j, int start) {
+            if (currentPoker.ClubsRankTotal == 1) {
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank + 39, start + j * 13, 355, 71, 96) + 1;
             }
-            else if (currentPoker.ClubsRankTotal == 2)
-            {
+            else if (currentPoker.ClubsRankTotal == 2) {
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank + 39, start + j * 13, 355, 71, 96) + 1;
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank + 39, start + j * 13, 355, 71, 96) + 1;
             }
             return j;
         }
-
-        private int DrawPeachsRank2(Graphics g, CurrentPoker currentPoker, int j, int start)
-        {
-            if (currentPoker.PeachsRankTotal == 1)
-            {
+        private int DrawPeachsRank2(Graphics g, CurrentPoker currentPoker, int j, int start) {
+            if (currentPoker.PeachsRankTotal == 1) {
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank + 13, start + j * 13, 355, 71, 96) + 1;
             }
-            else if (currentPoker.PeachsRankTotal == 2)
-            {
+            else if (currentPoker.PeachsRankTotal == 2) {
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank + 13, start + j * 13, 355, 71, 96) + 1;
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank + 13, start + j * 13, 355, 71, 96) + 1;
             }
             return j;
         }
-
-        private int DrawHeartsRank2(Graphics g, CurrentPoker currentPoker, int j, int start)
-        {
-            if (currentPoker.HeartsRankTotal == 1)
-            {
+        private int DrawHeartsRank2(Graphics g, CurrentPoker currentPoker, int j, int start) {
+            if (currentPoker.HeartsRankTotal == 1) {
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank, start + j * 13, 355, 71, 96) + 1;
             }
-            else if (currentPoker.HeartsRankTotal == 2)
-            {
+            else if (currentPoker.HeartsRankTotal == 2) {
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank, start + j * 13, 355, 71, 96) + 1;
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank, start + j * 13, 355, 71, 96) + 1;
             }
             return j;
         }
-
-        private int DrawMyClubs2(Graphics g, CurrentPoker currentPoker, int j, int start)
-        {
-            for (int i = 0; i < 13; i++)
-            {
-                if (currentPoker.ClubsNoRank[i] == 1)
-                {
+        private int DrawMyClubs2(Graphics g, CurrentPoker currentPoker, int j, int start) {
+            for (int i = 0; i < 13; i++) {
+                if (currentPoker.ClubsNoRank[i] == 1) {
                     j = DrawMyOneOrTwoCards2(g, j, i + 39, start + j * 13, 355, 71, 96) + 1;
                 }
-                else if (currentPoker.ClubsNoRank[i] == 2)
-                {
+                else if (currentPoker.ClubsNoRank[i] == 2) {
                     j = DrawMyOneOrTwoCards2(g, j, i + 39, start + j * 13, 355, 71, 96) + 1;
                     j = DrawMyOneOrTwoCards2(g, j, i + 39, start + j * 13, 355, 71, 96) + 1;
                 }
             }
             return j;
         }
-
-        private int DrawMyDiamonds2(Graphics g, CurrentPoker currentPoker, int j, int start)
-        {
-            for (int i = 0; i < 13; i++)
-            {
-                if (currentPoker.DiamondsNoRank[i] == 1)
-                {
+        private int DrawMyDiamonds2(Graphics g, CurrentPoker currentPoker, int j, int start) {
+            for (int i = 0; i < 13; i++) {
+                if (currentPoker.DiamondsNoRank[i] == 1) {
                     j = DrawMyOneOrTwoCards2(g, j, i + 26, start + j * 13, 355, 71, 96) + 1;
                 }
-                else if (currentPoker.DiamondsNoRank[i] == 2)
-                {
+                else if (currentPoker.DiamondsNoRank[i] == 2) {
                     j = DrawMyOneOrTwoCards2(g, j, i + 26, start + j * 13, 355, 71, 96) + 1;
                     j = DrawMyOneOrTwoCards2(g, j, i + 26, start + j * 13, 355, 71, 96) + 1;
                 }
             }
             return j;
         }
-
-        private int DrawMyPeachs2(Graphics g, CurrentPoker currentPoker, int j, int start)
-        {
-            for (int i = 0; i < 13; i++)
-            {
-                if (currentPoker.PeachsNoRank[i] == 1)
-                {
+        private int DrawMyPeachs2(Graphics g, CurrentPoker currentPoker, int j, int start) {
+            for (int i = 0; i < 13; i++) {
+                if (currentPoker.PeachsNoRank[i] == 1) {
                     j = DrawMyOneOrTwoCards2(g, j, i + 13, start + j * 13, 355, 71, 96) + 1;
                 }
-                else if (currentPoker.PeachsNoRank[i] == 2)
-                {
+                else if (currentPoker.PeachsNoRank[i] == 2) {
                     j = DrawMyOneOrTwoCards2(g, j, i + 13, start + j * 13, 355, 71, 96) + 1;
                     j = DrawMyOneOrTwoCards2(g, j, i + 13, start + j * 13, 355, 71, 96) + 1;
                 }
             }
             return j;
         }
-
-        private int DrawMyHearts2(Graphics g, CurrentPoker currentPoker, int j, int start)
-        {
-            for (int i = 0; i < 13; i++)
-            {
-                if (currentPoker.HeartsNoRank[i] == 1)
-                {
+        private int DrawMyHearts2(Graphics g, CurrentPoker currentPoker, int j, int start) {
+            for (int i = 0; i < 13; i++) {
+                if (currentPoker.HeartsNoRank[i] == 1) {
                     j = DrawMyOneOrTwoCards2(g, j, i, start + j * 13, 355, 71, 96) + 1;
                 }
-                else if (currentPoker.HeartsNoRank[i] == 2)
-                {
+                else if (currentPoker.HeartsNoRank[i] == 2) {
                     j = DrawMyOneOrTwoCards2(g, j, i, start + j * 13, 355, 71, 96) + 1;
                     j = DrawMyOneOrTwoCards2(g, j, i, start + j * 13, 355, 71, 96) + 1;
                 }
             }
             return j;
         }
-
-        //¸¨Öú·½·¨
-        private int DrawMyOneOrTwoCards2(Graphics g, int j, int number, int x, int y, int width, int height)
-        {
-            if ((bool)mainForm.myCardIsReady[mainForm.cardsOrderNumber])
-            {
+// è¾…åŠ©æ–¹æ³•
+        private int DrawMyOneOrTwoCards2(Graphics g, int j, int number, int x, int y, int width, int height) {
+            if ((bool)mainForm.myCardIsReady[mainForm.cardsOrderNumber]) {
                 g.DrawImage(getPokerImageByNumber(number), x, y, width, height);
             }
-            else
-            {
+            else {
                 g.DrawImage(getPokerImageByNumber(number), x, y + 20, width, height);
             }
-
             mainForm.cardsOrderNumber++;
             return j;
         }
-        #endregion // ÀàËÆµÄ»­×Ô¼ºÅÆÃæµÄ·½·¨
-
-        #region »æÖÆ¸÷¼Ò³öµÄÅÆ£¬²¢¼ÆËã½á¹û»òÕßÍ¨ÖªÏÂÒ»¼Ò
-        /// <summary>
-        /// »­×Ô¼º³öµÄÅÆ
-        /// </summary>
-        internal void DrawMyFinishSendedCards()
-        {
-            //ÔÚÖĞÑë»­³öµã³öµÄÅÆ
+#endregion // ç±»ä¼¼çš„ç”»è‡ªå·±ç‰Œé¢çš„æ–¹æ³•
+#region ç»˜åˆ¶å„å®¶å‡ºçš„ç‰Œï¼Œå¹¶è®¡ç®—ç»“æœæˆ–è€…é€šçŸ¥ä¸‹ä¸€å®¶
+// ç”»è‡ªå·±å‡ºçš„ç‰Œ
+        internal void DrawMyFinishSendedCards() {
+            // åœ¨ä¸­å¤®ç”»å‡ºç‚¹å‡ºçš„ç‰Œ
             DrawMySendedCardsAction(mainForm.currentSendCards[0]);
-
-            for (int i = 0; i < mainForm.currentSendCards[0].Count; i++)
-            {
+            for (int i = 0; i < mainForm.currentSendCards[0].Count; i++) {
                 mainForm.currentAllSendPokers[0].AddCard((int)mainForm.currentSendCards[0][i]);
             }
-
-
-            //ÖØ»­×Ô¼ºÊÖÖĞµÄÅÆ
-            if (mainForm.currentPokers[0].Count > 0)
-            {
+            // é‡ç”»è‡ªå·±æ‰‹ä¸­çš„ç‰Œ
+            if (mainForm.currentPokers[0].Count > 0) {
                 DrawMySortedCards(mainForm.currentPokers[0], mainForm.currentPokers[0].Count);
             }
-            else //ÖØĞÂÏÂ²¿¿Õ¼ä
-            {
+            else { // é‡æ–°ä¸‹éƒ¨ç©ºé—´
                 Rectangle rect = new Rectangle(30, 355, 560, 116);
                 Graphics g = Graphics.FromImage(mainForm.bmp);
                 g.DrawImage(mainForm.image, rect, rect, GraphicsUnit.Pixel);
                 g.Dispose();
             }
-
             DrawScoreImage(mainForm.Scores);
             mainForm.Refresh();
-
-            //¼ÆËãÄ¿Ç°Ë­µÄÅÆ×î´ó
-
-            if (mainForm.currentSendCards[3].Count > 0) //ÊÇ·ñÍê³É
-            {
+// è®¡ç®—ç›®å‰è°çš„ç‰Œæœ€å¤§
+            if (mainForm.currentSendCards[3].Count > 0) { // æ˜¯å¦å®Œæˆ
                 mainForm.currentState.CurrentCardCommands = CardCommands.Pause;
                 mainForm.SetPauseSet(mainForm.gameConfig.FinishedOncePauseTime, CardCommands.DrawOnceFinished);
-
                 DrawWhoWinThisTime();
-
             }
-            else
-            {
+            else {
                 mainForm.whoseOrder = 4;
                 mainForm.currentState.CurrentCardCommands = CardCommands.WaitingForSend;
             }
 
-
-
         }
-
-        /// <summary>
-        /// ÏÂ¼Ò³öÅÆ
-        /// </summary>
-        internal void DrawNextUserSendedCards()
-        {
+// ä¸‹å®¶å‡ºç‰Œ
+        internal void DrawNextUserSendedCards() {
             mainForm.currentState.CurrentCardCommands = CardCommands.Undefined;
-            //»­NextUser³öµÄÅÆ
-            if (mainForm.currentSendCards[0].Count > 0) //ËæÅÆ
-            {
+            // ç”»NextUserå‡ºçš„ç‰Œ
+            if (mainForm.currentSendCards[0].Count > 0) { // éšç‰Œ
                 DrawNextUserSendedCardsAction(Algorithm.MustSendedCards(mainForm, 4, mainForm.currentPokers, mainForm.currentSendCards, mainForm.currentState.Suit, mainForm.currentRank, mainForm.currentSendCards[mainForm.firstSend - 1].Count));
             }
-            else
-            {
+            else {
                 DrawNextUserSendedCardsAction(Algorithm.ShouldSendedCards(mainForm, 4, mainForm.currentPokers, mainForm.currentSendCards, mainForm.currentState.Suit, mainForm.currentRank));
                 mainForm.whoseOrder = 2;
             }
-
-            //¿¼ÂÇÊÇ·ñ¸Ç×¡µÄÎÊÌâ
-            //ÎÒÒÑ¾­³öÅÆ£¬Ó¦¸Ã½«ÎÒÖØ»­
+// è€ƒè™‘æ˜¯å¦ç›–ä½çš„é—®é¢˜
+// æˆ‘å·²ç»å‡ºç‰Œï¼Œåº”è¯¥å°†æˆ‘é‡ç”»
             int myCount = mainForm.currentSendCards[0].Count;
-            if (myCount > 0)
-            {
+            if (myCount > 0) {
                 int start = 285 - myCount * 7;
                 Graphics g = Graphics.FromImage(mainForm.bmp);
                 Rectangle rect = new Rectangle(start, 254, myCount * 14 + 57, 96);
                 g.DrawImage(mainForm.image, rect, rect, GraphicsUnit.Pixel);
-                for (int i = 0; i < myCount; i++)
-                {
+                for (int i = 0; i < myCount; i++) {
                     DrawMyImage(g, getPokerImageByNumber((int)mainForm.currentSendCards[0][i]), start, 244, 71, 96);
                     start += 14;
                 }
                 g.Dispose();
             }
-
             DrawScoreImage(mainForm.Scores);
             mainForm.Refresh();
-
-            //
-            if (mainForm.currentSendCards[1].Count > 0)
-            {
+// 
+            if (mainForm.currentSendCards[1].Count > 0) {
                 mainForm.currentState.CurrentCardCommands = CardCommands.Pause;
                 mainForm.SetPauseSet(mainForm.gameConfig.FinishedOncePauseTime, CardCommands.DrawOnceFinished);
-
                 DrawWhoWinThisTime();
             }
-            else
-            {
+            else {
                 mainForm.whoseOrder = 2;
                 mainForm.currentState.CurrentCardCommands = CardCommands.WaitingForSend;
             }
-
-
         }
-
-        /// <summary>
-        /// ¶Ô¼Ò³öÅÆ
-        /// </summary>
-        internal void DrawFrieldUserSendedCards()
-        {
+// å¯¹å®¶å‡ºç‰Œ
+        internal void DrawFrieldUserSendedCards() {
             mainForm.currentState.CurrentCardCommands = CardCommands.Undefined;
-            //»­FrieldUser³öµÄÅÆ
-            if (mainForm.currentSendCards[3].Count > 0) //ËæÅÆ
-            {
+            // ç”»FrieldUserå‡ºçš„ç‰Œ
+            if (mainForm.currentSendCards[3].Count > 0) { // éšç‰Œ
                 DrawFrieldUserSendedCardsAction(Algorithm.MustSendedCards(mainForm, 2, mainForm.currentPokers, mainForm.currentSendCards, mainForm.currentState.Suit, mainForm.currentRank, mainForm.currentSendCards[mainForm.firstSend - 1].Count));
             }
-            else
-            {
+            else {
                 DrawFrieldUserSendedCardsAction(Algorithm.ShouldSendedCards(mainForm, 2, mainForm.currentPokers, mainForm.currentSendCards, mainForm.currentState.Suit, mainForm.currentRank));
             }
-
-
-            //¿¼ÂÇÊÇ·ñ¸Ç×¡µÄÎÊÌâ
-            //Èç¹ûÏÂ¼ÒÒÑ¾­³öÅÆ£¬Ó¦¸Ã½«ÏÂ¼ÒÖØ»­,ÖØ»­ÏÂ¼ÒÊ±£¬ÓĞ¿ÉÄÜ¸Ç×¡ÎÒ
+// è€ƒè™‘æ˜¯å¦ç›–ä½çš„é—®é¢˜
+// å¦‚æœä¸‹å®¶å·²ç»å‡ºç‰Œï¼Œåº”è¯¥å°†ä¸‹å®¶é‡ç”»,é‡ç”»ä¸‹å®¶æ—¶ï¼Œæœ‰å¯èƒ½ç›–ä½æˆ‘
             int myCount = mainForm.currentSendCards[3].Count;
-            if (myCount > 0)
-            {
+            if (myCount > 0) {
                 Graphics g = Graphics.FromImage(mainForm.bmp);
-                for (int i = 0; i < myCount; i++)
-                {
+                for (int i = 0; i < myCount; i++) {
                     DrawMyImage(g, getPokerImageByNumber((int)mainForm.currentSendCards[3][i]), 326 + i * 13, 192, 71, 96);
                 }
                 g.Dispose();
             }
             myCount = mainForm.currentSendCards[0].Count;
-            if (myCount > 0)
-            {
+            if (myCount > 0) {
                 int start = 285 - myCount * 7;
                 Graphics g = Graphics.FromImage(mainForm.bmp);
                 Rectangle rect = new Rectangle(start, 254, myCount * 14 + 57, 96);
                 g.DrawImage(mainForm.image, rect, rect, GraphicsUnit.Pixel);
-                for (int i = 0; i < myCount; i++)
-                {
+                for (int i = 0; i < myCount; i++) {
                     DrawMyImage(g, getPokerImageByNumber((int)mainForm.currentSendCards[0][i]), start, 244, 71, 96);
                     start += 14;
                 }
                 g.Dispose();
             }
-
             DrawScoreImage(mainForm.Scores);
             mainForm.Refresh();
-
-            //
-            if (mainForm.currentSendCards[2].Count > 0)
-            {
+// 
+            if (mainForm.currentSendCards[2].Count > 0) {
                 mainForm.currentState.CurrentCardCommands = CardCommands.Pause;
                 mainForm.SetPauseSet(mainForm.gameConfig.FinishedOncePauseTime, CardCommands.DrawOnceFinished);
-
                 DrawWhoWinThisTime();
             }
-            else
-            {
+            else {
                 mainForm.whoseOrder = 3;
                 mainForm.currentState.CurrentCardCommands = CardCommands.WaitingForSend;
             }
-
-            //
+// 
         }
-
-        /// <summary>
-        /// ÉÏ¼Ò³öÅÆ
-        /// </summary>
-        internal void DrawPreviousUserSendedCards()
-        {
+// ä¸Šå®¶å‡ºç‰Œ
+        internal void DrawPreviousUserSendedCards() {
             mainForm.currentState.CurrentCardCommands = CardCommands.Undefined;
-            //»­PreviousUser³öµÄÅÆ
-            if (mainForm.currentSendCards[1].Count > 0) //ËæÅÆ
-            {
+            // ç”»PreviousUserå‡ºçš„ç‰Œ
+            if (mainForm.currentSendCards[1].Count > 0) { // éšç‰Œ 
                 DrawPreviousUserSendedCardsAction(Algorithm.MustSendedCards(mainForm, 3, mainForm.currentPokers, mainForm.currentSendCards, mainForm.currentState.Suit, mainForm.currentRank, mainForm.currentSendCards[mainForm.firstSend - 1].Count));
             }
-            else
-            {
+            else {
                 DrawPreviousUserSendedCardsAction(Algorithm.ShouldSendedCards(mainForm, 3, mainForm.currentPokers, mainForm.currentSendCards, mainForm.currentState.Suit, mainForm.currentRank));
             }
-
-
-            //¿¼ÂÇÊÇ·ñ¸Ç×¡µÄÎÊÌâ
-            //ÎÒÒÑ¾­³öÅÆ£¬Ó¦¸Ã½«ÎÒÖØ»­
+// è€ƒè™‘æ˜¯å¦ç›–ä½çš„é—®é¢˜
+// æˆ‘å·²ç»å‡ºç‰Œï¼Œåº”è¯¥å°†æˆ‘é‡ç”»
             int myCount = mainForm.currentSendCards[0].Count;
-            if (myCount > 0)
-            {
+            if (myCount > 0) {
                 int start = 285 - myCount * 7;
                 Graphics g = Graphics.FromImage(mainForm.bmp);
                 Rectangle rect = new Rectangle(start, 254, myCount * 14 + 57, 96);
                 g.DrawImage(mainForm.image, rect, rect, GraphicsUnit.Pixel);
-                for (int i = 0; i < myCount; i++)
-                {
+                for (int i = 0; i < myCount; i++) {
                     DrawMyImage(g, getPokerImageByNumber((int)mainForm.currentSendCards[0][i]), start, 244, 71, 96);
                     start += 14;
                 }
                 g.Dispose();
             }
-
             DrawScoreImage(mainForm.Scores);
             mainForm.Refresh();
-
-
-            //
-            if (mainForm.currentSendCards[0].Count > 0)
-            {
+// 
+            if (mainForm.currentSendCards[0].Count > 0) {
                 mainForm.currentState.CurrentCardCommands = CardCommands.Pause;
                 mainForm.SetPauseSet(mainForm.gameConfig.FinishedOncePauseTime, CardCommands.DrawOnceFinished);
-
                 DrawWhoWinThisTime();
             }
-            else
-            {
+            else {
                 mainForm.whoseOrder = 1;
                 mainForm.currentState.CurrentCardCommands = CardCommands.WaitingForMySending;
             }
-
-
         }
-
-        //´ó¼Ò¶¼³öÍêÒ»´ÎÅÆ£¬Ôò¼ÆËãµÃ·Ö¶àÉÙ£¬ÏÂ´Î¸ÃË­³öÅÆ
-        internal void DrawFinishedOnceSendedCards()
-        {
-            if (mainForm.currentPokers[0].Count == 0)
-            {
+// å¤§å®¶éƒ½å‡ºå®Œä¸€æ¬¡ç‰Œï¼Œåˆ™è®¡ç®—å¾—åˆ†å¤šå°‘ï¼Œä¸‹æ¬¡è¯¥è°å‡ºç‰Œ
+        internal void DrawFinishedOnceSendedCards() {
+            if (mainForm.currentPokers[0].Count == 0) {
                 DrawFinishedSendedCards();
                 return;
             }
-
-
-            #region ²âÊÔ
-            if (mainForm.gameConfig.IsDebug)
-            {
+#region æµ‹è¯•
+            if (mainForm.gameConfig.IsDebug) {
                 int f1 = mainForm.currentPokers[0].Count;
                 int f2 = mainForm.currentPokers[1].Count;
                 int f3 = mainForm.currentPokers[2].Count;
                 int f4 = mainForm.currentPokers[3].Count;
-
-                if (f1 != f2 || f2 != f3 || f3 != f4)
-                {
+                if (f1 != f2 || f2 != f3 || f3 != f4) {
                     int total = mainForm.currentSendCards[mainForm.firstSend - 1].Count;
-
                     int[] users = CommonMethods.OtherUsers(mainForm.firstSend);
-
-
                     if (mainForm.currentSendCards[users[0] - 1].Count != total)
                     {
                         for (int i = 0; i < mainForm.currentSendCards[users[0] - 1].Count; i++)
@@ -1956,7 +1391,6 @@ namespace Kuaff.Tractor
                         mainForm.currentSendCards[users[0] - 1] = new ArrayList();
                         MustSendCardsAlgorithm.WhoseOrderIs2(mainForm, mainForm.currentPokers, users[0], mainForm.currentSendCards[users[0] - 1], 1, mainForm.currentState.Suit, mainForm.currentRank, CommonMethods.GetSuit((int)mainForm.currentSendCards[mainForm.firstSend - 1][0]));
                     }
-
                     if (mainForm.currentSendCards[users[1] - 1].Count != total)
                     {
                         for (int i = 0; i < mainForm.currentSendCards[users[1] - 1].Count; i++)
@@ -1967,8 +1401,6 @@ namespace Kuaff.Tractor
                         mainForm.currentSendCards[users[1] - 1] = new ArrayList();
                         MustSendCardsAlgorithm.WhoseOrderIs3(mainForm, mainForm.currentPokers, users[1], mainForm.currentSendCards[users[1] - 1], 1, mainForm.currentState.Suit, mainForm.currentRank, CommonMethods.GetSuit((int)mainForm.currentSendCards[mainForm.firstSend - 1][0]));
                     }
-
-
                     if (mainForm.currentSendCards[users[2] - 1].Count != total)
                     {
                         for (int i = 0; i < mainForm.currentSendCards[users[2] - 1].Count; i++)
@@ -1979,33 +1411,23 @@ namespace Kuaff.Tractor
                         mainForm.currentSendCards[users[2] - 1] = new ArrayList();
                         MustSendCardsAlgorithm.WhoseOrderIs4(mainForm, mainForm.currentPokers, users[2], mainForm.currentSendCards[users[2] - 1], 1, mainForm.currentState.Suit, mainForm.currentRank, CommonMethods.GetSuit((int)mainForm.currentSendCards[mainForm.firstSend - 1][0]));
                     }
-
                    
                 }
             } 
-            #endregion // ²âÊÔ
- 
-
-
-            //¼ÆËã¸ÃË­·¢ÅÆ
+#endregion // æµ‹è¯•
+            // è®¡ç®—è¯¥è°å‘ç‰Œ
             mainForm.whoseOrder = TractorRules.GetNextOrder(mainForm);
-
             int newFirst = mainForm.whoseOrder;
-
-
-            #region ²âÊÔ
-            //if (mainForm.gameConfig.IsDebug) 
-            if (1==0)
-            {
-                if (mainForm.whoIsBigger != newFirst && mainForm.currentSendCards[0].Count == 1)
-                {
+#region æµ‹è¯•
+            // if (mainForm.gameConfig.IsDebug) 
+            if (1==0) {
+                if (mainForm.whoIsBigger != newFirst && mainForm.currentSendCards[0].Count == 1) {
                     Console.WriteLine("*******************************************************");
-                    Console.WriteLine("Ê×ÏÈ³öÅÆ:" + mainForm.firstSend + ", »¨É«=" + mainForm.currentState.Suit + ", Rank=" + mainForm.currentRank);
-                    Console.WriteLine("°´²½¼ÆËã×î´ó:" + mainForm.whoIsBigger + ", ×îÖÕ¼ÆËã" + newFirst);
-
+                    Console.WriteLine("é¦–å…ˆå‡ºç‰Œ:" + mainForm.firstSend + ", èŠ±è‰²=" + mainForm.currentState.Suit + ", Rank=" + mainForm.currentRank);
+                    Console.WriteLine("æŒ‰æ­¥è®¡ç®—æœ€å¤§:" + mainForm.whoIsBigger + ", æœ€ç»ˆè®¡ç®—" + newFirst);
                     Console.WriteLine("");
                     Console.WriteLine("");
-                    Console.WriteLine("×Ô¼º");
+                    Console.WriteLine("è‡ªå·±");
                     for (int i = 0; i < mainForm.pokerList[0].Count; i++)
                     {
                         Console.Write(mainForm.pokerList[0][i] + " ");
@@ -2015,9 +1437,8 @@ namespace Kuaff.Tractor
                     {
                         Console.Write(mainForm.currentSendCards[0][i] + " ");
                     }
-
                     Console.WriteLine("");
-                    Console.WriteLine("¶Ô¼Ò");
+                    Console.WriteLine("å¯¹å®¶");
                     for (int i = 0; i < mainForm.pokerList[1].Count; i++)
                     {
                         Console.Write(mainForm.pokerList[1][i] + " ");
@@ -2027,9 +1448,8 @@ namespace Kuaff.Tractor
                     {
                         Console.Write(mainForm.currentSendCards[1][i] + " ");
                     }
-
                     Console.WriteLine("");
-                    Console.WriteLine("Î÷¼Ò");
+                    Console.WriteLine("è¥¿å®¶");
                     for (int i = 0; i < mainForm.pokerList[2].Count; i++)
                     {
                         Console.Write(mainForm.pokerList[2][i] + " ");
@@ -2039,9 +1459,8 @@ namespace Kuaff.Tractor
                     {
                         Console.Write(mainForm.currentSendCards[2][i] + " ");
                     }
-
                     Console.WriteLine("");
-                    Console.WriteLine("¶«¼Ò");
+                    Console.WriteLine("ä¸œå®¶");
                     for (int i = 0; i < mainForm.pokerList[3].Count; i++)
                     {
                         Console.Write(mainForm.pokerList[3][i] + " ");
@@ -2053,16 +1472,13 @@ namespace Kuaff.Tractor
                     }
                     Console.WriteLine("");
                     Console.WriteLine("*******************************************************");
-
-                    //¸´Ô­
+                    // å¤åŸ
                     int[] users = CommonMethods.OtherUsers(mainForm.firstSend);
-
                     int tmp = mainForm.whoIsBigger;
                     if (mainForm.firstSend == tmp)
                     {
                         tmp = newFirst;
                     }
-
                     if (tmp == users[0])
                     {
                         mainForm.pokerList[users[0] - 1].Add(mainForm.currentSendCards[users[0] - 1][0]);
@@ -2087,201 +1503,139 @@ namespace Kuaff.Tractor
                     mainForm.timer.Stop();
                 }
             }
-            #endregion // ²âÊÔ
-
-
+#endregion // æµ‹è¯•
 
 
             mainForm.whoIsBigger = 0;
-
-
             mainForm.firstSend = mainForm.whoseOrder;
             bool success = false;
-            if (((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2)) && ((newFirst == 1) || (newFirst == 2)))
-            {
+            if (((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2)) && ((newFirst == 1) || (newFirst == 2))) {
                 success = true;
             }
-            if (((mainForm.currentState.Master == 3) || (mainForm.currentState.Master == 4)) && ((newFirst == 3) || (newFirst == 4)))
-            {
+            if (((mainForm.currentState.Master == 3) || (mainForm.currentState.Master == 4)) && ((newFirst == 3) || (newFirst == 4))) {
                 success = true;
             }
-
-
-            if (!success)
-            {
+            if (!success) {
                 TractorRules.CalculateScore(mainForm);
-
             }
-
             mainForm.currentSendCards[0] = new ArrayList(); 
             mainForm.currentSendCards[1] = new ArrayList(); 
             mainForm.currentSendCards[2] = new ArrayList(); 
             mainForm.currentSendCards[3] = new ArrayList(); 
-
             DrawCenterImage();
             DrawScoreImage(mainForm.Scores);
             mainForm.Refresh();
 
-
-
         }
-
-        private void DrawWhoWinThisTime()
-        {
-            //Ë­Ó®ÁËÕâÒ»È¦
+        private void DrawWhoWinThisTime() {
+            // è°èµ¢äº†è¿™ä¸€åœˆ
             int whoWin = TractorRules.GetNextOrder(mainForm);
-
-            if (whoWin == 1) //ÎÒ
-            {
+            if (whoWin == 1) { // æˆ‘
                 Graphics g = Graphics.FromImage(mainForm.bmp);
                 g.DrawImage(Properties.Resources.Winner, 437, 310, 33, 53);
                 g.Dispose();
             }
-            else if (whoWin == 2) //¶Ô¼Ò
-            {
+            else if (whoWin == 2) { // å¯¹å®¶
                 Graphics g = Graphics.FromImage(mainForm.bmp);
                 g.DrawImage(Properties.Resources.Winner, 437, 120, 33, 53);
                 g.Dispose();
             }
-            else if (whoWin == 3) //Î÷¼Ò
-            {
+            else if (whoWin == 3) { // è¥¿å®¶
                 Graphics g = Graphics.FromImage(mainForm.bmp);
                 g.DrawImage(Properties.Resources.Winner, 90, 218, 33, 53);
                 g.Dispose();
             }
-            else if (whoWin == 4) //¶«¼Ò
-            {
+            else if (whoWin == 4) { // ä¸œå®¶
                 Graphics g = Graphics.FromImage(mainForm.bmp);
                 g.DrawImage(Properties.Resources.Winner, 516, 218, 33, 53);
                 g.Dispose();
             }
-
             mainForm.Refresh();
         }
-
-        internal void DrawScoreImage(int scores)
-        {
+        internal void DrawScoreImage(int scores) {
             Graphics g = Graphics.FromImage(mainForm.bmp);
             Bitmap bmp = global::Kuaff.Tractor.Properties.Resources.scores;
-            Font font = new Font("ËÎÌå", 12, FontStyle.Bold);
-
-            if (mainForm.currentState.Master == 2 || mainForm.currentState.Master == 4)
-            {
+            Font font = new Font("å®‹ä½“", 12, FontStyle.Bold);
+            if (mainForm.currentState.Master == 2 || mainForm.currentState.Master == 4) {
                 Rectangle rect = new Rectangle(490, 128, 56, 56);
                 g.DrawImage(mainForm.image, rect, rect, GraphicsUnit.Pixel);
                 g.DrawImage(bmp, rect);
                 int x = 506;
-                if (scores.ToString().Length ==2)
-                {
+                if (scores.ToString().Length ==2) {
                     x -= 4;
                 }
-                else if (scores.ToString().Length ==3)
-                {
+                else if (scores.ToString().Length ==3) {
                     x -= 8;
                 }
                 g.DrawString(scores + "", font, Brushes.White, x, 138);
             }
-            else
-            {
+            else {
                 Rectangle rect = new Rectangle(85, 300, 56, 56);
                 g.DrawImage(mainForm.image, rect, rect, GraphicsUnit.Pixel);
                 g.DrawImage(bmp, rect);
                 int x = 100;
-                if (scores.ToString().Length == 2)
-                {
+                if (scores.ToString().Length == 2) {
                     x -= 4;
                 }
-                else if (scores.ToString().Length == 3)
-                {
+                else if (scores.ToString().Length == 3) {
                     x -= 8;
                 }
                 g.DrawString(scores + "", font, Brushes.White, x, 310);
             }
-
             g.Dispose();
         }
-
-        internal void DrawFinishedScoreImage()
-        {
+        internal void DrawFinishedScoreImage() {
             Graphics g = Graphics.FromImage(mainForm.bmp);
-
             Pen pen = new Pen(Color.White, 2);
             g.FillRectangle(new SolidBrush(Color.FromArgb(100, Color.White)), 77, 124, 476, 244);
             g.DrawRectangle(pen, 77, 124, 476, 244);
-
-            //»­µ×ÅÆ,´Ó169¿ªÊ¼»­
-            for (int i = 0; i < 8; i++)
-            {
+            // ç”»åº•ç‰Œ,ä»169å¼€å§‹ç”»
+            for (int i = 0; i < 8; i++) {
                 g.DrawImage(getPokerImageByNumber((int)mainForm.send8Cards[i]), 230 + i * 14, 130, 71, 96);
             }
-
-            //»­Ğ¡Ñ¾
+            // ç”»å°ä¸«
             g.DrawImage(global::Kuaff.Tractor.Properties.Resources.Logo, 160, 237, 110, 112);
-
-            //»­µÃ·Ö
-            Font font = new Font("ËÎÌå", 16, FontStyle.Bold);
-            g.DrawString("×ÜµÃ·Ö " + mainForm.Scores, font, Brushes.Blue, 310, 286);
-
+            // ç”»å¾—åˆ†
+            Font font = new Font("å®‹ä½“", 16, FontStyle.Bold);
+            g.DrawString("æ€»å¾—åˆ† " + mainForm.Scores, font, Brushes.Blue, 310, 286);
             g.Dispose();
         }
-
-        //´ó¼Ò¶¼³öÍêÅÆ£¬Ôò¼ÆËãµÃ·Ö¶àÉÙ£¬ÏÂ´Î¸ÃË­³öÅÆ
-        internal void DrawFinishedSendedCards()
-        {
+// å¤§å®¶éƒ½å‡ºå®Œç‰Œï¼Œåˆ™è®¡ç®—å¾—åˆ†å¤šå°‘ï¼Œä¸‹æ¬¡è¯¥è°å‡ºç‰Œ
+        internal void DrawFinishedSendedCards() {
             mainForm.isNew = false;
-
-           //¼ÆËãµÃ·Ö£¬È·¶¨ÏÂÒ»´Î×¯¼Ò£¬È·¶¨ÏÂÒ»´ÎµÄRank
+            // è®¡ç®—å¾—åˆ†ï¼Œç¡®å®šä¸‹ä¸€æ¬¡åº„å®¶ï¼Œç¡®å®šä¸‹ä¸€æ¬¡çš„Rank
             TractorRules.GetNextMasterUser(mainForm);
-
-
             mainForm.currentSendCards[0] = new ArrayList(); 
             mainForm.currentSendCards[1] = new ArrayList(); 
             mainForm.currentSendCards[2] = new ArrayList(); 
             mainForm.currentSendCards[3] = new ArrayList(); 
-
             DrawCenterImage();
             DrawFinishedScoreImage();
             mainForm.Refresh();
-
             mainForm.SetPauseSet(mainForm.gameConfig.FinishedThisTime, CardCommands.DrawOnceRank);
-
            
         }
-        #endregion // »æÖÆ¸÷¼Ò³öµÄÅÆ£¬²¢¼ÆËã½á¹û»òÕßÍ¨ÖªÏÂÒ»¼Ò
-
-
-        #region »­ÅÆÊ±µÄ¸¨Öú·½·¨
-
-        //¸ù¾İÅÆºÅµÃµ½ÏàÓ¦µÄÅÆµÄÍ¼Æ¬
-        private Bitmap getPokerImageByNumber(int number)
-        {
+#endregion // ç»˜åˆ¶å„å®¶å‡ºçš„ç‰Œï¼Œå¹¶è®¡ç®—ç»“æœæˆ–è€…é€šçŸ¥ä¸‹ä¸€å®¶
+#region ç”»ç‰Œæ—¶çš„è¾…åŠ©æ–¹æ³•
+// æ ¹æ®ç‰Œå·å¾—åˆ°ç›¸åº”çš„ç‰Œçš„å›¾ç‰‡
+        private Bitmap getPokerImageByNumber(int number) {
             Bitmap bitmap = null;
-
-            if (mainForm.gameConfig.CardImageName.Length == 0) //´ÓÄÚÇ¶µÄÍ¼°¸ÖĞ¶ÁÈ¡
-            {
-                 bitmap = (Bitmap)mainForm.gameConfig.CardsResourceManager.GetObject("_" + number, Kuaff_Cards.Culture);
+            if (mainForm.gameConfig.CardImageName.Length == 0) { // ä»å†…åµŒçš„å›¾æ¡ˆä¸­è¯»å–
+                bitmap = (Bitmap)mainForm.gameConfig.CardsResourceManager.GetObject("_" + number, Kuaff_Cards.Culture);
             }
-            else
-            {
-                bitmap = mainForm.cardsImages[number]; //´Ó×Ô¶¨ÒåµÄÍ¼Æ¬ÖĞ¶ÁÈ¡
+            else {
+                bitmap = mainForm.cardsImages[number]; // ä»è‡ªå®šä¹‰çš„å›¾ç‰‡ä¸­è¯»å–
             }
-
             return bitmap;
         }
-
-        /// <summary>
-        /// ÖØ»­³ÌĞò±³¾°
-        /// </summary>
-        /// <param name="g">»º³åÇøÍ¼ÏñµÄGraphics</param>
-        internal void DrawBackground(Graphics g)
-        {
-            //Bitmap image = global::Kuaff.Tractor.Properties.Resources.Backgroud;
+// é‡ç”»ç¨‹åºèƒŒæ™¯
+// <param name="g">ç¼“å†²åŒºå›¾åƒçš„Graphics</param>
+        internal void DrawBackground(Graphics g) {
+            // Bitmap image = global::Kuaff.Tractor.Properties.Resources.Backgroud;
             g.DrawImage(mainForm.image, mainForm.ClientRectangle, mainForm.ClientRectangle,GraphicsUnit.Pixel);
         }
-
-        //»­·¢ÅÆ¶¯»­£¬½«ÖĞ¼äÖ¡¶¯»­»­ºÃºóÔÙÈ¥³ı
-        private void DrawAnimatedCard(Bitmap card, int x, int y, int width, int height)
-        {
+// ç”»å‘ç‰ŒåŠ¨ç”»ï¼Œå°†ä¸­é—´å¸§åŠ¨ç”»ç”»å¥½åå†å»é™¤
+        private void DrawAnimatedCard(Bitmap card, int x, int y, int width, int height) {
             Graphics g = Graphics.FromImage(mainForm.bmp);
             Bitmap backup = mainForm.bmp.Clone(new Rectangle(x, y, width, height), PixelFormat.DontCare);
             g.DrawImage(card, x, y, width, height);
@@ -2289,66 +1643,50 @@ namespace Kuaff.Tractor
             g.DrawImage(backup, x, y, width, height);
             g.Dispose();
         }
-
-        //»­Í¼µÄ·½·¨
-        private void DrawMyImage(Graphics g, Bitmap bmp, int x, int y, int width, int height)
-        {
+// ç”»å›¾çš„æ–¹æ³•
+        private void DrawMyImage(Graphics g, Bitmap bmp, int x, int y, int width, int height) {
             g.DrawImage(bmp, x, y, width, height);
         }
-
-        //ÉèÖÃµ±Ç°µÄÅÆµÄĞÅÏ¢
-        private void SetCardsInformation(int x, int number, bool ready)
-        {
+// è®¾ç½®å½“å‰çš„ç‰Œçš„ä¿¡æ¯
+        private void SetCardsInformation(int x, int number, bool ready) {
             mainForm.myCardsLocation.Add(x);
             mainForm.myCardsNumber.Add(number);
             mainForm.myCardIsReady.Add(ready);
         }
-        #endregion // »­ÅÆÊ±µÄ¸¨Öú·½·¨
+#endregion // ç”»ç‰Œæ—¶çš„è¾…åŠ©æ–¹æ³•
 
-
-
-        //²âÊÔ·½·¨
-        internal void TestCards()
-        {
+// æµ‹è¯•æ–¹æ³•
+        internal void TestCards() {
             Graphics g = Graphics.FromImage(mainForm.bmp);
-
             int count = mainForm.pokerList[0].Count;
-            Font font = new Font("ËÎÌå", 9);
-
-            g.DrawString("×Ô¼º£º", font, Brushes.Red, 80, 130);
-            g.DrawString("¶Ô¼Ò£º", font, Brushes.Red, 80, 170);
-            g.DrawString("Î÷¼Ò£º", font, Brushes.Red, 80, 210);
-            g.DrawString("¶«¼Ò£º", font, Brushes.Red, 80, 250);
-
-
-            Console.Write("×Ô¼º£º");
-            for (int i = 0; i < count; i++)
-            {
+            Font font = new Font("å®‹ä½“", 9);
+            g.DrawString("è‡ªå·±ï¼š", font, Brushes.Red, 80, 130);
+            g.DrawString("å¯¹å®¶ï¼š", font, Brushes.Red, 80, 170);
+            g.DrawString("è¥¿å®¶ï¼š", font, Brushes.Red, 80, 210);
+            g.DrawString("ä¸œå®¶ï¼š", font, Brushes.Red, 80, 250);
+            Console.Write("è‡ªå·±ï¼š");
+            for (int i = 0; i < count; i++) {
                 g.DrawString(mainForm.pokerList[0][i].ToString(), font, Brushes.Red, 120 + i * 15, 130);
                 Console.Write(mainForm.pokerList[0][i].ToString() + ",");
             }
-            Console.Write("\r\n¶Ô¼Ò£º");
+            Console.Write("\r\nå¯¹å®¶ï¼š");
             count = mainForm.pokerList[1].Count;
-            for (int i = 0; i < count; i++)
-            {
+            for (int i = 0; i < count; i++) {
                 g.DrawString(mainForm.pokerList[1][i].ToString(), font, Brushes.Red, 120 + i * 15, 170);
                 Console.Write(mainForm.pokerList[1][i].ToString() + ",");
             }
-            Console.Write("\r\nÎ÷¼Ò£º");
+            Console.Write("\r\nè¥¿å®¶ï¼š");
             count = mainForm.pokerList[2].Count;
-            for (int i = 0; i < count; i++)
-            {
+            for (int i = 0; i < count; i++) {
                 g.DrawString(mainForm.pokerList[2][i].ToString(), font, Brushes.Red, 120 + i * 15, 210);
                 Console.Write(mainForm.pokerList[2][i].ToString() + ",");
             }
-            Console.Write("\r\n¶«¼Ò£º");
+            Console.Write("\r\nä¸œå®¶ï¼š");
             count = mainForm.pokerList[3].Count;
-            for (int i = 0; i < count; i++)
-            {
+            for (int i = 0; i < count; i++) {
                 g.DrawString(mainForm.pokerList[3][i].ToString(), font, Brushes.Red, 120 + i * 15, 250);
                 Console.Write(mainForm.pokerList[3][i].ToString() + ",");
             }
-
             mainForm.Refresh();
         }
     }

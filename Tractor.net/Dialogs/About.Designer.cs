@@ -1,33 +1,14 @@
-namespace Kuaff.Tractor
-{
-    partial class About
-    {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
+namespace Kuaff.Tractor {
+    partial class About {
         private System.ComponentModel.IContainer components = null;
-
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
+        protected override void Dispose(bool disposing) {
+            if (disposing && (components != null)) {
                 components.Dispose();
             }
             base.Dispose(disposing);
         }
-
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
+#region Windows Form Designer generated code
+        private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(About));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -141,7 +122,7 @@ namespace Kuaff.Tractor
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(230, 15);
             this.label9.TabIndex = 9;
-            this.label9.Text = "ÍøÖ·£ºhttp://smallnest.googlepages.com";
+            this.label9.Text = "ÍøÖ·£ºhttp:// smallnest.googlepages.com";
             // 
             // label10
             // 
@@ -180,11 +161,8 @@ namespace Kuaff.Tractor
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
-
-        #endregion
-
+#endregion
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;

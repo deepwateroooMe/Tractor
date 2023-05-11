@@ -1,33 +1,17 @@
-namespace Kuaff.Tractor
-{
-    partial class SelectCardsImage
-    {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+namespace Kuaff.Tractor {
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
+    partial class SelectCardsImage {
+
+        private System.ComponentModel.IContainer components = null;
+        protected override void Dispose(bool disposing) {
+            if (disposing && (components != null)) {
                 components.Dispose();
             }
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
+#region Windows Form Designer generated code
+        private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectCardsImage));
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
@@ -96,11 +80,8 @@ namespace Kuaff.Tractor
             this.Text = "—°‘Ò≈∆√ÊÕº∞∏";
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
-
-        #endregion
-
+#endregion
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
         internal System.Windows.Forms.ComboBox CustomCardsImage;
