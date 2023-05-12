@@ -55,7 +55,7 @@ namespace Kuaff.Tractor {
         // 当前手中牌的数值
         internal ArrayList myCardsNumber = new ArrayList();
         // 当前手中牌的是否被点出
-        internal ArrayList myCardIsReady = new ArrayList();
+        internal ArrayList myCardIsReady = new ArrayList(); 
         // 当前扣底的牌
         internal ArrayList send8Cards = new ArrayList();
         // *画我的牌的辅助变量
@@ -200,10 +200,10 @@ namespace Kuaff.Tractor {
         internal void init() {
             // 每次初始化都重绘背景
             Graphics g = Graphics.FromImage(bmp);
-            drawingFormHelper.DrawBackground(g);
+            drawingFormHelper.DrawBackground(g); // 画【客户端的背景框】
             // 发一次牌
             dpoker = new DistributePokerHelper();
-            pokerList = dpoker.Distribute();
+            pokerList = dpoker.Distribute(); // 把 108 张牌，随机分成在 4 个链表里
             // 每个人手中的牌清空,准备摸牌
             currentPokers[0].Clear();
             currentPokers[1].Clear(); 
@@ -223,19 +223,18 @@ namespace Kuaff.Tractor {
             currentPokers[1].Suit = 0;
             currentPokers[2].Suit = 0;
             currentPokers[3].Suit = 0;
-            currentSendCards[0] = new ArrayList();
+            currentSendCards[0] = new ArrayList(); // 每个人手中要出的牌【点击过，上拉跳出来了】
             currentSendCards[1] = new ArrayList();
             currentSendCards[2] = new ArrayList();
             currentSendCards[3] = new ArrayList();
             // 
-            myCardsLocation= new ArrayList();
-            myCardsNumber= new ArrayList();
-            myCardIsReady= new ArrayList();
-            send8Cards= new ArrayList();
+            myCardsLocation = new ArrayList();
+            myCardsNumber = new ArrayList();
+            myCardIsReady = new ArrayList();
+            send8Cards = new ArrayList();
             // 设置命令
             currentState.CurrentCardCommands = CardCommands.ReadyCards;
             currentState.Suit = 0;
-        
             // 设置还未发牌,循环25次将牌发完
             currentCount = 0;
             // 目前不可以反牌
@@ -248,8 +247,9 @@ namespace Kuaff.Tractor {
             drawingFormHelper.DrawSidebar(g);
             // 绘制东南西北
             drawingFormHelper.DrawOtherMaster(g, 0, 0);
+            // 这里添加：绘制如上【东南西北】一样，每家的叫牌亮牌框，或者直接在上面的画四家的时候一起画
             
-            if (currentState.Master != 0) {
+            if (currentState.Master != 0) { // 0 是还未定，如开始游戏抢庄时；其它为四家
                 drawingFormHelper.DrawMaster(g, currentState.Master, 1);
                 drawingFormHelper.DrawOtherMaster(g, currentState.Master, 1);
             }
@@ -267,7 +267,6 @@ namespace Kuaff.Tractor {
             whoIsBigger = 0;
             // 如果设置了游戏截止，则停止游戏
             if (gameConfig.WhenFinished > 0) {
-                
                 bool b = false;
                 if ((currentState.OurTotalRound + 1) > gameConfig.WhenFinished)  {
                     b = true;
@@ -292,22 +291,27 @@ namespace Kuaff.Tractor {
        
         private void MainForm_MouseClick(object sender, MouseEventArgs e) {
             // this.Text = "X=" + e.X + ",Y=" + e.Y + ";" + e.Clicks;
-            // 左键
-            // 只有发牌时和该我出牌时才能相应鼠标事件
+            // 左键：用于自已方 1, 只有在【等我扣8 张底】或是【等我出牌】时，才可以左键点击，就处理左键点击
+            // 只有发牌时和该我出牌时才能相应鼠标事件: 按道理说，如果如此执行，不会出错才对，为什么会出那个 bug ？
             if (((currentState.CurrentCardCommands == CardCommands.WaitingForMySending) || (currentState.CurrentCardCommands == CardCommands.WaitingForSending8Cards)) && (whoseOrder == 1)) {
                 if (e.Button == MouseButtons.Left) {
                     if ((e.X >= (int)myCardsLocation[0] && e.X <= ((int)myCardsLocation[myCardsLocation.Count - 1] + 71)) && (e.Y >= 355 && e.Y < 472)) {
-                        if (calculateRegionHelper.CalculateClickedRegion(e, 1)) {
+// 添加游戏逻辑里的【用户玩家贴心化处理】：
+                        // 当玩家非首家出牌（玩家为首家出牌时，无法确定玩家意愿而跳过），
+                        // 当出牌要求有对（甩牌或拖拉机），当玩家手牌有对，且点中了对中的一张，游戏逻辑帮助贴心处理，帮助用户自动选中或是取消对儿中的另一张
+                        // 【问题】；我不应该在视图层来修改这些东西，我需要去数据Model 层，根据游戏逻辑来管理数据。受限于现源码框架狗屎一样的设计，必须自己重构，至少先去把Model 层给弄通了。就是，当视图点击导致数据 myCardIsReady[] 有数值变化时， Model 层要再根据以上逻辑，进一步对数据作必要的修改，再由数据来驱动视图层的重绘
+                        if (calculateRegionHelper.CalculateClickedRegion(e, 1)) { // 严格图像点击上的：选中的牌，每点一次、选一张，重绘一遍玩家手牌
+                            // 数据层的再审核优化步骤，进一步修改 myCardIsReady[] 变量 
                             drawingFormHelper.DrawMyPlayingCards(currentPokers[0]);
                             Refresh();
                         }
                     }
-                } else if (e.Button == MouseButtons.Right) {  // 右键
-                    int i = calculateRegionHelper.CalculateRightClickedRegion(e);
+                } else if (e.Button == MouseButtons.Right) { // 右键：在先前选中过的某张牌上，用右銉取反？
+                    int i = calculateRegionHelper.CalculateRightClickedRegion(e); // 当前鼠标右键所点击的牌的下标：
                     if (i > -1 && i < myCardIsReady.Count) {
                         bool b = (bool)myCardIsReady[i];
                         int x = (int)myCardsLocation[i];
-                        for (int j = 1; j <= i; j++) {
+                        for (int j = 1; j <= i; j++) { // 这个，是在干什么? 昨天试玩的印象，是选中手牌全部取消了？再测试一下
                             if ((int)myCardsLocation[i - j] == (x - 13)) {
                                 myCardIsReady[i - j] = b;
                                 x = x - 13;

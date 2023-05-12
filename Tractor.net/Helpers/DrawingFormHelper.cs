@@ -40,8 +40,7 @@ namespace Kuaff.Tractor {
             // 判断我是否可以亮主
             if (mainForm.gameConfig.IsDebug) {
                 DoRankOrNot(mainForm.currentPokers[0], 1);
-            }
-            else {
+            } else {
                 MyRankOrNot(mainForm.currentPokers[0]);
             }
             mainForm.Refresh();
@@ -72,33 +71,28 @@ namespace Kuaff.Tractor {
             if (mainForm.showSuits == 1) {
                 if (mainForm.whoShowRank == 2) {
                     g.DrawImage(getPokerImageByNumber(mainForm.currentState.Suit * 13 - 13 + mainForm.currentRank), 437, 124, 71, 96);
-                }
-                else if (mainForm.whoShowRank == 3) {
+                } else if (mainForm.whoShowRank == 3) {
                     g.DrawImage(getPokerImageByNumber(mainForm.currentState.Suit * 13 - 13 + mainForm.currentRank), 80, 158, 71, 96);
-                }
-                else if (mainForm.whoShowRank == 4) {
+                } else if (mainForm.whoShowRank == 4) {
                     g.DrawImage(getPokerImageByNumber(mainForm.currentState.Suit * 13 - 13 + mainForm.currentRank), 480, 200, 71, 96);
                 }
-            }
-            else if (mainForm.showSuits == 2) {
+            } else if (mainForm.showSuits == 2) {
                 if (mainForm.whoShowRank == 2) {
                     ClearSuitCards(g);
                     g.DrawImage(getPokerImageByNumber(mainForm.currentState.Suit * 13 - 13 + mainForm.currentRank), 423, 124, 71, 96);
                     g.DrawImage(getPokerImageByNumber(mainForm.currentState.Suit * 13 - 13 + mainForm.currentRank), 437, 124, 71, 96);
-                }
-                else if (mainForm.whoShowRank == 3) {
+                } else if (mainForm.whoShowRank == 3) {
                     ClearSuitCards(g);
                     g.DrawImage(getPokerImageByNumber(mainForm.currentState.Suit * 13 - 13 + mainForm.currentRank), 80, 158, 71, 96);
                     g.DrawImage(getPokerImageByNumber(mainForm.currentState.Suit * 13 - 13 + mainForm.currentRank), 80, 178, 71, 96);
-                }
-                else if (mainForm.whoShowRank == 4) {
+                } else if (mainForm.whoShowRank == 4) {
                     ClearSuitCards(g);
                     g.DrawImage(getPokerImageByNumber(mainForm.currentState.Suit * 13 - 13 + mainForm.currentRank), 480, 200, 71, 96);
                     g.DrawImage(getPokerImageByNumber(mainForm.currentState.Suit * 13 - 13 + mainForm.currentRank), 480, 220, 71, 96);
                 }
             }
         }
-        // 清除亮的牌
+// 清除亮的牌
         private void ClearSuitCards(Graphics g) {
             g.DrawImage(mainForm.image, new Rectangle(80, 158, 71, 96), new Rectangle(80, 158, 71, 96), GraphicsUnit.Pixel);
             g.DrawImage(mainForm.image, new Rectangle(480, 200, 71, 96), new Rectangle(480, 200, 71, 96), GraphicsUnit.Pixel);
@@ -106,12 +100,12 @@ namespace Kuaff.Tractor {
         }
 #endregion // 发牌动画
 #region 画中心位置的牌
-        // 发牌时画中央的牌.
-        // 首先从底图中取相应的位置，重画这块背景。
-        // 然后用牌的背面画58-count*2张牌。
-        // 
-        // <param name="g">缓冲区图片的Graphics</param>
-        // <param name="num">牌的数量=58-发牌次数*2</param>
+// 发牌时画中央的牌.
+// 首先从底图中取相应的位置，重画这块背景。
+// 然后用牌的背面画58-count*2张牌。
+// 
+// <param name="g">缓冲区图片的Graphics</param>
+// <param name="num">牌的数量=58-发牌次数*2</param>
         internal void DrawCenterAllCards(Graphics g, int num) {
             Rectangle rect = new Rectangle(200, 186, (num + 1) * 2 + 71, 96);
             g.DrawImage(mainForm.image, rect, rect, GraphicsUnit.Pixel);
@@ -119,14 +113,14 @@ namespace Kuaff.Tractor {
                 g.DrawImage(mainForm.gameConfig.BackImage, 200 + i * 2, 186, 71, 96);
             }
         }
-        // 发完一次牌，需要清理程序中心
+// 发完一次牌，需要清理程序中心
         internal void DrawCenterImage() {
             Graphics g = Graphics.FromImage(mainForm.bmp);
             Rectangle rect = new Rectangle(77, 124, 476, 244);
             g.DrawImage(mainForm.image, rect, rect, GraphicsUnit.Pixel);
             g.Dispose();
         }
-        // 画流局图片
+// 画流局图片
         internal void DrawPassImage() {
             Graphics g = Graphics.FromImage(mainForm.bmp);
             Rectangle rect = new Rectangle(110, 150, 400, 199);
@@ -136,10 +130,10 @@ namespace Kuaff.Tractor {
         }
 #endregion // 画中心位置的牌
 #region 底牌处理
-        // 收底牌的动画
-        // 发牌25次后，最后剩余8张牌.
-        // 这时已经确定了庄家，将8张牌交给庄家,
-        // 同时以动画的方式显示。
+// 收底牌的动画
+// 发牌25次后，最后剩余8张牌.
+// 这时已经确定了庄家，将8张牌交给庄家,
+// 同时以动画的方式显示。
         internal void DrawCenter8Cards() {
             Graphics g = Graphics.FromImage(mainForm.bmp);
             Rectangle rect = new Rectangle(200, 186, 90, 96);
@@ -153,23 +147,20 @@ namespace Kuaff.Tractor {
             if (mainForm.currentState.Master == 1) {
                 DrawAnimatedCard(backup, 300, 330, 90, 96);
                 Get8Cards(mainForm.pokerList[0], mainForm.pokerList[1], mainForm.pokerList[2], mainForm.pokerList[3]);
-            }
-            else if (mainForm.currentState.Master == 2) {
+            } else if (mainForm.currentState.Master == 2) {
                 DrawAnimatedCard(backup, 200, 80, 90, 96);
                 Get8Cards(mainForm.pokerList[1], mainForm.pokerList[0], mainForm.pokerList[2], mainForm.pokerList[3]);
-            }
-            else if (mainForm.currentState.Master == 3) {
+            } else if (mainForm.currentState.Master == 3) {
                 DrawAnimatedCard(backup, 70, 186, 90, 96);
                 Get8Cards(mainForm.pokerList[2], mainForm.pokerList[1], mainForm.pokerList[0], mainForm.pokerList[3]);
-            }
-            else if (mainForm.currentState.Master == 4) {
+            } else if (mainForm.currentState.Master == 4) {
                 DrawAnimatedCard(backup, 400, 186, 90, 96);
                 Get8Cards(mainForm.pokerList[3], mainForm.pokerList[1], mainForm.pokerList[2], mainForm.pokerList[0]);
             }
             mainForm.Refresh();
             g.Dispose();
         }
-        // 将最后8张交给庄家
+// 将最后8张交给庄家
         private void Get8Cards(ArrayList list0, ArrayList list1, ArrayList list2, ArrayList list3) {
             list0.Add(list1[25]);
             list0.Add(list1[26]);
@@ -190,46 +181,41 @@ namespace Kuaff.Tractor {
             for (int i = 0; i < 8; i++) {
                 if (i ==2) {
                     g.DrawImage(getPokerImageByNumber((int)bottom[i]), 230 + i * 14, 146, 71, 96);
-                }
-                else {
+                } else {
                     g.DrawImage(getPokerImageByNumber((int)bottom[i]), 230 + i * 14, 186, 71, 96);
                 }
             }
-           
             mainForm.Refresh();
             g.Dispose();
         }
 #endregion // 底牌处理
 #region 绘制Sidebar和toolbar
-        // 绘制Sidebar
-        // <param name="g"></param>
+// 绘制Sidebar
+// <param name="g"></param>
         internal void DrawSidebar(Graphics g) {
             DrawMyImage(g, Properties.Resources.Sidebar, 20, 30, 70, 89);
             DrawMyImage(g, Properties.Resources.Sidebar, 540, 30, 70, 89);
         }
-        // 画东西南北
-        // <param name="g">缓冲区图像的Graphics</param>
-        // <param name="who">画谁</param>
-        // <param name="b">是否画亮色</param>
+// 画东西南北: 【亮牌框】也画出来
+// <param name="g">缓冲区图像的Graphics</param>
+// <param name="who">画谁</param>
+// <param name="b">是否画亮色</param>
         internal void DrawMaster(Graphics g, int who, int start) {
             if (who < 1 || who > 4) {
-                return;
+                return; // 未定
             }
             start = start * 80;
             int X = 0;
             if (who == 1) {
                 start += 40;
                 X = 548;
-            }
-            else if (who == 2) {
+            } else if (who == 2) {
                 start += 60;
                 X = 580;
-            }
-            else if (who == 3) {
+            } else if (who == 3) {
                 start += 0;
                 X = 30;
-            }
-            else if (who == 4) {
+            } else if (who == 4) {
                 start += 20;
                 X = 60;
             }
@@ -237,12 +223,11 @@ namespace Kuaff.Tractor {
             Rectangle srcRect = new Rectangle(start, 0, 20, 20);
             g.DrawImage(Properties.Resources.Master, destRect, srcRect, GraphicsUnit.Pixel);
         }
-        // 画其他白色
-        // <param name="g"></param>
-        // <param name="who"></param>
-        // <param name="start"></param>
+// 画其他白色
+// <param name="g"></param>
+// <param name="who"></param>
+// <param name="start"></param>
         internal void DrawOtherMaster(Graphics g, int who, int start) {
-            
             if (who != 1) {
                 Rectangle destRect = new Rectangle(548, 45, 20, 20);
                 Rectangle srcRect = new Rectangle(40, 0, 20, 20);
@@ -264,42 +249,37 @@ namespace Kuaff.Tractor {
                 g.DrawImage(Properties.Resources.Master, destRect, srcRect, GraphicsUnit.Pixel);
             }
         }
-        // 绘制Rank
-        // <param name="g">缓冲区图像的Graphics</param>
-        // <param name="me">画我还是画对方</param>
-        // <param name="b">两色还是暗色</param>
+// 绘制Rank
+// <param name="g">缓冲区图像的Graphics</param>
+// <param name="me">画我还是画对方</param>
+// <param name="b">两色还是暗色</param>
         internal void DrawRank(Graphics g, int number, bool me, bool b) {
             int X = 0;
             int X2 = 0;
             if (me) {
                 X = 566;
                 X2 = 46;
-            }
-            else {
+            } else {
                 X = 46;
                 X2 = 566;
             }
             Rectangle destRect = new Rectangle(X, 68, 20, 20);
             Rectangle destRect2 = new Rectangle(X2, 68, 20, 20);
-
             // 然后将数字填写上
             if (!b) {
                 g.DrawImage(Properties.Resources.Sidebar, destRect, new Rectangle(26, 38, 20, 20), GraphicsUnit.Pixel);
                 if (me) {
                     g.DrawImage(Properties.Resources.CardNumber, destRect, getCardNumberImage(mainForm.currentState.OurCurrentRank, b), GraphicsUnit.Pixel);
-                }
-                else {
+                } else {
                     g.DrawImage(Properties.Resources.CardNumber, destRect, getCardNumberImage(mainForm.currentState.OpposedCurrentRank, b), GraphicsUnit.Pixel);
                 }
-            }
-            else {
+            } else {
                 g.DrawImage(Properties.Resources.Sidebar, destRect, new Rectangle(26, 38, 20, 20), GraphicsUnit.Pixel);
                 g.DrawImage(Properties.Resources.Sidebar, destRect2, new Rectangle(26, 38, 20, 20), GraphicsUnit.Pixel);
                 if (me) {
                     g.DrawImage(Properties.Resources.CardNumber, destRect, getCardNumberImage(mainForm.currentState.OurCurrentRank, b), GraphicsUnit.Pixel);
                     g.DrawImage(Properties.Resources.CardNumber, destRect2, getCardNumberImage(mainForm.currentState.OpposedCurrentRank, !b), GraphicsUnit.Pixel);
-                }
-                else {
+                } else {
                     g.DrawImage(Properties.Resources.CardNumber, destRect, getCardNumberImage(mainForm.currentState.OpposedCurrentRank, b), GraphicsUnit.Pixel);
                     g.DrawImage(Properties.Resources.CardNumber, destRect2, getCardNumberImage(mainForm.currentState.OurCurrentRank, !b), GraphicsUnit.Pixel);
                 }
@@ -321,19 +301,18 @@ namespace Kuaff.Tractor {
             }
             return result;
         }
-        // 画花色
-        // <param name="g"></param>
-        // <param name="suit">花色</param>
-        // <param name="me">画我方还是对方</param>
-        // <param name="b">是否画亮色</param>
+// 画花色
+// <param name="g"></param>
+// <param name="suit">花色</param>
+// <param name="me">画我方还是对方</param>
+// <param name="b">是否画亮色</param>
         internal void DrawSuit(Graphics g, int suit, bool me, bool b) {
             int X = 0;
             int X2 = 0;
             if (me) {
                 X = 563;
                 X2 = 43;
-            }
-            else {
+            } else {
                 X = 43;
                 X2 = 563;
             }
@@ -351,29 +330,25 @@ namespace Kuaff.Tractor {
                 g.DrawImage(Properties.Resources.Suit, destRect, srcRect, GraphicsUnit.Pixel);
                 g.DrawImage(Properties.Resources.Sidebar, redrawRect, new Rectangle(23, 58, 25, 25), GraphicsUnit.Pixel);
                 DrawSuit(g, 0, !me, false);
-            }
-            else if (suit == 2) {
+            } else if (suit == 2) {
                 Rectangle srcRect = new Rectangle(25, 0, 25, 25);
                 g.DrawImage(Properties.Resources.Sidebar, destRect, new Rectangle(23, 58, 25, 25), GraphicsUnit.Pixel);
                 g.DrawImage(Properties.Resources.Suit, destRect, srcRect, GraphicsUnit.Pixel);
                 g.DrawImage(Properties.Resources.Sidebar, redrawRect, new Rectangle(23, 58, 25, 25), GraphicsUnit.Pixel);
                 DrawSuit(g, 0, !me, false);
-            }
-            else if (suit == 3) { // 方块
+            } else if (suit == 3) { // 方块
                 Rectangle srcRect = new Rectangle(50, 0, 25, 25);
                 g.DrawImage(Properties.Resources.Sidebar, destRect, new Rectangle(23, 58, 25, 25), GraphicsUnit.Pixel);
                 g.DrawImage(Properties.Resources.Suit, destRect, srcRect, GraphicsUnit.Pixel);
                 g.DrawImage(Properties.Resources.Sidebar, redrawRect, new Rectangle(23, 58, 25, 25), GraphicsUnit.Pixel);
                 DrawSuit(g, 0, !me, false);
-            }
-            else if (suit == 4) { // 梅花club 
+            } else if (suit == 4) { // 梅花club 
                 Rectangle srcRect = new Rectangle(75, 0, 25, 25);
                 g.DrawImage(Properties.Resources.Sidebar, destRect, new Rectangle(23, 58, 25, 25), GraphicsUnit.Pixel);
                 g.DrawImage(Properties.Resources.Suit, destRect, srcRect, GraphicsUnit.Pixel);
                 g.DrawImage(Properties.Resources.Sidebar, redrawRect, new Rectangle(23, 58, 25, 25), GraphicsUnit.Pixel);
                 DrawSuit(g, 0, !me, false);
-            }
-            else if (suit == 5) {
+            } else if (suit == 5) {
                 Rectangle srcRect = new Rectangle(100, 0, 25, 25);
                 g.DrawImage(Properties.Resources.Sidebar, destRect, new Rectangle(23, 58, 25, 25), GraphicsUnit.Pixel);
                 g.DrawImage(Properties.Resources.Suit, destRect, srcRect, GraphicsUnit.Pixel);
@@ -396,6 +371,7 @@ namespace Kuaff.Tractor {
             g.Dispose();
         }
 #endregion // 绘制Sidebar和toolbar
+
 #region 判断是否亮主
 // 是否应该亮主,调用算法
         private void DoRankOrNot(CurrentPoker currentPoker, int user) {
@@ -409,20 +385,16 @@ namespace Kuaff.Tractor {
                     mainForm.showSuits = 1;
                     mainForm.whoShowRank = user;
                     mainForm.currentState.Suit = suit;
-                    if ((mainForm.currentRank == 0) && mainForm.isNew)
-                    {
+                    if ((mainForm.currentRank == 0) && mainForm.isNew) {
                         mainForm.currentState.Master = user; // 
                     }
                     // 既然已经确定了谁亮的，谁是主，打几，那么就画吧
                     Graphics g = Graphics.FromImage(mainForm.bmp);
                     // 亮主的时候同时画花色,亮色显示在庄家下面
-                    if ((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2))
-                    {
+                    if ((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2)) {
                         DrawSuit(g, suit, true, true);
                         DrawRank(g, mainForm.currentState.OurCurrentRank, true, true);
-                    }
-                    else
-                    {
+                    } else {
                         DrawSuit(g, suit, false, true);
                         DrawRank(g, mainForm.currentState.OpposedCurrentRank, false, true);
                     }
@@ -433,18 +405,14 @@ namespace Kuaff.Tractor {
                     DrawOtherMaster(g, mainForm.currentState.Master, 1);
                     g.Dispose();
                 }
-            }
-            else { // 是否可以反
+            } else { // 是否可以反
                 int suit = Algorithm.ShouldSetRankAgain(mainForm, currentPoker);
-                
                 if (suit > 0) { // 是否可以加固
-                    if ((suit == mainForm.currentState.Suit) && (mainForm.whoShowRank == user) && (!mainForm.gameConfig.CanMyStrengthen))  // 如果不允许加固
-                    {
+                    if ((suit == mainForm.currentState.Suit) && (mainForm.whoShowRank == user) && (!mainForm.gameConfig.CanMyStrengthen)) {  // 如果不允许加固
                         return;
                     }
                     // 非加固时,考虑自反
-                    if ((suit != mainForm.currentState.Suit) && (mainForm.whoShowRank == user) && (!mainForm.gameConfig.CanMyRankAgain))  // 如果不允许自反
-                    {
+                    if ((suit != mainForm.currentState.Suit) && (mainForm.whoShowRank == user) && (!mainForm.gameConfig.CanMyRankAgain)) {  // 如果不允许自反
                         return;
                     }
                     int oldWhoShowRank = mainForm.whoShowRank;
@@ -452,20 +420,15 @@ namespace Kuaff.Tractor {
                     mainForm.showSuits = 2;
                     mainForm.whoShowRank = user;
                     mainForm.currentState.Suit = suit;
-                    if ((mainForm.currentRank == 0) && mainForm.isNew)
-                    {
+                    if ((mainForm.currentRank == 0) && mainForm.isNew) {
                         mainForm.currentState.Master = user;
                     }
-
                     Graphics g = Graphics.FromImage(mainForm.bmp);
                     // 亮主的时候同时画花色,亮色显示在庄家下面
-                    if ((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2))
-                    {
+                    if ((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2)) {
                         DrawSuit(g, suit, true, true);
                         DrawRank(g, mainForm.currentState.OurCurrentRank, true, true);
-                    }
-                    else
-                    {
+                    } else {
                         DrawSuit(g, suit, false, true);
                         DrawRank(g, mainForm.currentState.OpposedCurrentRank, false, true);
                     }
@@ -476,7 +439,6 @@ namespace Kuaff.Tractor {
                     // 画庄家，画红色
                     DrawMaster(g, mainForm.currentState.Master, 1);
                     g.Dispose();
-
                 }
             }
         }
@@ -496,8 +458,7 @@ namespace Kuaff.Tractor {
             for (int i = 0; i < 5; i++) {
                 if (suits[i]) {
                     g.DrawImage(Properties.Resources.Suit, new Rectangle(417 + i * 25, 327, 25, 25), new Rectangle(i * 25, 0, 25, 25), GraphicsUnit.Pixel);
-                }
-                else {
+                } else {
                     g.DrawImage(Properties.Resources.Suit, new Rectangle(417 + i * 25, 327, 25, 25), new Rectangle(125 + i * 25, 0, 25, 25), GraphicsUnit.Pixel);
                 }
             }
@@ -508,8 +469,7 @@ namespace Kuaff.Tractor {
         internal bool DoRankNot() {
             if (mainForm.currentState.Suit == 0) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
@@ -526,22 +486,17 @@ namespace Kuaff.Tractor {
                     mainForm.showSuits++;
                     mainForm.whoShowRank = 1;
                     mainForm.currentState.Suit = 1;
-                    if ((mainForm.currentRank == 0) && mainForm.isNew)
-                    {
+                    if ((mainForm.currentRank == 0) && mainForm.isNew) {
                         mainForm.currentState.Master = 1;
                     }
                     Graphics g = Graphics.FromImage(mainForm.bmp);
-                    if ((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2))
-                    {
+                    if ((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2)) {
                         DrawSuit(g, 1, true, true);
                         DrawRank(g, mainForm.currentState.OurCurrentRank, true, true);
-                    }
-                    else
-                    {
+                    } else {
                         DrawSuit(g, 1, false, true);
                         DrawRank(g, mainForm.currentState.OpposedCurrentRank, false, true);
                     }
-                    
                     DrawMaster(g, mainForm.currentState.Master, 1);
                     DrawOtherMaster(g, mainForm.currentState.Master, 1);
                     ClearSuitCards(g);
@@ -555,18 +510,13 @@ namespace Kuaff.Tractor {
                     mainForm.whoShowRank = 1;
                     Graphics g = Graphics.FromImage(mainForm.bmp);
                     mainForm.currentState.Suit = 2;
-                    if ((mainForm.currentRank == 0) && mainForm.isNew)
-                    {
+                    if ((mainForm.currentRank == 0) && mainForm.isNew) {
                         mainForm.currentState.Master = 1;
-                    
                     }
-                    if ((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2))
-                    {
+                    if ((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2)) {
                         DrawSuit(g, 2, true, true);
                         DrawRank(g, mainForm.currentState.OurCurrentRank, true, true);
-                    }
-                    else
-                    {
+                    } else {
                         DrawSuit(g, 2, false, true);
                         DrawRank(g, mainForm.currentState.OpposedCurrentRank, false, true);
                     }
@@ -583,24 +533,18 @@ namespace Kuaff.Tractor {
                     mainForm.whoShowRank = 1;
                     Graphics g = Graphics.FromImage(mainForm.bmp);
                     mainForm.currentState.Suit = 3;
-                    if ((mainForm.currentRank == 0) && mainForm.isNew)
-                    {
+                    if ((mainForm.currentRank == 0) && mainForm.isNew) {
                         mainForm.currentState.Master = 1;
-                        
                     }
-                    if ((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2))
-                    {
+                    if ((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2)) {
                         DrawSuit(g, 3, true, true);
                         DrawRank(g, mainForm.currentState.OurCurrentRank, true, true);
-                    }
-                    else
-                    {
+                    } else {
                         DrawSuit(g, 3, false, true);
                         DrawRank(g, mainForm.currentState.OpposedCurrentRank, false, true);
                     }
                     DrawMaster(g, mainForm.currentState.Master, 1);
                     DrawOtherMaster(g, mainForm.currentState.Master, 1);
-                    
                     ClearSuitCards(g);
                     g.Dispose();
                 }
@@ -612,27 +556,21 @@ namespace Kuaff.Tractor {
                     mainForm.whoShowRank = 1;
                     Graphics g = Graphics.FromImage(mainForm.bmp);
                     mainForm.currentState.Suit = 4;
-                    if ((mainForm.currentRank == 0) && mainForm.isNew)
-                    {
+                    if ((mainForm.currentRank == 0) && mainForm.isNew) {
                         mainForm.currentState.Master = 1;
-                        
                     }
-                    if ((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2))
-                    {
+                    if ((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2)) {
                         DrawSuit(g, 4, true, true);
                         DrawRank(g, mainForm.currentState.OurCurrentRank, true, true);
-                    }
-                    else
-                    {
+                    } else {
                         DrawSuit(g, 4, false, true);
                         DrawRank(g, mainForm.currentState.OpposedCurrentRank, false, true);
                     }
                     DrawMaster(g, mainForm.currentState.Master, 1);
                     DrawOtherMaster(g, mainForm.currentState.Master, 1);
-                    
                     ClearSuitCards(g);
                     g.Dispose();
-                }
+                } 
             }
             if (suits[4]) { // 如果王
                 Region region = new Region(new Rectangle(518, 327, 25, 25));
@@ -641,19 +579,13 @@ namespace Kuaff.Tractor {
                     mainForm.whoShowRank = 1;
                     Graphics g = Graphics.FromImage(mainForm.bmp);
                     mainForm.currentState.Suit = 5;
-                    if ((mainForm.currentRank == 0) && mainForm.isNew)
-                    {
+                    if ((mainForm.currentRank == 0) && mainForm.isNew) {
                         mainForm.currentState.Master = 1;
-                        
                     }
-
-                    if ((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2))
-                    {
+                    if ((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2)) {
                         DrawSuit(g, 5, true, true);
                         DrawRank(g, mainForm.currentState.OurCurrentRank, true, true);
-                    }
-                    else
-                    {
+                    } else {
                         DrawSuit(g, 5, false, true);
                         DrawRank(g, mainForm.currentState.OpposedCurrentRank, false, true);
                     }
@@ -738,8 +670,7 @@ namespace Kuaff.Tractor {
                 j = DrawDiamondsRank(g, currentPoker, j, start);
                 j = DrawClubsRank(g, currentPoker, j, start);
                 j = DrawHeartsRank(g, currentPoker, j, start);
-            }
-            else if (mainForm.currentState.Suit == 2) { // 黑桃
+            } else if (mainForm.currentState.Suit == 2) { // 黑桃
                 j = DrawMyDiamonds(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyClubs(g, currentPoker, j, start) + 1;
@@ -751,8 +682,7 @@ namespace Kuaff.Tractor {
                 j = DrawClubsRank(g, currentPoker, j, start);
                 j = DrawHeartsRank(g, currentPoker, j, start);
                 j = DrawPeachsRank(g, currentPoker, j, start);
-            }
-            else if (mainForm.currentState.Suit == 3) {  // 方片
+            } else if (mainForm.currentState.Suit == 3) {  // 方片
                 j = DrawMyClubs(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyHearts(g, currentPoker, j, start) + 1;
@@ -764,8 +694,7 @@ namespace Kuaff.Tractor {
                 j = DrawHeartsRank(g, currentPoker, j, start);
                 j = DrawPeachsRank(g, currentPoker, j, start);
                 j = DrawDiamondsRank(g, currentPoker, j, start);// 方块
-            }
-            else if (mainForm.currentState.Suit == 4) {
+            } else if (mainForm.currentState.Suit == 4) {
                 j = DrawMyHearts(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyPeachs(g, currentPoker, j, start) + 1;
@@ -777,8 +706,7 @@ namespace Kuaff.Tractor {
                 j = DrawPeachsRank(g, currentPoker, j, start);
                 j = DrawDiamondsRank(g, currentPoker, j, start);
                 j = DrawClubsRank(g, currentPoker, j, start);// 梅花
-            }
-            else if (mainForm.currentState.Suit == 5) {
+            } else if (mainForm.currentState.Suit == 5) {
                 j = DrawMyHearts(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyPeachs(g, currentPoker, j, start) + 1;
@@ -834,8 +762,7 @@ namespace Kuaff.Tractor {
                 j = DrawDiamondsRank2(g, currentPoker, j, start);
                 j = DrawClubsRank2(g, currentPoker, j, start);
                 j = DrawHeartsRank2(g, currentPoker, j, start);// 红桃
-            }
-            else if (mainForm.currentState.Suit == 2) {
+            } else if (mainForm.currentState.Suit == 2) {
                 j = DrawMyDiamonds2(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyClubs2(g, currentPoker, j, start) + 1;
@@ -847,8 +774,7 @@ namespace Kuaff.Tractor {
                 j = DrawClubsRank2(g, currentPoker, j, start);
                 j = DrawHeartsRank2(g, currentPoker, j, start);
                 j = DrawPeachsRank2(g, currentPoker, j, start);// 黑桃
-            }
-            else if (mainForm.currentState.Suit == 3) {
+            } else if (mainForm.currentState.Suit == 3) {
                 j = DrawMyClubs2(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyHearts2(g, currentPoker, j, start) + 1;
@@ -860,8 +786,7 @@ namespace Kuaff.Tractor {
                 j = DrawHeartsRank2(g, currentPoker, j, start);
                 j = DrawPeachsRank2(g, currentPoker, j, start);
                 j = DrawDiamondsRank2(g, currentPoker, j, start);// 方块
-            }
-            else if (mainForm.currentState.Suit == 4) {
+            } else if (mainForm.currentState.Suit == 4) {
                 j = DrawMyHearts2(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyPeachs2(g, currentPoker, j, start) + 1;
@@ -873,8 +798,7 @@ namespace Kuaff.Tractor {
                 j = DrawPeachsRank2(g, currentPoker, j, start);
                 j = DrawDiamondsRank2(g, currentPoker, j, start);
                 j = DrawClubsRank2(g, currentPoker, j, start);// 梅花
-            }
-            else if (mainForm.currentState.Suit == 5) {
+            } else if (mainForm.currentState.Suit == 5) {
                 j = DrawMyHearts2(g, currentPoker, j, start) + 1;
                 IsSuitLost(ref j, ref k);
                 j = DrawMyPeachs2(g, currentPoker, j, start) + 1;
@@ -896,8 +820,7 @@ namespace Kuaff.Tractor {
             Rectangle pigRect = new Rectangle(296, 300, 53, 46);
             if (TractorRules.IsInvalid(mainForm, mainForm.currentSendCards, 1) && (mainForm.currentState.CurrentCardCommands == CardCommands.WaitingForMySending)) {
                 g.DrawImage(Properties.Resources.Ready, pigRect);
-            }
-            else {
+            } else {
                 g.DrawImage(mainForm.image, pigRect, pigRect, GraphicsUnit.Pixel);
             }
             My8CardsIsReady(g);
@@ -908,16 +831,14 @@ namespace Kuaff.Tractor {
             if ((mainForm.currentState.CurrentCardCommands == CardCommands.WaitingForSending8Cards)) {
                 int total = 0;
                 for (int i = 0; i < mainForm.myCardIsReady.Count; i++) {
-                    if ((bool)mainForm.myCardIsReady[i])
-                    {
+                    if ((bool)mainForm.myCardIsReady[i]) {
                         total++;
                     }
                 }
                 Rectangle pigRect = new Rectangle(296, 300, 53, 46);
                 if (total == 8) {
                     g.DrawImage(Properties.Resources.Ready, pigRect);
-                }
-                else {
+                } else {
                     g.DrawImage(mainForm.image, pigRect, pigRect, GraphicsUnit.Pixel);
                 }
             }
@@ -1056,35 +977,27 @@ namespace Kuaff.Tractor {
             if (count == 1) {
                 SetCardsInformation(start + j * 13, number, false);
                 if (mainForm.whoShowRank == 1 && b) {
-                    if (number == 52 || number == 53)
-                    {
+                    if (number == 52 || number == 53) {
                         g.DrawImage(getPokerImageByNumber(number), start + j * 13, 375, 71, 96); // 单个的王不被提上
-                    }
-                    else
-                    {
+                    } else {
                         g.DrawImage(getPokerImageByNumber(number), start + j * 13, 360, 71, 96);
                     }
-                }
-                else {
+                } else {
                     g.DrawImage(getPokerImageByNumber(number), start + j * 13, 375, 71, 96);
                 }
                 j++;
-            }
-            else if (count == 2) {
+            } else if (count == 2) {
                 SetCardsInformation(start + j * 13, number, false);
                 if (mainForm.whoShowRank == 1 && b && mainForm.showSuits >= 1) {
                     g.DrawImage(getPokerImageByNumber(number), start + j * 13, 360, 71, 96);
-                }
-                else {
+                } else {
                     g.DrawImage(getPokerImageByNumber(number), start + j * 13, 375, 71, 96);
                 }
-                
                 j++;
                 SetCardsInformation(start + j * 13, number, false);
                 if (mainForm.whoShowRank == 1 && b && mainForm.showSuits >= 2) {
                     g.DrawImage(getPokerImageByNumber(number), start + j * 13, 360, 71, 96);
-                }
-                else {
+                } else {
                     g.DrawImage(getPokerImageByNumber(number), start + j * 13, 375, 71, 96);
                 }
                 j++;
@@ -1096,8 +1009,7 @@ namespace Kuaff.Tractor {
         private int DrawBigJack2(Graphics g, CurrentPoker currentPoker, int j, int start) {
             if (currentPoker.BigJack == 1) {
                 j = DrawMyOneOrTwoCards2(g, j, 53, start + j * 13, 355, 71, 96) + 1;
-            }
-            else if (currentPoker.BigJack == 2) {
+            } else if (currentPoker.BigJack == 2) {
                 j = DrawMyOneOrTwoCards2(g, j, 53, start + j * 13, 355, 71, 96) + 1;
                 j = DrawMyOneOrTwoCards2(g, j, 53, start + j * 13, 355, 71, 96) + 1;
             }
@@ -1106,8 +1018,7 @@ namespace Kuaff.Tractor {
         private int DrawSmallJack2(Graphics g, CurrentPoker currentPoker, int j, int start) {
             if (currentPoker.SmallJack == 1) {
                 j = DrawMyOneOrTwoCards2(g, j, 52, start + j * 13, 355, 71, 96) + 1;
-            }
-            else if (currentPoker.SmallJack == 2) {
+            } else if (currentPoker.SmallJack == 2) {
                 j = DrawMyOneOrTwoCards2(g, j, 52, start + j * 13, 355, 71, 96) + 1;
                 j = DrawMyOneOrTwoCards2(g, j, 52, start + j * 13, 355, 71, 96) + 1;
             }
@@ -1116,8 +1027,7 @@ namespace Kuaff.Tractor {
         private int DrawDiamondsRank2(Graphics g, CurrentPoker currentPoker, int j, int start) {
             if (currentPoker.DiamondsRankTotal == 1) {
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank + 26, start + j * 13, 355, 71, 96) + 1;
-            }
-            else if (currentPoker.DiamondsRankTotal == 2) {
+            } else if (currentPoker.DiamondsRankTotal == 2) {
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank + 26, start + j * 13, 355, 71, 96) + 1;
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank + 26, start + j * 13, 355, 71, 96) + 1;
             }
@@ -1126,8 +1036,7 @@ namespace Kuaff.Tractor {
         private int DrawClubsRank2(Graphics g, CurrentPoker currentPoker, int j, int start) {
             if (currentPoker.ClubsRankTotal == 1) {
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank + 39, start + j * 13, 355, 71, 96) + 1;
-            }
-            else if (currentPoker.ClubsRankTotal == 2) {
+            } else if (currentPoker.ClubsRankTotal == 2) {
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank + 39, start + j * 13, 355, 71, 96) + 1;
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank + 39, start + j * 13, 355, 71, 96) + 1;
             }
@@ -1136,8 +1045,7 @@ namespace Kuaff.Tractor {
         private int DrawPeachsRank2(Graphics g, CurrentPoker currentPoker, int j, int start) {
             if (currentPoker.PeachsRankTotal == 1) {
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank + 13, start + j * 13, 355, 71, 96) + 1;
-            }
-            else if (currentPoker.PeachsRankTotal == 2) {
+            } else if (currentPoker.PeachsRankTotal == 2) {
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank + 13, start + j * 13, 355, 71, 96) + 1;
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank + 13, start + j * 13, 355, 71, 96) + 1;
             }
@@ -1146,8 +1054,7 @@ namespace Kuaff.Tractor {
         private int DrawHeartsRank2(Graphics g, CurrentPoker currentPoker, int j, int start) {
             if (currentPoker.HeartsRankTotal == 1) {
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank, start + j * 13, 355, 71, 96) + 1;
-            }
-            else if (currentPoker.HeartsRankTotal == 2) {
+            } else if (currentPoker.HeartsRankTotal == 2) {
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank, start + j * 13, 355, 71, 96) + 1;
                 j = DrawMyOneOrTwoCards2(g, j, mainForm.currentRank, start + j * 13, 355, 71, 96) + 1;
             }
@@ -1157,8 +1064,7 @@ namespace Kuaff.Tractor {
             for (int i = 0; i < 13; i++) {
                 if (currentPoker.ClubsNoRank[i] == 1) {
                     j = DrawMyOneOrTwoCards2(g, j, i + 39, start + j * 13, 355, 71, 96) + 1;
-                }
-                else if (currentPoker.ClubsNoRank[i] == 2) {
+                } else if (currentPoker.ClubsNoRank[i] == 2) {
                     j = DrawMyOneOrTwoCards2(g, j, i + 39, start + j * 13, 355, 71, 96) + 1;
                     j = DrawMyOneOrTwoCards2(g, j, i + 39, start + j * 13, 355, 71, 96) + 1;
                 }
@@ -1169,8 +1075,7 @@ namespace Kuaff.Tractor {
             for (int i = 0; i < 13; i++) {
                 if (currentPoker.DiamondsNoRank[i] == 1) {
                     j = DrawMyOneOrTwoCards2(g, j, i + 26, start + j * 13, 355, 71, 96) + 1;
-                }
-                else if (currentPoker.DiamondsNoRank[i] == 2) {
+                } else if (currentPoker.DiamondsNoRank[i] == 2) {
                     j = DrawMyOneOrTwoCards2(g, j, i + 26, start + j * 13, 355, 71, 96) + 1;
                     j = DrawMyOneOrTwoCards2(g, j, i + 26, start + j * 13, 355, 71, 96) + 1;
                 }
@@ -1181,8 +1086,7 @@ namespace Kuaff.Tractor {
             for (int i = 0; i < 13; i++) {
                 if (currentPoker.PeachsNoRank[i] == 1) {
                     j = DrawMyOneOrTwoCards2(g, j, i + 13, start + j * 13, 355, 71, 96) + 1;
-                }
-                else if (currentPoker.PeachsNoRank[i] == 2) {
+                } else if (currentPoker.PeachsNoRank[i] == 2) {
                     j = DrawMyOneOrTwoCards2(g, j, i + 13, start + j * 13, 355, 71, 96) + 1;
                     j = DrawMyOneOrTwoCards2(g, j, i + 13, start + j * 13, 355, 71, 96) + 1;
                 }
@@ -1193,8 +1097,7 @@ namespace Kuaff.Tractor {
             for (int i = 0; i < 13; i++) {
                 if (currentPoker.HeartsNoRank[i] == 1) {
                     j = DrawMyOneOrTwoCards2(g, j, i, start + j * 13, 355, 71, 96) + 1;
-                }
-                else if (currentPoker.HeartsNoRank[i] == 2) {
+                } else if (currentPoker.HeartsNoRank[i] == 2) {
                     j = DrawMyOneOrTwoCards2(g, j, i, start + j * 13, 355, 71, 96) + 1;
                     j = DrawMyOneOrTwoCards2(g, j, i, start + j * 13, 355, 71, 96) + 1;
                 }
@@ -1205,8 +1108,7 @@ namespace Kuaff.Tractor {
         private int DrawMyOneOrTwoCards2(Graphics g, int j, int number, int x, int y, int width, int height) {
             if ((bool)mainForm.myCardIsReady[mainForm.cardsOrderNumber]) {
                 g.DrawImage(getPokerImageByNumber(number), x, y, width, height);
-            }
-            else {
+            } else {
                 g.DrawImage(getPokerImageByNumber(number), x, y + 20, width, height);
             }
             mainForm.cardsOrderNumber++;
@@ -1224,8 +1126,7 @@ namespace Kuaff.Tractor {
             // 重画自己手中的牌
             if (mainForm.currentPokers[0].Count > 0) {
                 DrawMySortedCards(mainForm.currentPokers[0], mainForm.currentPokers[0].Count);
-            }
-            else { // 重新下部空间
+            } else { // 重新下部空间
                 Rectangle rect = new Rectangle(30, 355, 560, 116);
                 Graphics g = Graphics.FromImage(mainForm.bmp);
                 g.DrawImage(mainForm.image, rect, rect, GraphicsUnit.Pixel);
@@ -1238,12 +1139,10 @@ namespace Kuaff.Tractor {
                 mainForm.currentState.CurrentCardCommands = CardCommands.Pause;
                 mainForm.SetPauseSet(mainForm.gameConfig.FinishedOncePauseTime, CardCommands.DrawOnceFinished);
                 DrawWhoWinThisTime();
-            }
-            else {
+            } else {
                 mainForm.whoseOrder = 4;
                 mainForm.currentState.CurrentCardCommands = CardCommands.WaitingForSend;
             }
-
         }
 // 下家出牌
         internal void DrawNextUserSendedCards() {
@@ -1251,8 +1150,7 @@ namespace Kuaff.Tractor {
             // 画NextUser出的牌
             if (mainForm.currentSendCards[0].Count > 0) { // 随牌
                 DrawNextUserSendedCardsAction(Algorithm.MustSendedCards(mainForm, 4, mainForm.currentPokers, mainForm.currentSendCards, mainForm.currentState.Suit, mainForm.currentRank, mainForm.currentSendCards[mainForm.firstSend - 1].Count));
-            }
-            else {
+            } else {
                 DrawNextUserSendedCardsAction(Algorithm.ShouldSendedCards(mainForm, 4, mainForm.currentPokers, mainForm.currentSendCards, mainForm.currentState.Suit, mainForm.currentRank));
                 mainForm.whoseOrder = 2;
             }
@@ -1277,8 +1175,7 @@ namespace Kuaff.Tractor {
                 mainForm.currentState.CurrentCardCommands = CardCommands.Pause;
                 mainForm.SetPauseSet(mainForm.gameConfig.FinishedOncePauseTime, CardCommands.DrawOnceFinished);
                 DrawWhoWinThisTime();
-            }
-            else {
+            } else {
                 mainForm.whoseOrder = 2;
                 mainForm.currentState.CurrentCardCommands = CardCommands.WaitingForSend;
             }
@@ -1289,8 +1186,7 @@ namespace Kuaff.Tractor {
             // 画FrieldUser出的牌
             if (mainForm.currentSendCards[3].Count > 0) { // 随牌
                 DrawFrieldUserSendedCardsAction(Algorithm.MustSendedCards(mainForm, 2, mainForm.currentPokers, mainForm.currentSendCards, mainForm.currentState.Suit, mainForm.currentRank, mainForm.currentSendCards[mainForm.firstSend - 1].Count));
-            }
-            else {
+            } else {
                 DrawFrieldUserSendedCardsAction(Algorithm.ShouldSendedCards(mainForm, 2, mainForm.currentPokers, mainForm.currentSendCards, mainForm.currentState.Suit, mainForm.currentRank));
             }
 // 考虑是否盖住的问题
@@ -1322,8 +1218,7 @@ namespace Kuaff.Tractor {
                 mainForm.currentState.CurrentCardCommands = CardCommands.Pause;
                 mainForm.SetPauseSet(mainForm.gameConfig.FinishedOncePauseTime, CardCommands.DrawOnceFinished);
                 DrawWhoWinThisTime();
-            }
-            else {
+            } else {
                 mainForm.whoseOrder = 3;
                 mainForm.currentState.CurrentCardCommands = CardCommands.WaitingForSend;
             }
@@ -1335,8 +1230,7 @@ namespace Kuaff.Tractor {
             // 画PreviousUser出的牌
             if (mainForm.currentSendCards[1].Count > 0) { // 随牌 
                 DrawPreviousUserSendedCardsAction(Algorithm.MustSendedCards(mainForm, 3, mainForm.currentPokers, mainForm.currentSendCards, mainForm.currentState.Suit, mainForm.currentRank, mainForm.currentSendCards[mainForm.firstSend - 1].Count));
-            }
-            else {
+            } else {
                 DrawPreviousUserSendedCardsAction(Algorithm.ShouldSendedCards(mainForm, 3, mainForm.currentPokers, mainForm.currentSendCards, mainForm.currentState.Suit, mainForm.currentRank));
             }
 // 考虑是否盖住的问题
@@ -1360,8 +1254,7 @@ namespace Kuaff.Tractor {
                 mainForm.currentState.CurrentCardCommands = CardCommands.Pause;
                 mainForm.SetPauseSet(mainForm.gameConfig.FinishedOncePauseTime, CardCommands.DrawOnceFinished);
                 DrawWhoWinThisTime();
-            }
-            else {
+            } else {
                 mainForm.whoseOrder = 1;
                 mainForm.currentState.CurrentCardCommands = CardCommands.WaitingForMySending;
             }
@@ -1381,37 +1274,30 @@ namespace Kuaff.Tractor {
                 if (f1 != f2 || f2 != f3 || f3 != f4) {
                     int total = mainForm.currentSendCards[mainForm.firstSend - 1].Count;
                     int[] users = CommonMethods.OtherUsers(mainForm.firstSend);
-                    if (mainForm.currentSendCards[users[0] - 1].Count != total)
-                    {
-                        for (int i = 0; i < mainForm.currentSendCards[users[0] - 1].Count; i++)
-                        {
+                    if (mainForm.currentSendCards[users[0] - 1].Count != total) {
+                        for (int i = 0; i < mainForm.currentSendCards[users[0] - 1].Count; i++) {
                             mainForm.pokerList[users[0] - 1].Add(mainForm.currentSendCards[users[0] - 1][i]);
                             mainForm.currentPokers[users[0] - 1].AddCard((int)mainForm.currentSendCards[users[0] - 1][i]);
                         }
                         mainForm.currentSendCards[users[0] - 1] = new ArrayList();
                         MustSendCardsAlgorithm.WhoseOrderIs2(mainForm, mainForm.currentPokers, users[0], mainForm.currentSendCards[users[0] - 1], 1, mainForm.currentState.Suit, mainForm.currentRank, CommonMethods.GetSuit((int)mainForm.currentSendCards[mainForm.firstSend - 1][0]));
                     }
-                    if (mainForm.currentSendCards[users[1] - 1].Count != total)
-                    {
-                        for (int i = 0; i < mainForm.currentSendCards[users[1] - 1].Count; i++)
-                        {
+                    if (mainForm.currentSendCards[users[1] - 1].Count != total) {
+                        for (int i = 0; i < mainForm.currentSendCards[users[1] - 1].Count; i++) {
                             mainForm.pokerList[users[1] - 1].Add(mainForm.currentSendCards[users[1] - 1][i]);
                             mainForm.currentPokers[users[1] - 1].AddCard((int)mainForm.currentSendCards[users[1] - 1][i]);
                         }
                         mainForm.currentSendCards[users[1] - 1] = new ArrayList();
                         MustSendCardsAlgorithm.WhoseOrderIs3(mainForm, mainForm.currentPokers, users[1], mainForm.currentSendCards[users[1] - 1], 1, mainForm.currentState.Suit, mainForm.currentRank, CommonMethods.GetSuit((int)mainForm.currentSendCards[mainForm.firstSend - 1][0]));
                     }
-                    if (mainForm.currentSendCards[users[2] - 1].Count != total)
-                    {
-                        for (int i = 0; i < mainForm.currentSendCards[users[2] - 1].Count; i++)
-                        {
+                    if (mainForm.currentSendCards[users[2] - 1].Count != total) {
+                        for (int i = 0; i < mainForm.currentSendCards[users[2] - 1].Count; i++) {
                             mainForm.pokerList[users[2] - 1].Add(mainForm.currentSendCards[users[2] - 1][i]);
                             mainForm.currentPokers[users[2] - 1].AddCard((int)mainForm.currentSendCards[users[2] - 1][i]);
                         }
                         mainForm.currentSendCards[users[2] - 1] = new ArrayList();
                         MustSendCardsAlgorithm.WhoseOrderIs4(mainForm, mainForm.currentPokers, users[2], mainForm.currentSendCards[users[2] - 1], 1, mainForm.currentState.Suit, mainForm.currentRank, CommonMethods.GetSuit((int)mainForm.currentSendCards[mainForm.firstSend - 1][0]));
                     }
-                   
                 }
             } 
 #endregion // 测试
@@ -1428,46 +1314,38 @@ namespace Kuaff.Tractor {
                     Console.WriteLine("");
                     Console.WriteLine("");
                     Console.WriteLine("自己");
-                    for (int i = 0; i < mainForm.pokerList[0].Count; i++)
-                    {
+                    for (int i = 0; i < mainForm.pokerList[0].Count; i++) {
                         Console.Write(mainForm.pokerList[0][i] + " ");
                     }
                     Console.WriteLine("");
-                    for (int i = 0; i < mainForm.currentSendCards[0].Count; i++)
-                    {
+                    for (int i = 0; i < mainForm.currentSendCards[0].Count; i++) {
                         Console.Write(mainForm.currentSendCards[0][i] + " ");
                     }
                     Console.WriteLine("");
                     Console.WriteLine("对家");
-                    for (int i = 0; i < mainForm.pokerList[1].Count; i++)
-                    {
+                    for (int i = 0; i < mainForm.pokerList[1].Count; i++) {
                         Console.Write(mainForm.pokerList[1][i] + " ");
                     }
                     Console.WriteLine("");
-                    for (int i = 0; i < mainForm.currentSendCards[1].Count; i++)
-                    {
+                    for (int i = 0; i < mainForm.currentSendCards[1].Count; i++) {
                         Console.Write(mainForm.currentSendCards[1][i] + " ");
                     }
                     Console.WriteLine("");
                     Console.WriteLine("西家");
-                    for (int i = 0; i < mainForm.pokerList[2].Count; i++)
-                    {
+                    for (int i = 0; i < mainForm.pokerList[2].Count; i++) {
                         Console.Write(mainForm.pokerList[2][i] + " ");
                     }
                     Console.WriteLine("");
-                    for (int i = 0; i < mainForm.currentSendCards[2].Count; i++)
-                    {
+                    for (int i = 0; i < mainForm.currentSendCards[2].Count; i++) {
                         Console.Write(mainForm.currentSendCards[2][i] + " ");
                     }
                     Console.WriteLine("");
                     Console.WriteLine("东家");
-                    for (int i = 0; i < mainForm.pokerList[3].Count; i++)
-                    {
+                    for (int i = 0; i < mainForm.pokerList[3].Count; i++) {
                         Console.Write(mainForm.pokerList[3][i] + " ");
                     }
                     Console.WriteLine("");
-                    for (int i = 0; i < mainForm.currentSendCards[3].Count; i++)
-                    {
+                    for (int i = 0; i < mainForm.currentSendCards[3].Count; i++) {
                         Console.Write(mainForm.currentSendCards[3][i] + " ");
                     }
                     Console.WriteLine("");
@@ -1475,26 +1353,22 @@ namespace Kuaff.Tractor {
                     // 复原
                     int[] users = CommonMethods.OtherUsers(mainForm.firstSend);
                     int tmp = mainForm.whoIsBigger;
-                    if (mainForm.firstSend == tmp)
-                    {
+                    if (mainForm.firstSend == tmp) {
                         tmp = newFirst;
                     }
-                    if (tmp == users[0])
-                    {
+                    if (tmp == users[0]) {
                         mainForm.pokerList[users[0] - 1].Add(mainForm.currentSendCards[users[0] - 1][0]);
                         mainForm.currentPokers[users[0] - 1].AddCard((int)mainForm.currentSendCards[users[0] - 1][0]);
                         mainForm.currentSendCards[users[0] - 1] = new ArrayList();
                         MustSendCardsAlgorithm.WhoseOrderIs2(mainForm, mainForm.currentPokers, users[0], mainForm.currentSendCards[users[0] - 1], 1, mainForm.currentState.Suit, mainForm.currentRank, CommonMethods.GetSuit((int)mainForm.currentSendCards[mainForm.firstSend - 1][0]));
                     }
-                    if (tmp == users[1])
-                    {
+                    if (tmp == users[1]) {
                         mainForm.pokerList[users[1] - 1].Add(mainForm.currentSendCards[users[1] - 1][0]);
                         mainForm.currentPokers[users[1] - 1].AddCard((int)mainForm.currentSendCards[users[1] - 1][0]);
                         mainForm.currentSendCards[users[1] - 1] = new ArrayList();
                         MustSendCardsAlgorithm.WhoseOrderIs3(mainForm, mainForm.currentPokers, users[1], mainForm.currentSendCards[users[1] - 1], 1, mainForm.currentState.Suit, mainForm.currentRank, CommonMethods.GetSuit((int)mainForm.currentSendCards[mainForm.firstSend - 1][0]));
                     }
-                    if (tmp == users[2])
-                    {
+                    if (tmp == users[2]) {
                         mainForm.pokerList[users[2] - 1].Add(mainForm.currentSendCards[users[2] - 1][0]);
                         mainForm.currentPokers[users[2] - 1].AddCard((int)mainForm.currentSendCards[users[2] - 1][0]);
                         mainForm.currentSendCards[users[2] - 1] = new ArrayList();
@@ -1504,8 +1378,6 @@ namespace Kuaff.Tractor {
                 }
             }
 #endregion // 测试
-
-
             mainForm.whoIsBigger = 0;
             mainForm.firstSend = mainForm.whoseOrder;
             bool success = false;
@@ -1525,7 +1397,6 @@ namespace Kuaff.Tractor {
             DrawCenterImage();
             DrawScoreImage(mainForm.Scores);
             mainForm.Refresh();
-
         }
         private void DrawWhoWinThisTime() {
             // 谁赢了这一圈
@@ -1534,18 +1405,15 @@ namespace Kuaff.Tractor {
                 Graphics g = Graphics.FromImage(mainForm.bmp);
                 g.DrawImage(Properties.Resources.Winner, 437, 310, 33, 53);
                 g.Dispose();
-            }
-            else if (whoWin == 2) { // 对家
+            } else if (whoWin == 2) { // 对家
                 Graphics g = Graphics.FromImage(mainForm.bmp);
                 g.DrawImage(Properties.Resources.Winner, 437, 120, 33, 53);
                 g.Dispose();
-            }
-            else if (whoWin == 3) { // 西家
+            } else if (whoWin == 3) { // 西家
                 Graphics g = Graphics.FromImage(mainForm.bmp);
                 g.DrawImage(Properties.Resources.Winner, 90, 218, 33, 53);
                 g.Dispose();
-            }
-            else if (whoWin == 4) { // 东家
+            } else if (whoWin == 4) { // 东家
                 Graphics g = Graphics.FromImage(mainForm.bmp);
                 g.DrawImage(Properties.Resources.Winner, 516, 218, 33, 53);
                 g.Dispose();
@@ -1563,21 +1431,18 @@ namespace Kuaff.Tractor {
                 int x = 506;
                 if (scores.ToString().Length ==2) {
                     x -= 4;
-                }
-                else if (scores.ToString().Length ==3) {
+                } else if (scores.ToString().Length ==3) {
                     x -= 8;
                 }
                 g.DrawString(scores + "", font, Brushes.White, x, 138);
-            }
-            else {
+            } else {
                 Rectangle rect = new Rectangle(85, 300, 56, 56);
                 g.DrawImage(mainForm.image, rect, rect, GraphicsUnit.Pixel);
                 g.DrawImage(bmp, rect);
                 int x = 100;
                 if (scores.ToString().Length == 2) {
                     x -= 4;
-                }
-                else if (scores.ToString().Length == 3) {
+                } else if (scores.ToString().Length == 3) {
                     x -= 8;
                 }
                 g.DrawString(scores + "", font, Brushes.White, x, 310);
@@ -1613,7 +1478,6 @@ namespace Kuaff.Tractor {
             DrawFinishedScoreImage();
             mainForm.Refresh();
             mainForm.SetPauseSet(mainForm.gameConfig.FinishedThisTime, CardCommands.DrawOnceRank);
-           
         }
 #endregion // 绘制各家出的牌，并计算结果或者通知下一家
 #region 画牌时的辅助方法
@@ -1622,8 +1486,7 @@ namespace Kuaff.Tractor {
             Bitmap bitmap = null;
             if (mainForm.gameConfig.CardImageName.Length == 0) { // 从内嵌的图案中读取
                 bitmap = (Bitmap)mainForm.gameConfig.CardsResourceManager.GetObject("_" + number, Kuaff_Cards.Culture);
-            }
-            else {
+            } else {
                 bitmap = mainForm.cardsImages[number]; // 从自定义的图片中读取
             }
             return bitmap;
@@ -1654,7 +1517,6 @@ namespace Kuaff.Tractor {
             mainForm.myCardIsReady.Add(ready);
         }
 #endregion // 画牌时的辅助方法
-
 // 测试方法
         internal void TestCards() {
             Graphics g = Graphics.FromImage(mainForm.bmp);
