@@ -11,6 +11,7 @@ using Kuaff.CardResouces;
 namespace Kuaff.Tractor {
     class CalculateRegionHelper {
         MainForm mainForm;
+
         internal CalculateRegionHelper(MainForm mainForm) {
             this.mainForm = mainForm;
         }

@@ -10,3 +10,14 @@ C:\chaos\Source\Repos\smallnest\Tractor\ModelResources\bin\Debug\ICSharpCode.Sha
 C:\chaos\Source\Repos\smallnest\Tractor\ModelResources\bin\Debug\ICSharpCode.SharpZipLib.xml
 C:\chaos\Source\Repos\smallnest\Tractor\ModelResources\obj\Debug\ModelResources.csprojAssemblyReference.cache
 C:\chaos\Source\Repos\smallnest\Tractor\ModelResources\obj\Debug\ModelResources.csproj.CopyComplete
+F:\Tractor\ModelResources\bin\Debug\Kuaff.ModelResources.dll
+F:\Tractor\ModelResources\bin\Debug\Kuaff.ModelResources.pdb
+F:\Tractor\ModelResources\bin\Debug\ICSharpCode.SharpZipLib.dll
+F:\Tractor\ModelResources\bin\Debug\ICSharpCode.SharpZipLib.pdb
+F:\Tractor\ModelResources\bin\Debug\ICSharpCode.SharpZipLib.xml
+F:\Tractor\ModelResources\obj\Debug\Kuaff.ModelResources.Kuaff.Model.resources
+F:\Tractor\ModelResources\obj\Debug\ModelResources.csproj.GenerateResource.cache
+F:\Tractor\ModelResources\obj\Debug\ModelResources.csproj.CoreCompileInputs.cache
+F:\Tractor\ModelResources\obj\Debug\ModelResources.csproj.CopyComplete
+F:\Tractor\ModelResources\obj\Debug\Kuaff.ModelResources.dll
+F:\Tractor\ModelResources\obj\Debug\Kuaff.ModelResources.pdb

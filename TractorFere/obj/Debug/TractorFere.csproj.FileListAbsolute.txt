@@ -10,3 +10,14 @@ C:\chaos\Source\Repos\smallnest\Tractor\TractorFere\bin\Debug\ICSharpCode.SharpZ
 C:\chaos\Source\Repos\smallnest\Tractor\TractorFere\bin\Debug\ICSharpCode.SharpZipLib.pdb
 C:\chaos\Source\Repos\smallnest\Tractor\TractorFere\bin\Debug\ICSharpCode.SharpZipLib.xml
 C:\chaos\Source\Repos\smallnest\Tractor\TractorFere\obj\Debug\TractorFere.csproj.CopyComplete
+F:\Tractor\TractorFere\bin\Debug\Kuaff.TractorFere.dll
+F:\Tractor\TractorFere\bin\Debug\Kuaff.TractorFere.pdb
+F:\Tractor\TractorFere\bin\Debug\ICSharpCode.SharpZipLib.dll
+F:\Tractor\TractorFere\bin\Debug\ICSharpCode.SharpZipLib.pdb
+F:\Tractor\TractorFere\bin\Debug\ICSharpCode.SharpZipLib.xml
+F:\Tractor\TractorFere\obj\Debug\Kuaff.TractorFere.Properties.Resources.resources
+F:\Tractor\TractorFere\obj\Debug\TractorFere.csproj.GenerateResource.cache
+F:\Tractor\TractorFere\obj\Debug\TractorFere.csproj.CoreCompileInputs.cache
+F:\Tractor\TractorFere\obj\Debug\TractorFere.csproj.CopyComplete
+F:\Tractor\TractorFere\obj\Debug\Kuaff.TractorFere.dll
+F:\Tractor\TractorFere\obj\Debug\Kuaff.TractorFere.pdb

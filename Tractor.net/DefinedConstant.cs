@@ -42,7 +42,7 @@ namespace Kuaff.Tractor {
         // 未定0、红桃1、黑桃2、方块3、梅花4、无主5
         internal int Suit;
         // 当前的庄家
-        // 未定0,自己1、对家2、西3、东4
+        // 未定0, 自己1、对家2、西3、东4
         internal int Master;
         internal CardCommands CurrentCardCommands; // 当前命令
         internal CurrentState(int ourCurrentRank, int opposedCurrentRank, int suit, int master,int ourTotalRound,int opposedTotalRound, CardCommands currentCardCommands) {

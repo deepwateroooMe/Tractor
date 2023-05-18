@@ -121,6 +121,11 @@
       <DependentUpon>Fere.cs</DependentUpon>
     </Compile>
     <Compile Include="GameConfig.cs" />
+    <Compile Include="Kuaff.Model.Designer.cs">
+      <DependentUpon>Kuaff.Model.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -155,14 +160,19 @@
       <SubType>Designer</SubType>
       <DependentUpon>TotalScores.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Kuaff.Model.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Kuaff.Model.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\SelectCardsImage.resx">
       <SubType>Designer</SubType>
@@ -180,15 +190,15 @@
       <SubType>Designer</SubType>
       <DependentUpon>SetSpeedDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>

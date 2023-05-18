@@ -199,7 +199,7 @@ namespace Kuaff.Tractor {
         // 初始化
         internal void init() {
             // 每次初始化都重绘背景
-            Graphics g = Graphics.FromImage(bmp);
+            Graphics g = Graphics.FromImage(bmp); //bmp: 背景图，程序某个地方会初始化它
             drawingFormHelper.DrawBackground(g); // 画【客户端的背景框】
             // 发一次牌
             dpoker = new DistributePokerHelper();
@@ -294,7 +294,8 @@ namespace Kuaff.Tractor {
             // 左键：用于自已方 1, 只有在【等我扣8 张底】或是【等我出牌】时，才可以左键点击，就处理左键点击
             // 只有发牌时和该我出牌时才能相应鼠标事件: 按道理说，如果如此执行，不会出错才对，为什么会出那个 bug ？
             if (((currentState.CurrentCardCommands == CardCommands.WaitingForMySending) || (currentState.CurrentCardCommands == CardCommands.WaitingForSending8Cards)) && (whoseOrder == 1)) {
-                if (e.Button == MouseButtons.Left) {
+                if (e.Button == MouseButtons.Left) { 
+                    // 确保左键落在牌区，矩形范围内
                     if ((e.X >= (int)myCardsLocation[0] && e.X <= ((int)myCardsLocation[myCardsLocation.Count - 1] + 71)) && (e.Y >= 355 && e.Y < 472)) {
 // 添加游戏逻辑里的【用户玩家贴心化处理】：
                         // 当玩家非首家出牌（玩家为首家出牌时，无法确定玩家意愿而跳过），

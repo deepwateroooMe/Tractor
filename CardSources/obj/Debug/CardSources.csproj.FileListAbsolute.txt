@@ -9,3 +9,14 @@ C:\chaos\Source\Repos\smallnest\Tractor\CardSources\bin\Debug\ICSharpCode.SharpZ
 C:\chaos\Source\Repos\smallnest\Tractor\CardSources\bin\Debug\ICSharpCode.SharpZipLib.pdb
 C:\chaos\Source\Repos\smallnest\Tractor\CardSources\bin\Debug\ICSharpCode.SharpZipLib.xml
 C:\chaos\Source\Repos\smallnest\Tractor\CardSources\obj\Debug\CardSources.csproj.CopyComplete
+F:\Tractor\CardSources\bin\Debug\Kuaff.CardResources.dll
+F:\Tractor\CardSources\bin\Debug\Kuaff.CardResources.pdb
+F:\Tractor\CardSources\bin\Debug\ICSharpCode.SharpZipLib.dll
+F:\Tractor\CardSources\bin\Debug\ICSharpCode.SharpZipLib.pdb
+F:\Tractor\CardSources\bin\Debug\ICSharpCode.SharpZipLib.xml
+F:\Tractor\CardSources\obj\Debug\Kuaff.CardResouces.Kuaff.Cards.resources
+F:\Tractor\CardSources\obj\Debug\CardSources.csproj.GenerateResource.cache
+F:\Tractor\CardSources\obj\Debug\CardSources.csproj.CoreCompileInputs.cache
+F:\Tractor\CardSources\obj\Debug\CardSources.csproj.CopyComplete
+F:\Tractor\CardSources\obj\Debug\Kuaff.CardResources.dll
+F:\Tractor\CardSources\obj\Debug\Kuaff.CardResources.pdb
