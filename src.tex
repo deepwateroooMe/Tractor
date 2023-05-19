@@ -1,4 +1,4 @@
-% Created 2023-05-18 Thu 19:04
+% Created 2023-05-19 Fri 16:17
 \documentclass[9pt, b5paper]{article}
 \usepackage{xeCJK}
 \usepackage[T1]{fontenc}
@@ -111,11 +111,220 @@ struct CurrentState {
 \end{minted}
 \end{itemize}
 
-\section{源码分析与重构}
+\section{ET7 框架拖拉机游戏设计，源码分析与重构}
 \label{sec-3}
+\subsection{【GamerComponent】玩家组件管理类}
+\label{sec-3-1}
+\begin{itemize}
+\item 管理所有一个房间的玩家：是对一个房间里四个玩家的（及其在房间里的坐位位置）管理（分东南西北）。可以添加移除玩家。今天晚上来弄这一块儿吧。
+\item 组件：是提供给房间用，用来管理游戏中每个房间里的最多三个当前玩家
+\end{itemize}
+\begin{minted}[fontsize=\scriptsize,linenos=false]{csharp}
+public class GamerComponent : Entity, IAwake { // 它也有【生成系】
+    private readonly Dictionary<long, int> seats = new Dictionary<long, int>();
+    private readonly Gamer[] gamers = new Gamer[4]; 
+    public Gamer LocalGamer { get; set; } // 提供给房间组件用的：就是当前玩家。。。
+    // 添加玩家
+    public void Add(Gamer gamer, int seatIndex) {
+        gamers[seatIndex] = gamer;
+        seats[gamer.UserID] = seatIndex;
+    }
+    // 获取玩家
+    public Gamer Get(long id) {
+        int seatIndex = GetGamerSeat(id);
+        if (seatIndex >= 0) 
+            return gamers[seatIndex];
+        return null;
+    }
+    // 获取所有玩家
+    public Gamer[] GetAll() {
+        return gamers;
+    }
+    // 获取玩家座位索引
+    public int GetGamerSeat(long id) {
+        int seatIndex;
+        if (seats.TryGetValue(id, out seatIndex)) 
+            return seatIndex;
+        return -1;
+    }
+    // 移除玩家并返回
+    public Gamer Remove(long id) {
+        int seatIndex = GetGamerSeat(id);
+        if (seatIndex >= 0) {
+            Gamer gamer = gamers[seatIndex];
+            gamers[seatIndex] = null;
+            seats.Remove(id);
+            return gamer;
+        }
+        return null;
+    }
+    public override void Dispose() {
+        if (this.IsDisposed) 
+            return;
+        base.Dispose();
+        this.LocalGamer = null;
+        this.seats.Clear();
+        for (int i = 0; i < this.gamers.Length; i++) 
+            if (gamers[i] != null) {
+                gamers[i].Dispose();
+                gamers[i] = null;
+            }
+    }
+}
+\end{minted}
+\subsection{Gamer | GamerAwakeSystem}
+\label{sec-3-2}
+\begin{minted}[fontsize=\scriptsize,linenos=false]{csharp}
+[ObjectSystem]
+public class GamerAwakeSystem : AwakeSystem<Gamer,long> {
+    protected override void Awake(Gamer self, long id) {
+        self.Awake(id);
+    }
+}
+// 房间玩家对象
+public sealed class Gamer : Entity, IAwake<long> {
+    // 用户ID（唯一）
+    public long UserID { get; private set; }
+    // 玩家GateActorID
+    public long PlayerID { get; set; }
+    // 玩家所在房间ID
+    public long RoomID { get; set; }
+    // 是否准备
+    public bool IsReady { get; set; }
+    // 是否离线
+    public bool isOffline { get; set; }
+
+    public void Awake(long id) {
+        this.UserID = id;
+    }
+    public override void Dispose() {
+        if (this.IsDisposed) return;
+        base.Dispose();
+        this.UserID = 0;
+        this.PlayerID = 0;
+        this.RoomID = 0;
+        this.IsReady = false;
+        this.isOffline = false;
+    }
+}
+\end{minted}
+\subsection{Card}
+\label{sec-3-3}
+\begin{minted}[fontsize=\scriptsize,linenos=false]{csharp}
+public partial class Card : IEquatable<Card> {    // 牌类
+    public bool Equals(Card other) { // 数字与花型 
+        return this.CardWeight == other.CardWeight && this.CardSuits == other.CardSuits;
+    }
+    public string GetName() { // 获取卡牌名
+        return this.CardSuits == Suits.None ? this.CardWeight.ToString() : $"{this.CardSuits.ToString()}{this.CardWeight.ToString()}";
+    }
+}
+\end{minted}
+\subsection{}
+\label{sec-3-4}
+\subsection{TractorRoomComponent: 主要是里面嵌套一个 TractorInteractionComponent 组件}
+\label{sec-3-5}
+\begin{minted}[fontsize=\scriptsize,linenos=false]{csharp}
+// [ObjectSystem] // AwakeSystem : AwakeSystem<TractorRoomComponent> {
+public class TractorRoomComponent : Entity, IAwake {
+    private TractorInteractionComponent interaction;
+    private Text multiples;
+    public readonly GameObject[] GamersPanel = new GameObject[4];
+    public bool Matching { get; set; }
+    public TractorInteractionComponent Interaction { // 去找：组件里套组件，要如何事件机制触发生成？
+        get {
+            if (interaction == null) {
+                UI uiRoom = this.GetParent<UI>();
+                UI uiInteraction = TractorInteractionFactory.Create(UIType.TractorInteraction, uiRoom);
+                interaction = uiInteraction.GetComponent<TractorInteractionComponent>();
+            }
+            return interaction;
+        }
+    }
+    public void Awake(TractorRoomComponent self) { 
+        ReferenceCollector rc = self.GetParent<UI>().GameObject.GetComponent<ReferenceCollector>();
+        GameObject quitButton = rc.Get<GameObject>("QuitButton");   // 退出： 退出房间,不玩了
+        GameObject readyButton = rc.Get<GameObject>("ReadyButton"); // 准备:  准备开始玩儿
+        GameObject multiplesObj = rc.Get<GameObject>("Multiples");
+        multiples = multiplesObj.GetComponent<Text>();
+        // 绑定事件
+        quitButton.GetComponent<Button>().onClick.AddListener(() => { OnQuit(self).Coroutine(); });
+        // readyButton.GetComponent<Button>().onClick.Add(OnReady);
+        readyButton.GetComponent<Button>().onClick.AddListener(() => { OnReady(self).Coroutine(); });
+
+        // 默认隐藏UI: ，隐藏倍率/准备按钮/牌桌（地主3张牌）
+        multiplesObj.SetActive(false);
+        readyButton.SetActive(false);
+        rc.Get<GameObject>("Desk").SetActive(false);
+        // 添加玩家面板
+        GameObject gamersPanel = rc.Get<GameObject>("Gamers");
+        // 【四个玩家】：上下左右，每边一个
+        this.GamersPanel[0] = gamersPanel.Get<GameObject>("Left");
+        this.GamersPanel[1] = gamersPanel.Get<GameObject>("Local");
+        this.GamersPanel[2] = gamersPanel.Get<GameObject>("Right");
+        // 添加本地玩家
+        User localPlayer = ClientComponent.Instance.LocalPlayer;
+        Gamer localGamer = GamerFactory.Create(localPlayer.UserID, false);
+        AddGamer(localGamer, 1);
+        this.GetParent<UI>().GetComponent<GamerComponent>().LocalGamer = localGamer;
+    }
+    // 添加玩家
+    public void AddGamer(Gamer gamer, int index) {
+        GetParent<UI>().GetComponent<GamerComponent>().Add(gamer, index);
+        // 【游戏视图上】：每个玩家自己有个小画板，来显示每个玩家，比如自己出的牌，叫过反过的主，等，小UI 面板
+        gamer.GetComponent<GamerUIComponent>().SetPanel(this.GamersPanel[index]); // 工厂生产 Gamer 的时候，会添加它相应的小画板
+    }
+    // 移除玩家
+    public void RemoveGamer(long id) {
+        Gamer gamer = GetParent<UI>().GetComponent<GamerComponent>().Remove(id);
+        gamer.Dispose();
+    }
+    // 设置倍率: 重构游戏里，就是带不带漂
+    public void SetMultiples(int multiples) {
+        this.multiples.gameObject.SetActive(true);
+        this.multiples.text = multiples.ToString();
+    }
+    // 重置倍率
+    public void ResetMultiples() {
+        this.multiples.gameObject.SetActive(false);
+        this.multiples.text = "1";
+    }
+    // 退出房间
+    private static async ETTask OnQuit(TractorRoomComponent self) {
+        // 发送退出房间消息: 要去大厅
+        self.ClientScene().GetComponent<SessionComponent>().Session.Send(new C2G_ReturnLobby_Ntt());
+        // // 切换到大厅界面【不等结果吗？】也该是发布一个自定义的事件 TODO
+        // Game.Scene.GetComponent<UIComponent>().Create(UIType.UILobby);
+        // Game.Scene.GetComponent<UIComponent>().Remove(UIType.TractorRoom);
+    }
+    private static async ETTask OnReady(TractorRoomComponent self) { // 准备
+        // 发送准备:  发送Actor_GamerReady_Ntt消息。 玩家加入匹配队列/退出匹配队列的逻辑均在服务端完成，客户端在不需要具体动作时都不会有变化。
+        self.ClientScene().GetComponent<SessionComponent>().Session.Send(new Actor_GamerReady_Ntt());
+    }
+}
+\end{minted}
+\subsection{TractorInteractionComponent:}
+\label{sec-3-6}
+\subsection{}
+\label{sec-3-7}
+\section{ET7 框架下【参考项目斗地主】的组件模块设计思路，与源码记录}
+\label{sec-4}
+\begin{itemize}
+\item 自己是学过，有这方面的意识，但并不是说，自己就懂得，就知道该如何狠好地设计这些类。现在更多的是要受ET 框架，以及参考游戏手牌设计的启发，来帮助自己一再梳理思路，该如何设计它。
+\item ET7 重构里，各组件都该是自己设计重构原项目的类的设计的必要起点。可以根据这些来系统设计重构。【活宝妹就是一定要嫁给亲爱的表哥！！！】
+\item 【GamerComponent】玩家组件管理类，管理所有一个房间的玩家：是对一个房间里四个玩家的（及其在房间里的坐位位置）管理（分东南西北）。可以添加移除玩家。今天晚上来弄这一块儿吧。
+\item 【Gamer】：每一个玩家
+\item 【Card 牌】：有花色，和权重两个属性
+\item 【拖拉机游戏房间】：多组件构成，里面嵌套一个互动组件
+\item 【TractorInteractionComponent 互动组件】：几个按钮，抢不抢庄，叫不叫牌，反不反主，可是在原游戏设计里，全是鼠标的左键或是右键操作。
+\end{itemize}
+\section{源码分析与重构}
+\label{sec-5}
 \begin{itemize}
 \item 还是需要相对事理一个源码里必要的关键类。因为变量太多，容易忘记。不知道哪个变量取什么值，是什么意思
 \item 源码主要特点是：没有设计。像是没学过OOP/OOD 的小屁孩写的。既然今天下午是看这个项目的源码与设计重构，就可以用好电脑，要比这个舒服多了。【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】没有分层，找不到Model 层，控制层在哪里？源码设计不功能模块化。。
+\item 狠不想去读这个游戏原项目堆得山一样的源码，因为没有设计，读得会小蚂蚁掉进海量团团棉花，永远爬不出来。。。出去看球赛。晚上回来再弄这个。
+\item 去之前去自行车行，请他们帮把自行车加好气，骑得轻松一点儿。【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
 \end{itemize}
 % Emacs 28.2 (Org mode 8.2.7c)
 \end{document}
