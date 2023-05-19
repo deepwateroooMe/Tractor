@@ -8,7 +8,6 @@ using Kuaff.CardResouces;
 namespace Kuaff.Tractor {
     [Serializable]
     class GameConfig {
-
 #region 时间设置
         // 时间设置
         int finishedOncePauseTime = DefinedConstant.FINISHEDONCEPAUSETIME; // 结算时间

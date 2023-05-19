@@ -18,13 +18,13 @@ namespace Kuaff.Tractor {
       
 #region 发牌动画
         // 准备发牌.
-        // 首先在程序中央画好58-i*2张牌(实际25+8就可以了，为了显示牌多，这里用50+8),
+        // 首先在程序中央画好58-i*2张牌(实际25+8就可以了，为了显示牌多，这里用50+8), 【两副牌】：该是 108 张
         // 每发一次牌，减少两张。
         // 
         // 然后，每个人手中发一次牌，然后从我开始，依次画得到牌后的界面。
         // 其他三个人画完牌后，应该调用算法中的方法，判断是否应该亮主。
         // <param name="count">发牌次数，一共发25张牌，每人25张，最后庄家收底</param>
-        internal void ReadyCards(int count) {
+        internal void ReadyCards(int count) { // 是刚才那几个命令中的一个
             // 得到缓冲区图像的Graphics
             Graphics g = Graphics.FromImage(mainForm.bmp);
             // 画牌局的中央，洗好的牌，实际画58张,每出一轮减少两张
@@ -197,19 +197,19 @@ namespace Kuaff.Tractor {
             DrawMyImage(g, Properties.Resources.Sidebar, 540, 30, 70, 89);
         }
 // 画东西南北: 【亮牌框】也画出来
+// 画庄家：用绿色把当前作庄的庄家高亮出来
 // <param name="g">缓冲区图像的Graphics</param>
-// <param name="who">画谁</param>
+// <param name="who">画谁</param> 就是画四家中的哪一家
 // <param name="b">是否画亮色</param>
         internal void DrawMaster(Graphics g, int who, int start) {
-            if (who < 1 || who > 4) {
+            if (who < 1 || who > 4) 
                 return; // 未定
-            }
-            start = start * 80;
-            int X = 0;
+            start = start * 80;// 1
+            int X = 0;// 框的某个方向的起始点
             if (who == 1) {
-                start += 40;
+                start += 40; // 自己是南，
                 X = 548;
-            } else if (who == 2) {
+            } else if (who == 2) { // 对家，是北，往右一点儿
                 start += 60;
                 X = 580;
             } else if (who == 3) {
@@ -221,9 +221,9 @@ namespace Kuaff.Tractor {
             }
             Rectangle destRect = new Rectangle(X, 45, 20, 20);
             Rectangle srcRect = new Rectangle(start, 0, 20, 20);
-            g.DrawImage(Properties.Resources.Master, destRect, srcRect, GraphicsUnit.Pixel);
+            g.DrawImage(Properties.Resources.Master, destRect, srcRect, GraphicsUnit.Pixel);// 不懂这个 .Master 画的是什么
         }
-// 画其他白色
+// 画其他，画成白色
 // <param name="g"></param>
 // <param name="who"></param>
 // <param name="start"></param>

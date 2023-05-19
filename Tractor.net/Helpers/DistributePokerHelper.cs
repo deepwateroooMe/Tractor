@@ -23,9 +23,8 @@ namespace Kuaff.Tractor {
             for (int i = 107; i >= 0; i --) {
                 int select = random.Next(i) * 3; // 用生成随机数的方法，完全随机地分配 108 张牌
                 pokerNumber = int.Parse(sb.ToString().Substring(select, 3));
-                if (pokerNumber >= 54) {
+                if (pokerNumber >= 54) // 因为是两副牌
                     pokerNumber -= 54;
-                }
                 list[j % 4].Add(pokerNumber);
                 sb.Remove(select, 3);
                 j++;

@@ -49,9 +49,18 @@ namespace Kuaff.Tractor {
                 if (regions[i].IsVisible(e.X, e.Y)) {
                     if (clicks == 2) {
                         mainForm.myCardIsReady[i] = true;
-                    } else if (clicks == 1) {
+                    } else if (clicks == 1) { // 鼠标左銉，传1, 被点击的牌取反
                         mainForm.myCardIsReady[i] = !(bool)mainForm.myCardIsReady[i];
                     }
+                    // 【判断条件＋优化思路】：
+                    // whoseOrder == 1 该自己出牌，并且自己不是首发出牌，而是跟牌
+                    // 出牌的手家出了对，甩牌或是拖拉机
+                    // 自己有对，并点中了对儿中的一张
+                    // ＝＝》同步对儿中的另一张为被点中状态。我先判断这些条件，因为取取的时候，同样要这步优化
+                    // if (mainForm.firstSend != 1 && )
+                    // if (mainForm.myCardIsReady[i]) { // 【添加】：Model 或是控制层对数据的进一步优化控制
+                    // } else {
+                    // }
                     return true;
                 }
             }

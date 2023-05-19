@@ -93,22 +93,16 @@ namespace Kuaff.Tractor {
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             SetStyle(ControlStyles.UserPaint, true);
             SetStyle(ControlStyles.StandardDoubleClick, true);
-           
             // 读取程序配置
             InitAppSetting();
-            
             notifyIcon.Text = Text;
             BackgroundImage = image;
-        
             // 变量初始化
             bmp = new Bitmap(ClientRectangle.Width, ClientRectangle.Height);
-            
-            
-            drawingFormHelper = new DrawingFormHelper(this);
-            calculateRegionHelper = new CalculateRegionHelper(this);
-            for (int i = 0; i < 54; i++) {
+            drawingFormHelper = new DrawingFormHelper(this); // 【画圈帮助类】：感觉是这个画图的类，还理解得不够透彻
+            calculateRegionHelper = new CalculateRegionHelper(this); // 这个类狠简单了
+            for (int i = 0; i < 54; i++) 
                 cardsImages[i] = null; // 初始化
-            }
         }
         private void InitAppSetting() {
             // 没有配置文件，则从config文件中读取
@@ -116,26 +110,22 @@ namespace Kuaff.Tractor {
                 AppSettingsReader reader = new AppSettingsReader();
                 try {
                     Text = (String)reader.GetValue("title", typeof(String));
-                }
-                catch (Exception ex) {
+                } catch (Exception ex) {
                     Text = "拖拉机大战";
                 }
                 try {
                     gameConfig.MustRank = (String)reader.GetValue("mustRank", typeof(String));
-                }
-                catch (Exception ex) {
+                } catch (Exception ex) {
                     gameConfig.MustRank = ",3,8,11,12,13,";
                 }
                 try {
                     gameConfig.IsDebug = (bool)reader.GetValue("debug", typeof(bool));
-                }
-                catch (Exception ex) {
+                } catch (Exception ex) {
                     gameConfig.IsDebug = false;
                 }
                 try {
                     gameConfig.BottomAlgorithm = (int)reader.GetValue("bottomAlgorithm", typeof(int));
-                }
-                catch (Exception ex) {
+                } catch (Exception ex) {
                     gameConfig.BottomAlgorithm = 1;
                 }
             } else {
@@ -145,15 +135,11 @@ namespace Kuaff.Tractor {
                     IFormatter formatter = new BinaryFormatter();
                     stream = new FileStream("gameConfig", FileMode.Open, FileAccess.Read, FileShare.Read);
                     gameConfig = (GameConfig)formatter.Deserialize(stream);
-                    
-                }
-                catch (Exception ex) {
-                    
+                } catch (Exception ex) {
                 }
                 finally {
-                    if (stream != null) {
+                    if (stream != null) 
                         stream.Close();
-                    }
                 }
             }
             // 未序列化的值
@@ -196,7 +182,7 @@ namespace Kuaff.Tractor {
                 timer.Start();
             }
         }
-        // 初始化
+        // 【初始化】：这是初始化的程序过程，感觉也是游戏的逻辑控制流程
         internal void init() {
             // 每次初始化都重绘背景
             Graphics g = Graphics.FromImage(bmp); //bmp: 背景图，程序某个地方会初始化它
@@ -242,38 +228,34 @@ namespace Kuaff.Tractor {
             whoShowRank = 0;
             // 得分清零
             Scores = 0;
-            
-            // 绘制Sidebar
+            // 绘制Sidebar: 不知道这个画的是什么是哪里
             drawingFormHelper.DrawSidebar(g);
             // 绘制东南西北
             drawingFormHelper.DrawOtherMaster(g, 0, 0);
-            // 这里添加：绘制如上【东南西北】一样，每家的叫牌亮牌框，或者直接在上面的画四家的时候一起画
-            
+            // 这里添加：绘制如上【东南西北】一样，每家的叫牌亮牌框，或者直接在上面的画四家的时候一起画。可以画现在那个电脑的屏幕里！！
+            // 画【庄家】
             if (currentState.Master != 0) { // 0 是还未定，如开始游戏抢庄时；其它为四家
                 drawingFormHelper.DrawMaster(g, currentState.Master, 1);
                 drawingFormHelper.DrawOtherMaster(g, currentState.Master, 1);
             }
-            // 绘制Rank
+            // 画【Rank】：这轮打几
             drawingFormHelper.DrawRank(g,currentState.OurCurrentRank,true,false);
             drawingFormHelper.DrawRank(g, currentState.OpposedCurrentRank, false, false);
-            // 绘制花色
+            // 绘制花色：还没有亮牌的时候，都不用高亮，亮牌后还会重画一遍
             drawingFormHelper.DrawSuit(g, 0, true, false);
             drawingFormHelper.DrawSuit(g, 0, false, false);
             send8Cards = new ArrayList();
-            // 调整花色
-            if (currentRank == 53) {
+            // 调整花色：打王
+            if (currentRank == 53) 
                 currentState.Suit = 5;
-            }
             whoIsBigger = 0;
-            // 如果设置了游戏截止，则停止游戏
+            // 如果设置了游戏截止，则停止游戏。这个变量没看懂。是说，玩家设置了，比如只玩十分钟的游戏时间，还是设置了，只打几圈，不管是自已主还是对家先打到这个圈数，就截止 
             if (gameConfig.WhenFinished > 0) {
                 bool b = false;
-                if ((currentState.OurTotalRound + 1) > gameConfig.WhenFinished)  {
+                if ((currentState.OurTotalRound + 1) > gameConfig.WhenFinished)  
                     b = true;
-                }
-                if ((currentState.OpposedTotalRound + 1) > gameConfig.WhenFinished) {
+                if ((currentState.OpposedTotalRound + 1) > gameConfig.WhenFinished) 
                     b = true;
-                }
                 if (b) {
                     timer.Stop();
                     PauseGametoolStripMenuItem.Text = "继续游戏";
@@ -295,31 +277,29 @@ namespace Kuaff.Tractor {
             // 只有发牌时和该我出牌时才能相应鼠标事件: 按道理说，如果如此执行，不会出错才对，为什么会出那个 bug ？
             if (((currentState.CurrentCardCommands == CardCommands.WaitingForMySending) || (currentState.CurrentCardCommands == CardCommands.WaitingForSending8Cards)) && (whoseOrder == 1)) {
                 if (e.Button == MouseButtons.Left) { 
-                    // 确保左键落在牌区，矩形范围内
+                    // 确保左键落在牌区，当前自己手中，所有手牌的范围内，矩形范围内
                     if ((e.X >= (int)myCardsLocation[0] && e.X <= ((int)myCardsLocation[myCardsLocation.Count - 1] + 71)) && (e.Y >= 355 && e.Y < 472)) {
 // 添加游戏逻辑里的【用户玩家贴心化处理】：
                         // 当玩家非首家出牌（玩家为首家出牌时，无法确定玩家意愿而跳过），
                         // 当出牌要求有对（甩牌或拖拉机），当玩家手牌有对，且点中了对中的一张，游戏逻辑帮助贴心处理，帮助用户自动选中或是取消对儿中的另一张
                         // 【问题】；我不应该在视图层来修改这些东西，我需要去数据Model 层，根据游戏逻辑来管理数据。受限于现源码框架狗屎一样的设计，必须自己重构，至少先去把Model 层给弄通了。就是，当视图点击导致数据 myCardIsReady[] 有数值变化时， Model 层要再根据以上逻辑，进一步对数据作必要的修改，再由数据来驱动视图层的重绘
+                        // 【设计】：我怎么才能在鼠标点击检测到点牌，改变了数据的情况下，再与数据 Model/Control 逻辑连起来，进一步修改数据，再由数据来驱动视图层的重绘 ?
                         if (calculateRegionHelper.CalculateClickedRegion(e, 1)) { // 严格图像点击上的：选中的牌，每点一次、选一张，重绘一遍玩家手牌
                             // 数据层的再审核优化步骤，进一步修改 myCardIsReady[] 变量 
                             drawingFormHelper.DrawMyPlayingCards(currentPokers[0]);
                             Refresh();
                         }
                     }
-                } else if (e.Button == MouseButtons.Right) { // 右键：在先前选中过的某张牌上，用右銉取反？
+                } else if (e.Button == MouseButtons.Right) { // 右键：取消了先前左键所全部选中的
                     int i = calculateRegionHelper.CalculateRightClickedRegion(e); // 当前鼠标右键所点击的牌的下标：
                     if (i > -1 && i < myCardIsReady.Count) {
                         bool b = (bool)myCardIsReady[i];
                         int x = (int)myCardsLocation[i];
-                        for (int j = 1; j <= i; j++) { // 这个，是在干什么? 昨天试玩的印象，是选中手牌全部取消了？再测试一下
+                        for (int j = 1; j <= i; j++) { // 【没看懂】：玩的时候，右銉是先前左键选中的，全部取消掉了
                             if ((int)myCardsLocation[i - j] == (x - 13)) {
                                 myCardIsReady[i - j] = b;
                                 x = x - 13;
-                            }
-                            else {
-                                break;
-                            }
+                            } else break;
                         }
                         drawingFormHelper.DrawMyPlayingCards(currentPokers[0]);
                         Refresh();
@@ -328,24 +308,19 @@ namespace Kuaff.Tractor {
                 // 判断是否点击了小猪*********和以上的点击不同
                 Rectangle pigRect = new Rectangle(296, 300, 53, 46);
                 Region region = new Region(pigRect);
-                if (region.IsVisible(e.X, e.Y)) {
-                    // 判断是否处在扣牌阶段
+                if (region.IsVisible(e.X, e.Y)) { // 鼠标点击：落在了猪头区
                     if ((currentState.CurrentCardCommands == CardCommands.WaitingForSending8Cards)) { // 如果等我扣牌
-                        // 扣牌,所以擦去小猪
-                        Graphics g = Graphics.FromImage(bmp);
+                        Graphics g = Graphics.FromImage(bmp); // 扣牌,所以擦去小猪
                         g.DrawImage(image, pigRect, pigRect, GraphicsUnit.Pixel);
                         g.Dispose();
                         ArrayList readyCards = new ArrayList();
-                        for (int i = 0; i < myCardIsReady.Count; i++) {
-                            if ((bool)myCardIsReady[i]) {
+                        for (int i = 0; i < myCardIsReady.Count; i++) 
+                            if ((bool)myCardIsReady[i]) 
                                 readyCards.Add((int)myCardsNumber[i]);
-                            }
-                        }
                         if (readyCards.Count == 8) {
                             send8Cards = new ArrayList();
-                            for (int i = 0; i < 8; i++) {
+                            for (int i = 0; i < 8; i++) 
                                 CommonMethods.SendCards(send8Cards, currentPokers[0], pokerList[0], (int)readyCards[i]);
-                            }
                             initSendedCards();
                             currentState.CurrentCardCommands = CardCommands.DrawMySortedCards;
                         }
@@ -474,7 +449,7 @@ namespace Kuaff.Tractor {
                         drawingFormHelper.DrawToolbar();
                     }
                 }
-                if (currentCount < 25) {
+                if (currentCount < 25) { // 每人手上 25 张牌，一张张地分，一张张地画
                     drawingFormHelper.ReadyCards(currentCount);
                     currentCount++;
                 } else {
@@ -931,3 +906,4 @@ namespace Kuaff.Tractor {
         }              
     }
 }
+

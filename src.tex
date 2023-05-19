@@ -1,0 +1,121 @@
+% Created 2023-05-18 Thu 19:04
+\documentclass[9pt, b5paper]{article}
+\usepackage{xeCJK}
+\usepackage[T1]{fontenc}
+\usepackage{bera}
+\usepackage[scaled]{beraserif}
+\usepackage[scaled]{berasans}
+\usepackage[scaled]{beramono}
+\usepackage[cache=false]{minted}
+\usepackage{xltxtra}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{float}
+\usepackage{textcomp}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{latexsym}
+\usepackage{natbib}
+\usepackage{geometry}
+\geometry{left=1.2cm,right=1.2cm,top=1.5cm,bottom=1.2cm}
+\usepackage[xetex,colorlinks=true,CJKbookmarks=true,linkcolor=blue,urlcolor=blue,menucolor=blue]{hyperref}
+\newminted{common-lisp}{fontsize=\footnotesize} 
+\author{deepwaterooo}
+\date{\today}
+\title{ET 框架拖拉机项目源码与设计重构}
+\hypersetup{
+  pdfkeywords={},
+  pdfsubject={},
+  pdfcreator={Emacs 28.2 (Org mode 8.2.7c)}}
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+
+\section{DefinedConstant | CardCommands | CurrentState}
+\label{sec-1}
+\begin{minted}[fontsize=\scriptsize,linenos=false]{csharp}
+// 程序常量
+class DefinedConstant {
+    // 时间常量
+    internal const int FINISHEDONCEPAUSETIME = 1500; // 每圈暂停时间
+    internal const int NORANKPAUSETIME = 5000; // 流局时间
+    internal const int GET8CARDSTIME = 1000; // 摸8张底牌的时间
+    internal const int SORTCARDSTIME = 1000; // 我的牌排序时间
+    internal const int FINISHEDTHISTIME = 2500; // 每局暂停时间
+    internal const int TIMERDIDA = 100; // 系统滴答
+}
+// 命令状态，指示下一步动作
+enum CardCommands {
+    ReadyCards, // 发牌命令
+    DrawCenter8Cards, // 画8张底牌的命令
+    WaitingForSending8Cards, // 等待扣底的命令
+    DrawMySortedCards,// 排序我的牌的命令
+    Pause,// 通用暂停命令
+    WaitingShowPass, // 显示流局的命令
+    WaitingShowBottom, // 翻底牌的命令
+    WaitingForSend, // 等待出牌
+    WaitingForMySending, // 等待我出牌的命令
+    DrawOnceFinished,// 出完一圈后的命令
+    DrawOnceRank,// 出完一局后的命令
+    Undefined // 未定义的命令
+}
+// 保存当前游戏状态的对象
+[Serializable]
+struct CurrentState {
+    internal int OurCurrentRank; // 自己当前的牌局
+    internal int OurTotalRound; // 总轮数
+    internal int OpposedCurrentRank; // 对方的牌局
+    internal int OpposedTotalRound; // 总轮数
+
+    // 当前的【庄家】：未定0, 自己1、对家2、西3、东4
+    internal int Master;
+
+    // 当前的【花色】：未定0、红桃1、黑桃2、方块3、梅花4、无主5
+    internal int Suit;
+
+    internal CardCommands CurrentCardCommands; // 当前命令
+    internal CurrentState(int ourCurrentRank, int opposedCurrentRank, int suit, int master,int ourTotalRound,int opposedTotalRound, CardCommands currentCardCommands) { // tv ..
+    }
+}
+\end{minted}
+\section{CurrentPoker : Diamonds | 梅花 | 红桃 | 黑桃}
+\label{sec-2}
+\begin{itemize}
+\item 这个东西重复四遍，什么意思嘛。就是因为这么初始化，没法支持用户配置【2 为常主】
+\item 设置为一个广谱的 OneSuit 之类的类，可以实例成四种类型，并且根据2 是否为常主来设置大小
+\begin{minted}[fontsize=\scriptsize,linenos=false]{csharp}
+#region 方块
+// 方块(2,3,4,5,6,7,8,9,10,J,Q,K,A)
+        private int[] diamonds = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        internal int[] Diamonds {
+            get { return diamonds; }
+            set { diamonds = value; }
+        }
+// 不带主的方块
+        private int[] diamondsNoRank = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        internal int[] DiamondsNoRank {
+            get { return diamondsNoRank; }
+            set { diamondsNoRank = value; }
+        }
+// 方块Rank数
+        internal int DiamondsRankTotal = 0;
+// 方块非Rank数
+        internal int DiamondsNoRankTotal = 0;
+// 排序的牌型
+        internal int[] SortCards = new int[56];
+#endregion // 方块
+\end{minted}
+\end{itemize}
+
+\section{源码分析与重构}
+\label{sec-3}
+\begin{itemize}
+\item 还是需要相对事理一个源码里必要的关键类。因为变量太多，容易忘记。不知道哪个变量取什么值，是什么意思
+\item 源码主要特点是：没有设计。像是没学过OOP/OOD 的小屁孩写的。既然今天下午是看这个项目的源码与设计重构，就可以用好电脑，要比这个舒服多了。【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】没有分层，找不到Model 层，控制层在哪里？源码设计不功能模块化。。
+\end{itemize}
+% Emacs 28.2 (Org mode 8.2.7c)
+\end{document}
