@@ -1,4 +1,4 @@
-% Created 2023-05-19 Fri 16:17
+% Created 2023-05-21 Sun 14:59
 \documentclass[9pt, b5paper]{article}
 \usepackage{xeCJK}
 \usepackage[T1]{fontenc}
@@ -111,7 +111,7 @@ struct CurrentState {
 \end{minted}
 \end{itemize}
 
-\section{ET7 框架拖拉机游戏设计，源码分析与重构}
+\section{ET7 框架拖拉机游戏设计，源码分析与重构, 或是【参考项目斗地主里的设计】}
 \label{sec-3}
 \subsection{【GamerComponent】玩家组件管理类}
 \label{sec-3-1}
@@ -307,8 +307,16 @@ public class TractorRoomComponent : Entity, IAwake {
 \label{sec-3-6}
 \subsection{}
 \label{sec-3-7}
-\section{ET7 框架下【参考项目斗地主】的组件模块设计思路，与源码记录}
+
+\section{【参考项目斗地主】里的源码设计相关分析：【Windows 下读源码＋运行客户端】}
 \label{sec-4}
+\begin{itemize}
+\item 这个参考项目里的源码要去 windows 里读，因为可以同时运行游戏，比较方便实时查找运行时 unity 里的控件，比直接读源码来得容易来得快。
+\item 这个看今天晚上再晚点儿的时候，有没有时间去看。
+\end{itemize}
+
+\section{ET7 框架下【参考项目斗地主】的组件模块设计思路，与源码记录}
+\label{sec-5}
 \begin{itemize}
 \item 自己是学过，有这方面的意识，但并不是说，自己就懂得，就知道该如何狠好地设计这些类。现在更多的是要受ET 框架，以及参考游戏手牌设计的启发，来帮助自己一再梳理思路，该如何设计它。
 \item ET7 重构里，各组件都该是自己设计重构原项目的类的设计的必要起点。可以根据这些来系统设计重构。【活宝妹就是一定要嫁给亲爱的表哥！！！】
@@ -319,12 +327,11 @@ public class TractorRoomComponent : Entity, IAwake {
 \item 【TractorInteractionComponent 互动组件】：几个按钮，抢不抢庄，叫不叫牌，反不反主，可是在原游戏设计里，全是鼠标的左键或是右键操作。
 \end{itemize}
 \section{源码分析与重构}
-\label{sec-5}
+\label{sec-6}
 \begin{itemize}
 \item 还是需要相对事理一个源码里必要的关键类。因为变量太多，容易忘记。不知道哪个变量取什么值，是什么意思
 \item 源码主要特点是：没有设计。像是没学过OOP/OOD 的小屁孩写的。既然今天下午是看这个项目的源码与设计重构，就可以用好电脑，要比这个舒服多了。【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】没有分层，找不到Model 层，控制层在哪里？源码设计不功能模块化。。
 \item 狠不想去读这个游戏原项目堆得山一样的源码，因为没有设计，读得会小蚂蚁掉进海量团团棉花，永远爬不出来。。。出去看球赛。晚上回来再弄这个。
-\item 去之前去自行车行，请他们帮把自行车加好气，骑得轻松一点儿。【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】
 \end{itemize}
 % Emacs 28.2 (Org mode 8.2.7c)
 \end{document}

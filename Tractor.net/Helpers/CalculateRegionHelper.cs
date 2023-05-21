@@ -69,7 +69,7 @@ namespace Kuaff.Tractor {
 // 计算是否点击到牌面
         internal bool CalculateDoubleClickedRegion(MouseEventArgs e) {
             // 采用区域计算
-            Region[] regions = new Region[mainForm.myCardsLocation.Count];
+            Region[] regions = new Region[mainForm.myCardsLocation.Count]; // 同步到：牌的最新状态
             for (int i = 0; i < mainForm.myCardsLocation.Count; i++) {
                 if ((bool)mainForm.myCardIsReady[i]) {
                     regions[i] = new Region(new Rectangle((int)mainForm.myCardsLocation[i], 355, 71, 96));
@@ -92,7 +92,6 @@ namespace Kuaff.Tractor {
                 m = mainForm.myCardsLocation.Count - 5;
                 k = 5;
             }
-            // 这里，为什么要对最后 5 张牌，另行处理？
             // 与上面同理，这里算的是：当前一张牌6, 可能会被后面的多张（最多4 张？）牌盖过。可是问题时，为什么只对最后5 张牌如此处理，而不是每张牌这么处理？
             for (int i = 0; i < k - 1; i++) 
                 for (int j = 1; j < (k - i); j++) 
