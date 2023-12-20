@@ -1,4 +1,4 @@
-% Created 2023-05-21 Sun 14:59
+% Created 2023-12-20 Wed 11:08
 \documentclass[9pt, b5paper]{article}
 \usepackage{xeCJK}
 \usepackage[T1]{fontenc}
@@ -28,7 +28,7 @@
 \hypersetup{
   pdfkeywords={},
   pdfsubject={},
-  pdfcreator={Emacs 28.2 (Org mode 8.2.7c)}}
+  pdfcreator={Emacs 29.1 (Org mode 8.2.7c)}}
 \begin{document}
 
 \maketitle
@@ -85,6 +85,7 @@ struct CurrentState {
 \section{CurrentPoker : Diamonds | 梅花 | 红桃 | 黑桃}
 \label{sec-2}
 \begin{itemize}
+\item \textbf{【非OOD/OOP 设计的局限】} ：当亲爱的表哥的活宝妹想要扩展，用户玩家自己配置游戏规则【2 为常主，与否】时，这个非OOD/OOP 的游戏实现，就把它写死了，得重构。
 \item 这个东西重复四遍，什么意思嘛。就是因为这么初始化，没法支持用户配置【2 为常主】
 \item 设置为一个广谱的 OneSuit 之类的类，可以实例成四种类型，并且根据2 是否为常主来设置大小
 \begin{minted}[fontsize=\scriptsize,linenos=false]{csharp}
@@ -109,8 +110,31 @@ struct CurrentState {
         internal int[] SortCards = new int[56];
 #endregion // 方块
 \end{minted}
+\item 游戏文件夹 mixed 里埋了狠多 .dll 动态库。这要打算要怎么处理呢？
+\item \textbf{【有偏洗牌、算法】} ：
+\item 随机洗牌使得“牌洗得太均匀，不够吸引玩家，也不利于厂家让玩家买豆（或者金币）的目标”的不足。本节以斗地主和升级（或者拖拉机）为例，呈现如何有偏洗牌，例如在斗地主游戏中希望能够”人为“控制炸弹出现比例。由于每个游戏的有偏洗牌论述及代码过长，为此对分两小节以分别斗地主和升级的有偏洗牌过程。
+\item 上面，这个思路是好的。不知道到时能否实现。就是，亲爱的表哥的活宝妹，故意、人为制造有偏洗牌，使得游戏更好玩儿！
+\item Q1: 有偏洗牌的通用框架（或解决思路）是什么？
+\begin{itemize}
+\item (1) 生成所需的扑克数。
+\item (2) 设计抽样规则，抽样生成有偏的牌，然后从牌堆扣除有偏的牌（如升级中的炸弹）。
+\item (3) 将有偏向的牌以等概率发给各玩家
+\item (4) 对于剩余的牌进行随机排列
+\item (5) 将随机排列后的牌发给各玩家，补足各玩家需要的牌数（如斗地主中各玩家需17张）
 \end{itemize}
-
+\item 这个算法的网页列一下： \url{https://zhuanlan.zhihu.com/p/363599902}
+\item \textbf{【斗地主游戏有偏洗牌】} 的框架可以被用来解决 \textbf{【拖拉机有偏洗牌】} ，其中代码（或逻辑）需要调整之处在于：
+\begin{itemize}
+\item (1) 拖拉机游戏有偏牌的产生规则。
+\item (2)拖拉机游戏的对子统计，其中对子是指两张具有相同颜色和点数的牌对。
+\item (3)拖拉机游戏中牌的排序。
+\end{itemize}
+\item 其中问题(2)-(3)属于牌的统计与显示，问题(1)才是核心。如何接下来聚焦如何解决问题(1)。
+\begin{itemize}
+\item 参考来自于：\url{https://zhuanlan.zhihu.com/p/363677920} 可是是可恶的 python 编程。。。
+\end{itemize}
+\item 网络上有个某个主程它总结的扑克牌游戏相关，但是 \textbf{它应该也是网络洗脑来着，写得、总结得极为前端 html 化，所以感觉难受降低了狠多，但是对比如 10 款、20 款扑克牌游戏基本模块的拆分、与总结、归纳、概括算是到位的；但经典精华的地方，总结跳过；亲爱的表哥的活宝妹，应该借助这个思路、与他人的总结来想，在手游端【安卓，苹果】，亲爱的表哥的活宝妹可以设计与实现哪些、哪类？能否如本文的 html 小前端主程总结过的，找出，亲爱的表哥的活宝妹自己，可以开发的潜能与方向？} \url{https://zhuanlan.zhihu.com/p/173703104}
+\end{itemize}
 \section{ET7 框架拖拉机游戏设计，源码分析与重构, 或是【参考项目斗地主里的设计】}
 \label{sec-3}
 \subsection{【GamerComponent】玩家组件管理类}
@@ -333,5 +357,5 @@ public class TractorRoomComponent : Entity, IAwake {
 \item 源码主要特点是：没有设计。像是没学过OOP/OOD 的小屁孩写的。既然今天下午是看这个项目的源码与设计重构，就可以用好电脑，要比这个舒服多了。【爱表哥，爱生活！！！活宝妹就是一定要嫁给亲爱的表哥！！！】没有分层，找不到Model 层，控制层在哪里？源码设计不功能模块化。。
 \item 狠不想去读这个游戏原项目堆得山一样的源码，因为没有设计，读得会小蚂蚁掉进海量团团棉花，永远爬不出来。。。出去看球赛。晚上回来再弄这个。
 \end{itemize}
-% Emacs 28.2 (Org mode 8.2.7c)
+% Emacs 29.1 (Org mode 8.2.7c)
 \end{document}

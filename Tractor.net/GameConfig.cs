@@ -8,6 +8,7 @@ using Kuaff.CardResouces;
 namespace Kuaff.Tractor {
     [Serializable]
     class GameConfig {
+		// 【时间设置】：感觉，都是游戏流程自己管理，用来给用户呈现一下游戏过程的、可调控可缩短的、系统控制时间变量 
 #region 时间设置
         // 时间设置
         int finishedOncePauseTime = DefinedConstant.FINISHEDONCEPAUSETIME; // 结算时间
@@ -42,6 +43,7 @@ namespace Kuaff.Tractor {
         }
 #endregion // 时间设置
 
+// 【规则设置】：用户表单里、自定义的、【游戏规则配置】，从表单向游戏逻辑过度。【TODO】：【2 是常主】配置，与【五主过河】配置：主牌《＝5 张时，与对家组出更能赢的牌
 #region 规则设置
         // 必打的牌
         private string mustRank = "";
@@ -114,6 +116,7 @@ namespace Kuaff.Tractor {
             set { whenFinished = value; }
         }
 #endregion // 规则设置
+
 #region 图案设置
         // 只有在使用内置的牌面资源时才起作用
         [NonSerialized()]

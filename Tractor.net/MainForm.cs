@@ -17,14 +17,14 @@ using Kuaff.CardResouces;
 using Kuaff.ModelResources;
 using Kuaff.OperaResources;
 using Kuaff.TractorFere;
-namespace Kuaff.Tractor {
+namespace Kuaff.Tractor { // 这个主界面，再快速看一遍，大概接近1 小时的时间
     internal partial class MainForm : Form {
 #region 变量声明
         // 缓冲区图像
         internal Bitmap bmp = null;
         // 原始背景图片
         internal Bitmap image = null;
-        // 状态
+// 状态
         // 当前的状态
         internal CurrentState currentState ;
         // 当前的Rank,代表当前牌局的Rank, 0代表实际的牌局2..... 11代表K, 12代表A, 53代表打王
@@ -35,7 +35,7 @@ namespace Kuaff.Tractor {
         internal int showSuits = 0;
         // 谁亮的牌
         internal int whoShowRank = 0;
-        // 发牌序列
+// 发牌序列
         // 得到一次发牌的序列,dpoker时发牌的帮助类，pokerList是每个人手中的牌的列表
         internal DistributePokerHelper dpoker = null;
         internal ArrayList[] pokerList = null;
@@ -49,7 +49,7 @@ namespace Kuaff.Tractor {
         internal int whoseOrder = 0;// 0未定,1我，2对家，3西家,4东家
         // 一次出来中谁最先开始出的牌
         internal int firstSend = 0;
-        // *辅助变量
+// 辅助变量：管理玩家【我 me】的、手牌相关
         // 当前手中牌的坐标
         internal ArrayList myCardsLocation = new ArrayList();
         // 当前手中牌的数值
@@ -58,17 +58,17 @@ namespace Kuaff.Tractor {
         internal ArrayList myCardIsReady = new ArrayList(); 
         // 当前扣底的牌
         internal ArrayList send8Cards = new ArrayList();
-        // *画我的牌的辅助变量
+// 【画我的牌】的辅助变量
         // 画牌顺序
         internal int cardsOrderNumber = 0;
         // 确定程序休眠的最长时间
         internal long sleepTime;
         internal long sleepMaxTime = 2000;
         internal CardCommands wakeupCardCommands;
-        // *绘画辅助类
+// 绘画辅助类
         // DrawingForm变量
         internal DrawingFormHelper drawingFormHelper = null;
-        internal CalculateRegionHelper calculateRegionHelper = null;
+        internal CalculateRegionHelper calculateRegionHelper = null; // 【帮助类】：用来辅助判断，哪些牌，是被选中，或是取消选中的状态
         // 记录本次得分
         internal int Scores = 0;
        

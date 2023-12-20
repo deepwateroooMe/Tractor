@@ -9,7 +9,10 @@ using System.Windows.Forms;
 using System.Threading;
 using Kuaff.CardResouces;
 namespace Kuaff.Tractor {
-    // 实现大部分的绘画操作
+    // 实现大部分的绘画操作: 表单应用游戏，都是一个一个零部件画出来的。ET 框架重构后，应该都用图片替换就可以了
+	// 这个类，主要是画各种界面，就不细看了。
+	// 举个例子：打7 ，2 是常主，玩家我手中选中【2277】2 副花色，7 主花色，常主拖拉机，画玩家我手中待出牌【2277】拖拉机，就是把这四张牌，相对于其它牌，画高一点儿
+	// 必要的细节，到时读到，到时再细看，标注理解一下
     class DrawingFormHelper {
         MainForm mainForm;
         internal DrawingFormHelper(MainForm mainForm) {
