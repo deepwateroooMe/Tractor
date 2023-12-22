@@ -54,7 +54,7 @@ namespace Kuaff.Tractor {
         }
 // Again
         internal static int ShouldSetRankAgain(MainForm mainForm, CurrentPoker currentPoker) {
-            if (!(mainForm.showSuits == 1)) {
+            if (!(mainForm.showSuits == 1)) { // 感觉这个玩法，这里可能有点儿限制：这个玩法，只允许【加固】或是【反牌】1 次？真这样就不好玩！要可以允许多次！
                 return 0;
             }
             int rank = currentPoker.Rank;

@@ -40,7 +40,7 @@ namespace Kuaff.Tractor {
         internal int OpposedTotalRound;
         // 当前的花色：主色
         // 未定0、红桃1、黑桃2、方块3、梅花4、无主5
-        internal int Suit;
+        internal int Suit; // <<<<<<<<<<<<<<<<<<<< 
         // 当前的庄家：庄家
         // 未定0, 自己1、对家2、西3、东4
         internal int Master;

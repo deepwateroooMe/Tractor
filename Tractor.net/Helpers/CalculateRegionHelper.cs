@@ -17,7 +17,7 @@ namespace Kuaff.Tractor {
         }
 // 计算是否点击到牌面: 所以这里就被设置成为了，必须鼠标点击到，才重画，画得稍微高一点儿。
 // 想要设置的点击辅助至少是：如果出对或是甩牌拖拉机，需要自动对成对成甩牌成拖拉机的牌自动改更。而不需要用户点2 3 等多次。同理再点击时同步降低，
-// 【TODO】：亲用户便利小功能：手牌【AAKK】拖拉机，用户我点四张任意一个，四张全涨高；再点任意一张，至少三张全降低，代表玩家我先出A 帮我的对家带牌, 再甩牌 AKK, 对家可以出更多的牌
+// 【TODO】：亲用户便利小功能：手牌【AAKK】拖拉机，用户我点四张任意一个，四张全涨高；再点任意一张，至少三张全降低，代表玩家我先出A 帮我的对家带牌, 再甩牌 AKK, 对家可以出更多的牌。K==>AAK A==>AKK
         internal bool CalculateClickedRegion(MouseEventArgs e, int clicks) {
             // 采用区域计算
             Region[] regions = new Region[mainForm.myCardsLocation.Count]; // 手上，现有所有牌的张数
@@ -70,7 +70,7 @@ namespace Kuaff.Tractor {
             }
             return false;
         }
-// 计算是否点击到牌面
+// 计算是否点击到牌面：鼠标双击事件
         internal bool CalculateDoubleClickedRegion(MouseEventArgs e) {
             // 采用区域计算
             Region[] regions = new Region[mainForm.myCardsLocation.Count]; // 同步到：牌的最新状态

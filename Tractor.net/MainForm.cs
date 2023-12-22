@@ -12,7 +12,7 @@ using System.Resources;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Configuration;
+using System.Configuration; // <<<<<<<<<<<<<<<<<<<< 参考索引
 using Kuaff.CardResouces;
 using Kuaff.ModelResources;
 using Kuaff.OperaResources;
@@ -31,7 +31,7 @@ namespace Kuaff.Tractor { // 这个主界面，再快速看一遍，大概接近
         internal int currentRank = 0;
         // 是否是新开始的游戏
         internal bool isNew = true;
-        // 亮牌的次数
+        // 亮牌的次数：这个变量没看懂，对游戏玩法的影响比较大。【TODO】：要看懂，作必要的修改
         internal int showSuits = 0;
         // 谁亮的牌
         internal int whoShowRank = 0;
@@ -43,7 +43,7 @@ namespace Kuaff.Tractor { // 这个主界面，再快速看一遍，大概接近
         internal CurrentPoker[] currentPokers = { new CurrentPoker(), new CurrentPoker(), new CurrentPoker(), new CurrentPoker() };
         // 画图的次数（仅在发牌时使用）
         internal int currentCount = 0;
-        // 当前一轮各家的出牌情况
+        // 当前一轮各家的出牌情况：不知道这里记的是什么
         internal ArrayList[] currentSendCards = new ArrayList[4];
         // 应该谁出牌
         internal int whoseOrder = 0;// 0未定,1我，2对家，3西家,4东家
@@ -80,7 +80,7 @@ namespace Kuaff.Tractor { // 这个主界面，再快速看一遍，大概接近
         private string musicFile = "";
         // 牌面图案
         internal Bitmap[] cardsImages = new Bitmap[54];
-        // 出牌算法
+        // 出牌算法：去找一下，还有哪些更好的算法？
         internal object[] UserAlgorithms = { null, null, null, null };
         // 当前一局已经出的牌
         internal CurrentPoker[] currentAllSendPokers = { new CurrentPoker(), new CurrentPoker(), new CurrentPoker(), new CurrentPoker() };
@@ -106,8 +106,8 @@ namespace Kuaff.Tractor { // 这个主界面，再快速看一遍，大概接近
         }
         private void InitAppSetting() {
             // 没有配置文件，则从config文件中读取
-            if (!File.Exists("gameConfig")) {
-                AppSettingsReader reader = new AppSettingsReader();
+            if (!File.Exists("gameConfig")) { // 玩家点击任何键，都会自动多次覆盖保存，玩家最新的（最后一次的）游戏配置。当游戏加载，加载的也是上次，先前，玩家最后配置过的 
+                AppSettingsReader reader = new AppSettingsReader(); // 游戏应用中，这个类的实例化过程、里面封装的内容，不明白
                 try {
                     Text = (String)reader.GetValue("title", typeof(String));
                 } catch (Exception ex) {
@@ -116,7 +116,7 @@ namespace Kuaff.Tractor { // 这个主界面，再快速看一遍，大概接近
                 try {
                     gameConfig.MustRank = (String)reader.GetValue("mustRank", typeof(String));
                 } catch (Exception ex) {
-                    gameConfig.MustRank = ",3,8,11,12,13,";
+                    gameConfig.MustRank = ",3,8,11,12,13,"; // <<<<<<<<<<<<<<<<<<<< 
                 }
                 try {
                     gameConfig.IsDebug = (bool)reader.GetValue("debug", typeof(bool));
@@ -143,12 +143,12 @@ namespace Kuaff.Tractor { // 这个主界面，再快速看一遍，大概接近
                 }
             }
             // 未序列化的值
-            AppSettingsReader myreader = new AppSettingsReader();
+            AppSettingsReader myreader = new AppSettingsReader(); // 好像是个系统的，什么加载函数
             gameConfig.CardsResourceManager = Kuaff_Cards.ResourceManager;
             try {
-                String bkImage = (String)myreader.GetValue("backImage", typeof(String));
-                image = new Bitmap(bkImage);
-                KuaffToolStripMenuItem.CheckState = CheckState.Unchecked;
+                String bkImage = (String)myreader.GetValue("backImage", typeof(String)); // 加载【背景图片】
+                image = new Bitmap(bkImage); // 生成 Bitmap
+                KuaffToolStripMenuItem.CheckState = CheckState.Unchecked; // 跟表单上某控件相关的：选择选中状态设置，数据驱动图形
             }
             catch (Exception ex) {
                 image = global::Kuaff.Tractor.Properties.Resources.Backgroud;
@@ -163,6 +163,7 @@ namespace Kuaff.Tractor { // 这个主界面，再快速看一遍，大概接近
                 RobotToolStripMenuItem.CheckState = CheckState.Checked;
             }
         }
+		// 几个键的【点击事件】：回调设置
 #region 窗口事件处理程序
         internal void MenuItem_Click(object sender, EventArgs e) {
             ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
@@ -172,14 +173,12 @@ namespace Kuaff.Tractor { // 这个主界面，再快速看一遍，大概接近
             if (menuItem.Text.Equals("开始新游戏")) {
                 PauseGametoolStripMenuItem.Text = "暂停游戏";
                 // 新游戏初始状态，我家和敌方都从2开始，令牌为开始发牌
-                currentState = new CurrentState(0, 0, 0, 0,0,0,CardCommands.ReadyCards);
+                currentState = new CurrentState(0, 0, 0,  0, 0, 0, CardCommands.ReadyCards);
                 currentRank = 0;
                 isNew = true;
                 whoIsBigger = 0;
-                // 初始化
-                init();
-                // 开始定时器，进行发牌
-                timer.Start();
+                init(); // 初始化
+                timer.Start(); // 开始定时器，进行发牌
             }
         }
         // 【初始化】：这是初始化的程序过程，感觉也是游戏的逻辑控制流程
@@ -250,7 +249,7 @@ namespace Kuaff.Tractor { // 这个主界面，再快速看一遍，大概接近
                 currentState.Suit = 5;
             whoIsBigger = 0;
             // 如果设置了游戏截止，则停止游戏。这个变量没看懂。是说，玩家设置了，比如只玩十分钟的游戏时间，还是设置了，只打几圈，不管是自已主还是对家先打到这个圈数，就截止 
-            if (gameConfig.WhenFinished > 0) {
+            if (gameConfig.WhenFinished > 0) { // 设置过：这个标记
                 bool b = false;
                 if ((currentState.OurTotalRound + 1) > gameConfig.WhenFinished)  
                     b = true;
@@ -263,21 +262,20 @@ namespace Kuaff.Tractor { // 这个主界面，再快速看一遍，大概接近
                 }
             }
         }
-       
         // 窗口绘画处理,将缓冲区图像画到窗口上
         private void MainForm_Paint(object sender, PaintEventArgs e) {
             Graphics g = e.Graphics;
             // 将bmp画到窗口上
             g.DrawImage(bmp, 0, 0);
         }
-       
-        private void MainForm_MouseClick(object sender, MouseEventArgs e) {
+        private void MainForm_MouseClick(object sender, MouseEventArgs e) { // 【选牌相关命令、状态下的】左键、右键、点出牌键、
             // this.Text = "X=" + e.X + ",Y=" + e.Y + ";" + e.Clicks;
-            // 左键：用于自已方 1, 只有在【等我扣8 张底】或是【等我出牌】时，才可以左键点击，就处理左键点击
-            // 只有发牌时和该我出牌时才能相应鼠标事件: 按道理说，如果如此执行，不会出错才对，为什么会出那个 bug ？
+            // 左键：用于自已方 1, 只有在【等我扣8 张底】或是【等我出牌】时，才可以左键点击，就处理左键点击。也就是游戏的其它流程环节，不处理左键点击事件
+            // 只有发牌时和该我出牌时才能相应鼠标事件: 按道理说，如果如此执行，不会出错才对，为什么会出那个 bug ？游戏应用运行时的异常
+			// 命令式【服务端】与【客户端】交互：先判断，当前的命令状态，界定鼠标点击事件的，特定命令范围。所以，总是先判断、划分、区分命令
             if (((currentState.CurrentCardCommands == CardCommands.WaitingForMySending) || (currentState.CurrentCardCommands == CardCommands.WaitingForSending8Cards)) && (whoseOrder == 1)) {
-                if (e.Button == MouseButtons.Left) { 
-                    // 确保左键落在牌区，当前自己手中，所有手牌的范围内，矩形范围内
+                if (e.Button == MouseButtons.Left) { // 【左键点击事件】：
+                    // 确保左键落在牌区，【当前自己手牌】，所有手牌的范围内【根据现手牌张数，计算最右侧最右连线的位置】，矩形范围内
                     if ((e.X >= (int)myCardsLocation[0] && e.X <= ((int)myCardsLocation[myCardsLocation.Count - 1] + 71)) && (e.Y >= 355 && e.Y < 472)) {
 // 添加游戏逻辑里的【用户玩家贴心化处理】：
                         // 当玩家非首家出牌（玩家为首家出牌时，无法确定玩家意愿而跳过），
@@ -308,8 +306,8 @@ namespace Kuaff.Tractor { // 这个主界面，再快速看一遍，大概接近
                 // 判断是否点击了小猪*********和以上的点击不同
                 Rectangle pigRect = new Rectangle(296, 300, 53, 46);
                 Region region = new Region(pigRect);
-                if (region.IsVisible(e.X, e.Y)) { // 鼠标点击：落在了猪头区
-                    if ((currentState.CurrentCardCommands == CardCommands.WaitingForSending8Cards)) { // 如果等我扣牌
+                if (region.IsVisible(e.X, e.Y)) { // 鼠标点击：落在了猪头区：【扣8 张底牌】或是出【当前轮，玩家想出的牌】2 种可能。
+                    if ((currentState.CurrentCardCommands == CardCommands.WaitingForSending8Cards)) { // 如果【等我扣底牌】
                         Graphics g = Graphics.FromImage(bmp); // 扣牌,所以擦去小猪
                         g.DrawImage(image, pigRect, pigRect, GraphicsUnit.Pixel);
                         g.Dispose();
@@ -324,7 +322,7 @@ namespace Kuaff.Tractor { // 这个主界面，再快速看一遍，大概接近
                             initSendedCards();
                             currentState.CurrentCardCommands = CardCommands.DrawMySortedCards;
                         }
-                    } else if (currentState.CurrentCardCommands == CardCommands.WaitingForMySending) { // 如果等我发牌
+                    } else if (currentState.CurrentCardCommands == CardCommands.WaitingForMySending) { // 如果【等我发牌】等我出牌？
                         // 如果我准备出的牌合法
                         if (TractorRules.IsInvalid(this, currentSendCards, 1)) {
                             // 出牌，所以擦去小猪
@@ -332,15 +330,14 @@ namespace Kuaff.Tractor { // 这个主界面，再快速看一遍，大概接近
                             g.DrawImage(image, pigRect, pigRect, GraphicsUnit.Pixel);
                             g.Dispose();
                             // 在这里检查甩牌的检查
-                            if (firstSend == 1) {
+                            if (firstSend == 1) { // 【每一轮】第一个出牌的人：【出的牌】合法吗？甩牌【AAK,AKK 之类的】是最大的吗？谁有心算功，能算出其它最大的牌？
                                 whoIsBigger = 1;
                                 ArrayList minCards = new ArrayList();
-                                if (TractorRules.CheckSendCards(this, minCards,0)) {
+                                if (TractorRules.CheckSendCards(this, minCards, 0)) {
                                     currentSendCards[0] = new ArrayList();
-                                    for (int i = 0; i < myCardIsReady.Count; i++) {
+                                    for (int i = 0; i < myCardIsReady.Count; i++) 
                                         if ((bool)myCardIsReady[i])
                                             CommonMethods.SendCards(currentSendCards[0], currentPokers[0], pokerList[0], (int)myCardsNumber[i]);
-                                    }
                                 }
                                 else {
                                     for (int i = 0; i < minCards.Count; i++) 
@@ -348,21 +345,18 @@ namespace Kuaff.Tractor { // 这个主界面，再快速看一遍，大概接近
                                 }
                             } else {
                                 currentSendCards[0] = new ArrayList();
-                                for (int i = 0; i < myCardIsReady.Count; i++) {
-                                    if ((bool)myCardIsReady[i]) {
+                                for (int i = 0; i < myCardIsReady.Count; i++) 
+                                    if ((bool)myCardIsReady[i]) 
                                         CommonMethods.SendCards(currentSendCards[0], currentPokers[0], pokerList[0], (int)myCardsNumber[i]);
-                                    }
-                                }
                             }
                             drawingFormHelper.DrawMyFinishSendedCards();
                         }
-                    }
-                }
-            } else if (currentState.CurrentCardCommands == CardCommands.ReadyCards) {
+                    } // 如果【等我发牌】等我出牌？
+				} // 按键、发送玩家手牌【8 张底】或是【这一轮出牌】区
+            } else if (currentState.CurrentCardCommands == CardCommands.ReadyCards) // 上几个命令之后，另一个命令：【发牌命令】
                 drawingFormHelper.IsClickedRanked(e);
-            }
         }
-        private void MainForm_MouseDoubleClick(object sender, MouseEventArgs e) {
+        private void MainForm_MouseDoubleClick(object sender, MouseEventArgs e) { // 鼠标双击事件：感觉处理的逻辑，与上面的【鼠标单击事件】是一样的
             // if (e.Button == MouseButtons.Right)
             //    return;
             // 如果当前没有牌可出 
@@ -386,21 +380,21 @@ namespace Kuaff.Tractor { // 这个主界面，再快速看一遍，大概接近
                         readyCards.Add((int)myCardsNumber[i]);
                     }
                 }
-                if (readyCards.Count == 8) {
+                if (readyCards.Count == 8) { // 如果是我【无论如何：叫牌叫了主、加固了、反牌】扣底牌 8 强
                     send8Cards = new ArrayList();
-                    for (int i = 0; i < 8; i++) {
+                    for (int i = 0; i < 8; i++) { // 这里有动画吗，一张张放的
                         CommonMethods.SendCards(send8Cards, currentPokers[0], pokerList[0], (int)readyCards[i]);
                     }
-                    initSendedCards();
-                    currentState.CurrentCardCommands = CardCommands.DrawMySortedCards;
+                    initSendedCards(); // 放下去后，桌面牌心位置，8 张牌更新 
+                    currentState.CurrentCardCommands = CardCommands.DrawMySortedCards; // 下一个命令：画牌桌上的8 张底牌，图形界面
                 }
-            } else if (currentState.CurrentCardCommands == CardCommands.WaitingForMySending) { // 如果等我发牌
-                if (TractorRules.IsInvalid(this, currentSendCards, 1)) {
+            } else if (currentState.CurrentCardCommands == CardCommands.WaitingForMySending) { // 如果：等我【这一轮的出牌】
+                if (TractorRules.IsInvalid(this, currentSendCards, 1)) { // 我选出来的，抽出来的牌不合法
                     if (firstSend == 1) {
                         whoIsBigger = 1;
                         ArrayList minCards = new ArrayList();
-                        if (TractorRules.CheckSendCards(this, minCards,0)) {
-                            currentSendCards[0] = new ArrayList(); 
+                        if (TractorRules.CheckSendCards(this, minCards, 0)) {
+                            currentSendCards[0] = new ArrayList(); // 四元素数组：开新链条 
                             for (int i = 0; i < myCardIsReady.Count; i++) {
                                 if ((bool)myCardIsReady[i]) {
                                     CommonMethods.SendCards(currentSendCards[0], currentPokers[0], pokerList[0], (int)myCardsNumber[i]);
@@ -906,4 +900,3 @@ namespace Kuaff.Tractor { // 这个主界面，再快速看一遍，大概接近
         }              
     }
 }
-

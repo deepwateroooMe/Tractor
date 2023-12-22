@@ -18,7 +18,6 @@ namespace Kuaff.Tractor {
         internal DrawingFormHelper(MainForm mainForm) {
             this.mainForm = mainForm;
         }
-      
 #region 发牌动画
         // 准备发牌.
         // 首先在程序中央画好58-i*2张牌(实际25+8就可以了，为了显示牌多，这里用50+8), 【两副牌】：该是 108 张
@@ -116,14 +115,14 @@ namespace Kuaff.Tractor {
                 g.DrawImage(mainForm.gameConfig.BackImage, 200 + i * 2, 186, 71, 96);
             }
         }
-// 发完一次牌，需要清理程序中心
+// 发完一次牌，需要清理程序中心：108 张牌全发完了，牌桌中间应该是空的，8 张底回来前
         internal void DrawCenterImage() {
             Graphics g = Graphics.FromImage(mainForm.bmp);
             Rectangle rect = new Rectangle(77, 124, 476, 244);
             g.DrawImage(mainForm.image, rect, rect, GraphicsUnit.Pixel);
             g.Dispose();
         }
-// 画流局图片
+// 画流局图片：玩的时候，这里好像有点儿动画
         internal void DrawPassImage() {
             Graphics g = Graphics.FromImage(mainForm.bmp);
             Rectangle rect = new Rectangle(110, 150, 400, 199);
@@ -133,7 +132,7 @@ namespace Kuaff.Tractor {
         }
 #endregion // 画中心位置的牌
 #region 底牌处理
-// 收底牌的动画
+// 收底牌的动画：【收底牌】，可能是1 张1 张缩进的过程？下是说，是，动画方式 
 // 发牌25次后，最后剩余8张牌.
 // 这时已经确定了庄家，将8张牌交给庄家,
 // 同时以动画的方式显示。
@@ -164,7 +163,7 @@ namespace Kuaff.Tractor {
             g.Dispose();
         }
 // 将最后8张交给庄家
-        private void Get8Cards(ArrayList list0, ArrayList list1, ArrayList list2, ArrayList list3) {
+        private void Get8Cards(ArrayList list0, ArrayList list1, ArrayList list2, ArrayList list3) { // 说什么意思，没看懂 
             list0.Add(list1[25]);
             list0.Add(list1[26]);
             list0.Add(list2[25]);
@@ -182,7 +181,7 @@ namespace Kuaff.Tractor {
             Graphics g = Graphics.FromImage(mainForm.bmp);
             // 画底牌,从169开始画
             for (int i = 0; i < 8; i++) {
-                if (i ==2) {
+                if (i == 2) { // 什么意思呢？没人叫主时，底牌翻第3 张，定为主？所以画得不一样？
                     g.DrawImage(getPokerImageByNumber((int)bottom[i]), 230 + i * 14, 146, 71, 96);
                 } else {
                     g.DrawImage(getPokerImageByNumber((int)bottom[i]), 230 + i * 14, 186, 71, 96);
@@ -194,7 +193,6 @@ namespace Kuaff.Tractor {
 #endregion // 底牌处理
 #region 绘制Sidebar和toolbar
 // 绘制Sidebar
-// <param name="g"></param>
         internal void DrawSidebar(Graphics g) {
             DrawMyImage(g, Properties.Resources.Sidebar, 20, 30, 70, 89);
             DrawMyImage(g, Properties.Resources.Sidebar, 540, 30, 70, 89);
@@ -227,9 +225,6 @@ namespace Kuaff.Tractor {
             g.DrawImage(Properties.Resources.Master, destRect, srcRect, GraphicsUnit.Pixel);// 不懂这个 .Master 画的是什么
         }
 // 画其他，画成白色
-// <param name="g"></param>
-// <param name="who"></param>
-// <param name="start"></param>
         internal void DrawOtherMaster(Graphics g, int who, int start) {
             if (who != 1) {
                 Rectangle destRect = new Rectangle(548, 45, 20, 20);
@@ -252,7 +247,7 @@ namespace Kuaff.Tractor {
                 g.DrawImage(Properties.Resources.Master, destRect, srcRect, GraphicsUnit.Pixel);
             }
         }
-// 绘制Rank
+// 绘制Rank: 就是画，这一轮打几
 // <param name="g">缓冲区图像的Graphics</param>
 // <param name="me">画我还是画对方</param>
 // <param name="b">两色还是暗色</param>
@@ -288,7 +283,7 @@ namespace Kuaff.Tractor {
                 }
             }
         }
-        private Rectangle getCardNumberImage(int number, bool b) {
+        private Rectangle getCardNumberImage(int number, bool b) { 
             Rectangle result = new Rectangle(0, 0, 0, 0);
             if (number >= 0 && number <= 12) {
                 if (b) {
@@ -308,7 +303,7 @@ namespace Kuaff.Tractor {
 // <param name="g"></param>
 // <param name="suit">花色</param>
 // <param name="me">画我方还是对方</param>
-// <param name="b">是否画亮色</param>
+// <param name="b">是否画亮色</param> // 应该是，我方坐庄，画亮色；对方坐庄，画暗色之类的，【这轮打几的图案】
         internal void DrawSuit(Graphics g, int suit, bool me, bool b) {
             int X = 0;
             int X2 = 0;
@@ -374,7 +369,7 @@ namespace Kuaff.Tractor {
             g.Dispose();
         }
 #endregion // 绘制Sidebar和toolbar
-
+// 下面：玩家起到 Rank 这一轮要打几的【几的牌】，决定是否要亮主的判断逻辑
 #region 判断是否亮主
 // 是否应该亮主,调用算法
         private void DoRankOrNot(CurrentPoker currentPoker, int user) {
@@ -382,7 +377,7 @@ namespace Kuaff.Tractor {
             if (currentPoker.Rank == 53)
                 return;
             // 如果还未设主，则设主
-            if (mainForm.currentState.Suit == 0) {
+            if (mainForm.currentState.Suit == 0) { // 未定：当前轮，还不曾叫过主
                 int suit = Algorithm.ShouldSetRank(mainForm, user);
                 if (suit > 0) {
                     mainForm.showSuits = 1;
@@ -393,7 +388,7 @@ namespace Kuaff.Tractor {
                     }
                     // 既然已经确定了谁亮的，谁是主，打几，那么就画吧
                     Graphics g = Graphics.FromImage(mainForm.bmp);
-                    // 亮主的时候同时画花色,亮色显示在庄家下面
+                    // 亮主的时候同时画花色,亮色显示在庄家下面：就是【庄家】的画亮色，闲家的画暗色
                     if ((mainForm.currentState.Master == 1) || (mainForm.currentState.Master == 2)) {
                         DrawSuit(g, suit, true, true);
                         DrawRank(g, mainForm.currentState.OurCurrentRank, true, true);
@@ -408,7 +403,7 @@ namespace Kuaff.Tractor {
                     DrawOtherMaster(g, mainForm.currentState.Master, 1);
                     g.Dispose();
                 }
-            } else { // 是否可以反
+            } else { // 是否可以反：就是当前牌轮，【已经有人亮过主了，当前轮有主】，但是玩家起到可能、可以加固，或是可以反的牌，就继续判断，【是否可以加固或是反牌】
                 int suit = Algorithm.ShouldSetRankAgain(mainForm, currentPoker);
                 if (suit > 0) { // 是否可以加固
                     if ((suit == mainForm.currentState.Suit) && (mainForm.whoShowRank == user) && (!mainForm.gameConfig.CanMyStrengthen)) {  // 如果不允许加固
@@ -480,7 +475,6 @@ namespace Kuaff.Tractor {
 // 在发牌时检测鼠标事件，如果我进行了点击：
 // 如果我在亮主栏上进行了点击，
 // 如果我可以亮主，则进行亮主
-// <param name="e"></param>
         internal void IsClickedRanked(MouseEventArgs e) {
             bool[] suits = Algorithm.CanSetRank(mainForm, mainForm.currentPokers[0]);
             if (suits[0]) { // 如果红桃

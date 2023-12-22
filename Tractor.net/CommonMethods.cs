@@ -13,10 +13,10 @@ namespace Kuaff.Tractor {
 // <param name="rank">当前牌局</param>
 // <returns>返回CurrentPoker对象</returns>
         internal static CurrentPoker parse(ArrayList list, int suit, int rank) {
-            // 红桃0-12
+            // 红桃0-12 【黑红梅方，小大王】
             // 黑桃13-25
-            // 方块26-38
-            // 梅花39-51
+            // 梅花26-38
+            // 方块39-51
             // 小王52
             // 大王53
             CurrentPoker poker = new CurrentPoker();
@@ -190,7 +190,7 @@ namespace Kuaff.Tractor {
                 return 3;
             } else if (a >= 39 && a < 52) {
                 return 4;
-            } else  {
+            } else { // 怎么会到这个分支来的？一堆破烂垃圾源码。。。
                 return 5;
             }
         }
@@ -199,13 +199,13 @@ namespace Kuaff.Tractor {
 // <param name="suit">主花色</param>
 // <param name="rank">主Rank</param>
 // <returns>花色</returns>
-        internal static int GetSuit(int a,int suit,int rank) {
+        internal static int GetSuit(int a, int suit, int rank) {
             int firstSuit = 0;
-            if (a == 53 || a == 52) {
+            if (a == 53 || a == 52) { // 大小王 
                 firstSuit = suit;
-            } else if ((a % 13) == rank) {
+            } else if ((a % 13) == rank) { // 当前打几的牌，都是主
                 firstSuit = suit;
-            } else {
+            } else { // 其它 
                 firstSuit = GetSuit(a);
             }
             return firstSuit;

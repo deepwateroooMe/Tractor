@@ -6,8 +6,10 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using Kuaff.CardResouces;
 namespace Kuaff.Tractor {
-    [Serializable]
-    class GameConfig {
+	// 【TODO】：当添加两项左右的用户配置，这里也应该有相应的添加
+    [Serializable] // 这里，应该就是说，【序列化】配置，到【序列化的文件】，文件的名字，是哪里写定的？
+	// 哪里，也没有写，是【序列化】到哪个特定的文件，除非使用Unity 等游戏引擎，在控制面板上、设置配置的
+    class GameConfig { // 这里的配置，是会写入某个文件的？
 		// 【时间设置】：感觉，都是游戏流程自己管理，用来给用户呈现一下游戏过程的、可调控可缩短的、系统控制时间变量 
 #region 时间设置
         // 时间设置
@@ -42,11 +44,9 @@ namespace Kuaff.Tractor {
             set { timerDiDa = value; }
         }
 #endregion // 时间设置
-
 // 【规则设置】：用户表单里、自定义的、【游戏规则配置】，从表单向游戏逻辑过度。【TODO】：【2 是常主】配置，与【五主过河】配置：主牌《＝5 张时，与对家组出更能赢的牌
 #region 规则设置
-        // 必打的牌
-        private string mustRank = "";
+        private string mustRank = ""; // 必打的牌
         internal string MustRank {
             get { return mustRank; }
             set { mustRank = value; }
@@ -91,7 +91,6 @@ namespace Kuaff.Tractor {
             get { return aToJ; }
             set { aToJ = value; }
         }
-        
         // 是否可以自反
         private bool canMyRankAgain = true;
         internal bool CanMyRankAgain {
@@ -155,6 +154,5 @@ namespace Kuaff.Tractor {
             set { cardImageName = value; }
         }
 #endregion // 图案设置
-
     }
 }

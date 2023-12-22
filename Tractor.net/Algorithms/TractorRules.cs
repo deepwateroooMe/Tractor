@@ -597,8 +597,8 @@ namespace Kuaff.Tractor {
             }
             return score;
         }
-// 玩家甩牌时的检查,如果所有的牌都是最大的，true
-        internal static bool CheckSendCards(MainForm mainForm, ArrayList minCards,int who) {
+// 玩家甩牌时的检查,如果所有的牌都是最大的，true. 那么就不仅仅只有【AAK】或是【AKK】还可以是更小的，只要现在四玩家手中，是最大就可以 
+        internal static bool CheckSendCards(MainForm mainForm, ArrayList minCards, int who) {
 // ArrayList minCards = new ArrayList();
             int[] users = CommonMethods.OtherUsers(who);
             ArrayList list = new ArrayList();
@@ -607,22 +607,23 @@ namespace Kuaff.Tractor {
             int rank = mainForm.currentRank;
             cp.Suit = suit;
             cp.Rank = rank;
-            for (int i = 0; i < mainForm.myCardIsReady.Count; i++) {
+            for (int i = 0; i < mainForm.myCardIsReady.Count; i++) { // 【玩家，此轮当前想出的牌】：借用过来了
                 if ((bool)mainForm.myCardIsReady[i]) {
                     list.Add(mainForm.myCardsNumber[i]);
                 }
             }
-            int firstSuit = CommonMethods.GetSuit((int)list[0],cp.Suit,cp.Rank);
+// 【选中牌中】第一张牌的花色：问题是，若是跟牌，我缺少需要出的花色，添加了其它，第1 张牌就不准呀。。。
+            int firstSuit = CommonMethods.GetSuit((int)list[0], cp.Suit, cp.Rank); // <<<<<<<<<<<<<<<<<<<< 
             cp = CommonMethods.parse(list, cp.Suit, cp.Rank);
             cp.Sort();
-            if (list.Count == 1) { // 如果是单张牌 
+            if (list.Count == 1) { // 如果是单张牌：如果是单张牌，怎样都是合法的？围规：有这个副花色，但是出杀牌了，可能吗？
                 return true;
             } else if (list.Count == 2 && (cp.GetPairs().Count == 1)) { // 如果是一对
                 return true;
             } else if (list.Count == 4 && (cp.HasTractors())) { // 如果是拖拉机
                 return true;
-            } else { // 我甩混合牌时
-                if (cp.HasTractors()) {
+            } else { // 我甩混合牌时：会自动填充，传入的参数 minCards 链条
+                if (cp.HasTractors()) { // 有拖拉机
                     int myMax = cp.GetTractor();
                     int[] ttt = cp.GetTractorOtherCards(myMax);
                     cp.RemoveCard(myMax);

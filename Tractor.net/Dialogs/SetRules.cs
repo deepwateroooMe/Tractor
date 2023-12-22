@@ -145,15 +145,14 @@ namespace Kuaff.Tractor {
             } else {
                 form.gameConfig.AToJ = false;
             }
-            // ���浽�ļ�
             SaveGameConfig();
         }
-        private void SaveGameConfig() {
+        private void SaveGameConfig() { // 两个地方，都存在这个方法。哪个是被调用的？本文件里，多次调用本方法。就是玩家几乎点击任何键，都自动保存玩家游戏配置
             Stream stream = null;
             try {
                 IFormatter formatter = new BinaryFormatter();
                 stream = new FileStream("gameConfig", FileMode.Create, FileAccess.Write, FileShare.None);
-                formatter.Serialize(stream, form.gameConfig);
+                formatter.Serialize(stream, form.gameConfig); // 序列化的，也是，同一个玩家配置过的配置对象
             }
             catch (Exception ex) {}
             finally {

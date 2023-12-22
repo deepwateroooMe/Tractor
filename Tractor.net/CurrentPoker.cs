@@ -3,15 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 namespace Kuaff.Tractor {
-    
+// 好大一个类：    
     class CurrentPoker {
-// 当前的Rank
+// 当前的Rank: 当前打几 
         internal int Rank = 0;
-// 当前的suit
+// 当前的suit: 什么花色、无主？
         internal int Suit = 0;
-// 当前牌的数量
+// 当前牌的数量：
         private int count = 0;
-        internal int Count {
+        internal int Count { // 这不是，只算了一副牌的张数？
             get {
                 count = 0;
                 for (int i = 0; i < 13; i++) {
@@ -339,7 +339,8 @@ namespace Kuaff.Tractor {
             }
             return rt;
         }
-        internal int[] GetSuitCards(int asuit) {
+		// 不知道，这写得什么狗屎一堆破烂代码，连个注释也没有
+        internal int[] GetSuitCards(int asuit) { 
             ArrayList list = new ArrayList();
             if (asuit == 5) {
                 if (Rank != 53) {
@@ -636,15 +637,16 @@ namespace Kuaff.Tractor {
             }
             return new int[13];
         }
+// 破烂不学OOD/OOP 的主程：私有数组，用来表示，一个花色的【缺省张数】：数组初始化为 0
 #region 方块
 // 方块(2,3,4,5,6,7,8,9,10,J,Q,K,A)
-        private int[] diamonds = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        private int[] diamonds = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // 13 个元素都有
         internal int[] Diamonds {
             get { return diamonds; }
             set { diamonds = value; }
         }
 // 不带主的方块
-        private int[] diamondsNoRank = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        private int[] diamondsNoRank = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // 13 个元素都有
         internal int[] DiamondsNoRank {
             get { return diamondsNoRank; }
             set { diamondsNoRank = value; }
@@ -653,7 +655,7 @@ namespace Kuaff.Tractor {
         internal int DiamondsRankTotal = 0;
 // 方块非Rank数
         internal int DiamondsNoRankTotal = 0;
-// 排序的牌型
+// 排序的牌型：怎么就变成了是 56 个元素呢？
         internal int[] SortCards = new int[56];
 #endregion // 方块
 #region 梅花
@@ -724,7 +726,8 @@ namespace Kuaff.Tractor {
             set { smallJack = value; }
         }
 #endregion // 大小王
-#region Rank记录
+// 感觉，这里，没明白说的是什么意思？
+#region Rank记录 
 // 主Rank
         private int masterRank = 0;
         internal int MasterRank {
@@ -740,15 +743,15 @@ namespace Kuaff.Tractor {
             set { subRank = value; }
         }
 #endregion // Rank记录
+// 牌的花色排序，索引，是按照【大王53、小王52、黑桃0-12, 红桃13-25, 方块26-38, 梅花 39-51】的索引来的
 // 增加一张牌
         internal void AddCard(int number) {
-            // 大王
-            if (number == 53) {
+            if (number == 53) { // 大王
                 bigJack++;
-            } else if (number == 52) {
+            } else if (number == 52) { // 小王
                 smallJack++;
             } else if (number < 52) {
-                if (number >= 0 && number < 13) {
+                if (number >= 0 && number < 13) { // 黑桃
                     hearts[number]++;
                     if (number == Rank) {
                         HeartsRankTotal++;
@@ -756,7 +759,7 @@ namespace Kuaff.Tractor {
                         heartsNoRank[number]++;
                         HeartsNoRankTotal++;
                     }
-                } else if (number >= 13 && number < 26) {
+                } else if (number >= 13 && number < 26) { // 红桃
                     peachs[number - 13]++;
                     if ((number - 13) == Rank) {
                         PeachsRankTotal++;
@@ -764,7 +767,7 @@ namespace Kuaff.Tractor {
                         peachsNoRank[number - 13]++;
                         PeachsNoRankTotal++;
                     }
-                } else if (number >= 26 && number < 39) { // 方片
+                } else if (number >= 26 && number < 39) { // 方块
                     diamonds[number - 26]++;
                     if ((number - 26) == Rank) {
                         DiamondsRankTotal++;
@@ -772,7 +775,7 @@ namespace Kuaff.Tractor {
                         DiamondsNoRank[number - 26]++;
                         DiamondsNoRankTotal++;
                     }
-                } else if (number >= 39 && number < 52) {
+                } else if (number >= 39 && number < 52) { // 梅花
                     clubs[number - 39]++;
                     if ((number - 39) == Rank) {
                         ClubsRankTotal++;
@@ -781,17 +784,16 @@ namespace Kuaff.Tractor {
                         ClubsNoRankTotal++;
                     }
                 }
-                if (Suit > 0 && Suit<5) {
+                if (Suit > 0 && Suit < 5) { // 这里，说什么意思 
                     if (number == ((Suit - 1) * 13 + Rank)) {
                         masterRank++;
                     }
                 }
             }
         }
-// 增加一张牌
+// 删除一张牌
         internal void RemoveCard(int number) {
-            // 大王
-            if (number == 53) {
+            if (number == 53) { // 大王
                 bigJack--;
                 return;
             } else if (number == 52) {
@@ -865,15 +867,14 @@ namespace Kuaff.Tractor {
         }
 // 排序
         internal void Sort() {
-            for (int i = 0; i < 56; i++) {
+            for (int i = 0; i < 56; i++) // 多少张牌呢 
                 SortCards[i] = 0;
-            }
             SortCards[0] = bigJack;
             SortCards[1] = smallJack;
             SortCards[2] = masterRank;
             SortCards[3] = SubRank;
             if (Suit == 1) {
-                SetSortValues(heartsNoRank,peachsNoRank,diamondsNoRank,clubsNoRank);
+                SetSortValues(heartsNoRank, peachsNoRank, diamondsNoRank, clubsNoRank);
             } else if (Suit == 2) {
                 SetSortValues(peachsNoRank, heartsNoRank, diamondsNoRank, clubsNoRank);
             } else if (Suit == 3) {
@@ -884,7 +885,7 @@ namespace Kuaff.Tractor {
                 SetSortValues(heartsNoRank, peachsNoRank, diamondsNoRank, clubsNoRank);
             }
         }
-        private void SetSortValues(int[] nr0,int[] nr1,int[] nr2,int[] nr3) {
+        private void SetSortValues(int[] nr0, int[] nr1, int[] nr2, int[] nr3) {
             int j = 4;
             for (int i = 12; i > -1; i--) {
                 if (i != Rank) {
@@ -927,42 +928,29 @@ namespace Kuaff.Tractor {
         internal bool IsMixed() {
             if (Suit ==5) {
                 int a2 = 0;
-                for (int i = 4; i < 56; i++) {
-                    if (SortCards[i]>0) {
+                for (int i = 4; i < 56; i++) 
+                    if (SortCards[i]>0) 
                         a2++;
-                    }
-                }
-                if (a2 == 0) {
+                if (a2 == 0) 
                     return false;
-                }
             }
             int[] c = {0,0,0,0};
-            for (int i=0;i<17;i++) {
-                if (SortCards[i]>0) {
+            for (int i=0;i<17;i++) 
+                if (SortCards[i]>0)
                     c[0]++;
-                }
-            }
-            for (int i=17;i<30;i++) {
-                if (SortCards[i] > 0) {
+            for (int i=17;i<30;i++) 
+                if (SortCards[i] > 0) 
                     c[1]++;
-                }
-            }
-            for (int i=31;i<43;i++) {
-                if (SortCards[i] > 0) {
+            for (int i=31;i<43;i++) 
+                if (SortCards[i] > 0) 
                     c[2]++;
-                }
-            }
-            for (int i = 44; i < 56; i++) {
-                if (SortCards[i] > 0) {
+            for (int i = 44; i < 56; i++) 
+                if (SortCards[i] > 0) 
                     c[3]++;
-                }
-            }
             int total = 0;
-            for (int i = 0; i < 4; i++) {
-                if (c[i]>0) {
+            for (int i = 0; i < 4; i++) 
+                if (c[i]>0) 
                     total++;
-                }
-            }
             if (total>1) {
                 return true;
             } else {
@@ -978,34 +966,28 @@ namespace Kuaff.Tractor {
             }
         }
 // 是否有对
-        internal ArrayList GetPairs() {
+        internal ArrayList GetPairs() { // 算的是：两副或是更多副牌里，【0,53】所有单副牌索引里，同 rank 同花色，不止一张的下标，链条
             ArrayList list = new ArrayList();
             for (int i = 0; i < 13; i++) {
-                if (hearts[i] > 1) {
+                if (hearts[i] > 1) 
                     list.Add(i);
-                }
-                if (peachs[i] > 1) {
+                if (peachs[i] > 1) 
                     list.Add(i+13);
-                }
-                if (diamonds[i] > 1) {
+                if (diamonds[i] > 1) 
                     list.Add(i+26);
-                }
-                if (clubs[i] > 1) {
+                if (clubs[i] > 1) 
                     list.Add(i+39);
-                }
             }
-            if (smallJack > 1) {
+            if (smallJack > 1) 
                 list.Add(52);
-            }
-            if (bigJack > 1) {
+            if (bigJack > 1) 
                 list.Add(53);
-            }
             return list;
         }
-        internal ArrayList GetPairs(int asuit) {
-            if (asuit == Suit) {
+        internal ArrayList GetPairs(int asuit) { // 内部方法：什么地方调用的？
+            if (asuit == Suit) { // 主：有花色
                 return GetMasterPairs();
-            } else {
+            } else { // 无花色，常主
                 return GetNoRankPairs(asuit);
             }
         }
@@ -1088,117 +1070,92 @@ namespace Kuaff.Tractor {
             }
             return list;
         }
-        internal ArrayList GetNoRankPairs(int asuit) {
+        internal ArrayList GetNoRankPairs(int asuit) { 
             ArrayList list = new ArrayList();
-            if ((asuit ==1)) {
-                for (int i = 0; i < 13; i++) {
-                    if (heartsNoRank[i] > 1) {
+            if ((asuit == 1)) {
+                for (int i = 0; i < 13; i++) 
+                    if (heartsNoRank[i] > 1) 
                         list.Add(i);
-                    }
-                }
             } else if ((asuit == 2)) {
-                for (int i = 0; i < 13; i++) {
-                    if (peachsNoRank[i] > 1) {
+                for (int i = 0; i < 13; i++) 
+                    if (peachsNoRank[i] > 1) 
                         list.Add(i + 13);
-                    }
-                }
             } else if ((asuit == 3)) {
-                for (int i = 0; i < 13; i++) {
-                    if (diamondsNoRank[i] > 1) {
+                for (int i = 0; i < 13; i++) 
+                    if (diamondsNoRank[i] > 1) 
                         list.Add(i + 26);
-                    }
-                }
             } else if ((asuit == 4)) {
-                for (int i = 0; i < 13; i++) {
-                    if (clubsNoRank[i] > 1) {
+                for (int i = 0; i < 13; i++)
+                    if (clubsNoRank[i] > 1) 
                         list.Add(i + 39);
-                    }
-                }
             } else if ((asuit == 5)) {
-                if (smallJack>1)  {
+                if (smallJack>1)  
                     list.Add(52);
-                }
-                if (bigJack > 1) {
+                if (bigJack > 1) 
                     list.Add(53);
-                }
             }
             return list;
         }
         internal ArrayList GetNoRankPairs() {
             ArrayList list = new ArrayList();
             for (int i = 0; i < 13; i++) {
-                if (heartsNoRank[i] > 1) {
+                if (heartsNoRank[i] > 1) 
                     list.Add(i);
-                }
-                if (peachsNoRank[i] > 1) {
+                if (peachsNoRank[i] > 1) 
                     list.Add(i+13);
-                }
-                if (diamondsNoRank[i] > 1) {
+                if (diamondsNoRank[i] > 1) 
                     list.Add(i+26);
-                }
-                if (clubsNoRank[i] > 1) {
+                if (clubsNoRank[i] > 1) 
                     list.Add(i+39);
-                }
             }
             return list;
         }
-        internal ArrayList GetNoRankNoSuitPairs() {
+        internal ArrayList GetNoRankNoSuitPairs() { // 感觉，这里的几个方法，说的意思没弄明白，要再看一下
             ArrayList list = new ArrayList();
             for (int i = 0; i < 13; i++) {
                 if (Suit != 1) {
-                    if (heartsNoRank[i] > 1) {
+                    if (heartsNoRank[i] > 1) 
                         list.Add(i);
-                    }
                 }
                 if (Suit != 2) {
-                    if (peachsNoRank[i] > 1) {
+                    if (peachsNoRank[i] > 1) 
                         list.Add(i+13);
-                    }
                 }
                 if (Suit != 3) {
-                    if (diamondsNoRank[i] > 1) {
+                    if (diamondsNoRank[i] > 1) 
                         list.Add(i+26);
-                    }
                 }
                 if (Suit != 4) {
-                    if (clubsNoRank[i] > 1) {
+                    if (clubsNoRank[i] > 1) 
                         list.Add(i+39);
-                    }
                 }
             }
             return list;
         }
         internal bool HasMasterRankPairs() {
-            if (Rank > 12) {
+            if (Rank > 12) 
                 return false;
-            }
             if (masterRank > 1) {
-                return true;
+                return true; 
             } else {
                 return false;
             }
         }
         internal bool HasSubRankPairs() {
-            if (Rank > 12) {
+            if (Rank > 12) 
                 return false;
-            }
             int count = 0;
-            if (hearts[Rank]>1) {
+            if (hearts[Rank]>1) 
                 count++;
-            }
-            if (peachs[Rank] > 1) {
+            if (peachs[Rank] > 1) 
                 count++;
-            }
-            if (diamonds[Rank] > 1) {
+            if (diamonds[Rank] > 1) 
                 count++;
-            }
-            if (clubs[Rank] > 1) {
+            if (clubs[Rank] > 1) 
                 count++;
-            }
-            if (HasMasterRankPairs()) {
+            if (HasMasterRankPairs()) 
                 count --;
-            }
-            if (count > 0) {
+            if (count > 0) { 
                 return true;
             } else {
                 return false;
@@ -1207,16 +1164,15 @@ namespace Kuaff.Tractor {
 // 是否有拖拉机
         internal bool HasTractors() {
             ArrayList list = GetPairs();
-            if (list.Count ==0) {
+            if (list.Count == 0) 
                 return false;
-            }
             if (GetTractor() == -1) {
                 return false;
             } else {
                 return true;
             }
         }
-        internal int GetTractor() {
+        internal int GetTractor() { // 这个方法，也再读遍
             // 大小王
             if ((smallJack == 2) && (bigJack == 2)) {
                 return 53;
@@ -1282,117 +1238,93 @@ namespace Kuaff.Tractor {
             } else {
                 // 顺序比较
                 for (int i = 12; i > 0; i--) {
-                    if (i == Rank) {
+                    if (i == Rank) 
                         continue;
-                    }
                     int m = i - 1;
-                    if (m == Rank) {
+                    if (m == Rank) 
                         m--;
-                    }
-                    if (m < 0) {
+                    if (m < 0) 
                         break;
-                    }
                     if (asuit == 1) {
-                        if ((heartsNoRank[i] > 1) && (heartsNoRank[m] > 1)) {
+                        if ((heartsNoRank[i] > 1) && (heartsNoRank[m] > 1)) 
                             return i;
-                        }
                     }
                     if (asuit == 2) {
-                        if ((peachsNoRank[i] > 1) && (peachsNoRank[m] > 1)) {
+                        if ((peachsNoRank[i] > 1) && (peachsNoRank[m] > 1)) 
                             return (i + 13);
-                        }
                     }
                     if (asuit == 3) {
-                        if ((diamondsNoRank[i] > 1) && (diamondsNoRank[m] > 1)) {
+                        if ((diamondsNoRank[i] > 1) && (diamondsNoRank[m] > 1)) 
                             return (i + 26);
-                        }
                     }
                     if (asuit == 4) {
-                        if ((clubsNoRank[i] > 1) && (clubsNoRank[m] > 1)) {
+                        if ((clubsNoRank[i] > 1) && (clubsNoRank[m] > 1)) 
                             return (i + 39);
-                        }
                     }
                 }
                 return -1;
             }
         }
-        internal int GetMasterTractor() {
+        internal int GetMasterTractor() { // 这里，捡最大的，返回 
             // 大小王
-            if ((smallJack == 2) && (bigJack == 2)) {
+            if ((smallJack == 2) && (bigJack == 2)) 
                 return 53;
-            }
             // 小王主花色
-            if ((smallJack == 2) && (masterRank == 2)) {
+            if ((smallJack == 2) && (masterRank == 2)) 
                 return 52;
-            }
             // 主花色副花色
-            if ((masterRank == 2) && HasSubRankPairs()) {
+            if ((masterRank == 2) && HasSubRankPairs()) 
                 return ((Suit - 1) * 13 + Rank);
-            }
             // 副花色A时
             if (HasSubRankPairs()) {
                 ArrayList a = GetSubRankPairs();
                 int m = Rank; 
-                if (Rank == 12) {
+                if (Rank == 12) 
                     m = 11;
-                }
-                if ((Suit == 1) && (hearts[m] > 1)) {
+                if ((Suit == 1) && (hearts[m] > 1)) 
                     return (int)a[0];
-                }
-                if ((Suit == 2) && (peachs[m] > 1)) {
+                if ((Suit == 2) && (peachs[m] > 1)) 
                     return (int)a[0];
-                }
-                if ((Suit == 3) && (diamonds[m] > 1)) {
+                if ((Suit == 3) && (diamonds[m] > 1)) 
                     return (int)a[0];
-                }
-                if ((Suit == 4) && (clubs[m] > 1)) {
+                if ((Suit == 4) && (clubs[m] > 1)) 
                     return (int)a[0];
-                }
             }
             // 顺序比较
             for (int i = 12; i > 0; i--) {
-                if (i == Rank) {
+                if (i == Rank) 
                     continue;
-                }
                 int m = i - 1;
-                if (m == Rank) {
+                if (m == Rank) 
                     m--;
-                }
-                if (m < 0) {
+                if (m < 0) 
                     break;
-                }
                 if (Suit == 1) {
-                    if ((heartsNoRank[i] > 1) && (heartsNoRank[m] > 1)) {
+                    if ((heartsNoRank[i] > 1) && (heartsNoRank[m] > 1)) 
                         return i;
-                    }
                 }
                 if (Suit == 2) {
-                    if ((peachsNoRank[i] > 1) && (peachsNoRank[m] > 1)) {
+                    if ((peachsNoRank[i] > 1) && (peachsNoRank[m] > 1)) 
                         return (i + 13);
-                    }
                 }
                 if (Suit == 3) {
-                    if ((diamondsNoRank[i] > 1) && (diamondsNoRank[m] > 1)) {
+                    if ((diamondsNoRank[i] > 1) && (diamondsNoRank[m] > 1)) 
                         return (i + 26);
-                    }
                 }
                 if (Suit == 4) {
-                    if ((clubsNoRank[i] > 1) && (clubsNoRank[m] > 1)) {
+                    if ((clubsNoRank[i] > 1) && (clubsNoRank[m] > 1)) 
                         return (i + 39);
-                    }
                 }
             }
             return -1;
         }
         internal int[] GetTractorOtherCards(int max) {
             // 大小王
-            if (max == 53) {
+            if (max == 53) 
                 return new int[] {53,52,52};
-            }
             // 小王主花色
-            if (max == 52) {
+            if (max == 52) 
                 return new int[] { 52, (Suit - 1) * 13 + Rank, (Suit - 1) * 13 + Rank };
-            }
             // 主花色副花色
             if (max == ((Suit - 1) * 13 + Rank)) {
                 ArrayList a = GetSubRankPairs();
@@ -1403,79 +1335,62 @@ namespace Kuaff.Tractor {
                 ArrayList a = GetSubRankPairs();
                 if ((int)a[0] == max) {
                     int m = 12;
-                    if (Rank == 12) {
+                    if (Rank == 12) 
                         m = 11;
-                    }
-                    if ((Suit == 1) && (hearts[m] > 1)) {
+                    if ((Suit == 1) && (hearts[m] > 1)) 
                         return new int[] { (int)a[0], m, m };
-                    }
-                    if ((Suit == 2) && (peachs[m] > 1)) {
+                    if ((Suit == 2) && (peachs[m] > 1)) 
                         return new int[] { (int)a[0], m + 13, m + 13 };
-                    }
-                    if ((Suit == 3) && (diamonds[m] > 1)) {
+                    if ((Suit == 3) && (diamonds[m] > 1)) 
                         return new int[] { (int)a[0], m + 26, m + 26 };
-                    }
-                    if ((Suit == 4) && (clubs[m] > 1)) {
+                    if ((Suit == 4) && (clubs[m] > 1)) 
                         return new int[] { (int)a[0], m + 39, m + 39 };
-                    }
                 }
             }
             // 顺序比较
             for (int i = 12; i > 0; i--) {
                 if (Suit == 1) {
                     int m = i - 1;
-                    if (m == Rank) {
+                    if (m == Rank) 
                         m--;
-                    }
-                    if (m < 0) {
+                    if (m < 0) 
                         break;
-                    }
                     if (max == i) {
-                        if ((heartsNoRank[i] > 1) && (heartsNoRank[m] > 1)) {
+                        if ((heartsNoRank[i] > 1) && (heartsNoRank[m] > 1)) 
                             return new int[] { i, m, m };
-                        }
                     }
                 }
                 if (Suit == 2) {
                     if ((max - 13) == i) {
                         int m = i - 1;
-                        if (m == Rank) {
+                        if (m == Rank) 
                             m--;
-                        }
-                        if (m < 0) {
+                        if (m < 0) 
                             break;
-                        }
-                        if ((peachsNoRank[i] > 1) && (peachsNoRank[m] > 1)) {
+                        if ((peachsNoRank[i] > 1) && (peachsNoRank[m] > 1)) 
                             return new int[] { i + 13, m + 13, m + 13 };
-                        }
                     }
                 }
                 if (Suit == 3) {
                     if ((max - 26) == i) {
                         int m = i - 1;
-                        if (m == Rank) {
+                        if (m == Rank) 
                             m--;
-                        }
-                        if (m < 0) {
+                        if (m < 0) 
                             break;
-                        }
-                        if ((diamondsNoRank[i] > 1) && (diamondsNoRank[m] > 1)) {
+                        if ((diamondsNoRank[i] > 1) && (diamondsNoRank[m] > 1)) 
                             return new int[] { i + 26, m + 26, m + 26 };
-                        }
                     }
                 }
                 if (Suit == 4) {
                     if ((max - 39) == i) {
                         int m = i - 1;
-                        if (m == Rank) {
+                        if (m == Rank) 
                             m--;
-                        }
-                        if (m < 0) {
+                        if (m < 0) 
                             break;
-                        }
-                        if ((clubsNoRank[i] > 1) && (clubsNoRank[m] > 1)) {
+                        if ((clubsNoRank[i] > 1) && (clubsNoRank[m] > 1)) 
                             return new int[] { i + 39, m+ 39, m + 39 };
-                        }
                     }
                 }
             }
@@ -1484,57 +1399,45 @@ namespace Kuaff.Tractor {
                 if (Suit != 1) {
                     if (max == i) {
                         int m = i - 1;
-                        if (m == Rank) {
+                        if (m == Rank) 
                             m--;
-                        }
-                        if (m < 0) {
+                        if (m < 0) 
                             break;
-                        }
-                        if ((heartsNoRank[i] > 1) && (heartsNoRank[m] > 1)) {
+                        if ((heartsNoRank[i] > 1) && (heartsNoRank[m] > 1)) 
                             return new int[] { i, m, m };
-                        }
                     }
                 }
                 if (Suit != 2) {
                     if ((max-13) == i) {
                         int m = i - 1;
-                        if (m == Rank) {
+                        if (m == Rank) 
                             m--;
-                        }
-                        if (m < 0) {
+                        if (m < 0) 
                             break;
-                        }
-                        if ((peachsNoRank[i] > 1) && (peachsNoRank[m] > 1)) {
+                        if ((peachsNoRank[i] > 1) && (peachsNoRank[m] > 1)) 
                             return new int[] { i + 13, m + 13, m + 13 };
-                        }
                     }
                 }
                 if (Suit != 3) {
                     if ((max-26) == i) {
                         int m = i - 1;
-                        if (m == Rank) {
+                        if (m == Rank) 
                             m--;
-                        }
-                        if (m < 0) {
+                        if (m < 0) 
                             break;
-                        }
-                        if ((diamondsNoRank[i] > 1) && (diamondsNoRank[m] > 1)) {
+                        if ((diamondsNoRank[i] > 1) && (diamondsNoRank[m] > 1)) 
                             return new int[] { i + 26, m +26, m +26 };
-                        }
                     }
                 }
                 if (Suit != 4) {
                     if ((max-39) == i) {
                         int m = i - 1;
-                        if (m == Rank) {
+                        if (m == Rank) 
                             m--;
-                        }
-                        if (m < 0) {
+                        if (m < 0) 
                             break;
-                        }
-                        if ((clubsNoRank[i] > 1) && (clubsNoRank[m] > 1)) {
+                        if ((clubsNoRank[i] > 1) && (clubsNoRank[m] > 1)) 
                             return new int[] { i + 39, m + 39 , m + 39};
-                        }
                     }
                 }
             }
@@ -1544,37 +1447,33 @@ namespace Kuaff.Tractor {
             // 顺序比较
             for (int i = 12; i > 0; i--) {
                 if (Suit != 1) {
-                    if ((heartsNoRank[i] > 1) && (heartsNoRank[i - 1] > 1)) {
+                    if ((heartsNoRank[i] > 1) && (heartsNoRank[i - 1] > 1)) 
                         return i;
-                    }
                 }
                 if (Suit != 2) {
-                    if ((peachsNoRank[i] > 1) && (peachsNoRank[i - 1] > 1)) {
+                    if ((peachsNoRank[i] > 1) && (peachsNoRank[i - 1] > 1)) 
                         return (i + 13);
-                    }
                 }
                 if (Suit != 3) {
-                    if ((diamondsNoRank[i] > 1) && (diamondsNoRank[i - 1] > 1)) {
+                    if ((diamondsNoRank[i] > 1) && (diamondsNoRank[i - 1] > 1)) 
                         return (i + 26);
-                    }
                 }
                 if (Suit != 4) {
-                    if ((clubsNoRank[i] > 1) && (clubsNoRank[i - 1] > 1)) {
+                    if ((clubsNoRank[i] > 1) && (clubsNoRank[i - 1] > 1)) 
                         return (i + 39);
-                    }
                 }
             }
             return -1;
         }
 // 比较单张副牌
-        internal bool CompareTo(int number) {
+        internal bool CompareTo(int number) { // 返回的是：是否，比被比较的数 number 小？
             int masterCards = GetMasterCardsTotal();
             if (number >= 0 && number < 13) {
-                for (int i = 12; i >-1; i--) {
+                for (int i = 12; i >-1; i--) { // 降序：从大往小遍历，如果【同花色】里，还有大牌【张数 > 0】，就不大
                     if (heartsNoRank[i]>0) {
                         if (number >= i)
                             return false;
-                        else
+                        else // 是否，比被比较的数 number 小？
                             return true;
                     }
                 }
@@ -1629,8 +1528,10 @@ namespace Kuaff.Tractor {
             return false;
         }
 // 比较对
-        internal bool CompareTo(int[] numbers) {
-            if (numbers.Length>=6) {
+        internal bool CompareTo(int[] numbers) { // 这里没看明白，要再看一下
+			// 最多可能连5 拖，可是概率上应该不至于，真的连续多少拖
+// 【连三拖】；只有一种可能？不止一种可能。【AA22 副副22 正正77 副副 77 正正小王小王大王大王】不是这样的，尤其添加【2 是常主】用户可配置功能后
+            if (numbers.Length >= 6) {  // 这里不明白
                 return false;
             }
             ArrayList al = new ArrayList();
@@ -1790,4 +1691,4 @@ namespace Kuaff.Tractor {
             return pokers;
         }
     }
-}
+} // 【亲爱的表哥的活宝妹，任何时候，亲爱的表哥的活宝妹就是一定要、一定会嫁给活宝妹的亲爱的表哥！！！爱表哥，爱生活！！！】
